@@ -7,20 +7,20 @@ use Mix.Config
 
 # General application configuration
 config :fantasy_bb,
-  ecto_repos: [FantasyBb.Repo]
+	ecto_repos: [FantasyBb.Repo]
 
 # Configures the endpoint
 config :fantasy_bb, FantasyBbWeb.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "0toKs9icObF4SXWlRjK+nki9fQaaDsMTpvVdOuHh+/GVvAQGXPJE8ibxj9kBBw71",
-  render_errors: [view: FantasyBbWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: FantasyBb.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+	url: [host: "localhost"],
+	secret_key_base: "0toKs9icObF4SXWlRjK+nki9fQaaDsMTpvVdOuHh+/GVvAQGXPJE8ibxj9kBBw71",
+	render_errors: [view: FantasyBbWeb.ErrorView, accepts: ~w(json)],
+	pubsub: [name: FantasyBb.PubSub,
+					 adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
-  format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+	format: "$time $metadata[$level] $message\n",
+	metadata: [:request_id]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

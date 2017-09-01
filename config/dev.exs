@@ -7,11 +7,11 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :fantasy_bb, FantasyBbWeb.Endpoint,
-  http: [port: 4000],
-  debug_errors: true,
-  code_reloader: true,
-  check_origin: false,
-  watchers: []
+	http: [port: 4000],
+	debug_errors: true,
+	code_reloader: true,
+	check_origin: false,
+	watchers: []
 
 # ## SSL Support
 #
@@ -38,9 +38,9 @@ config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
 config :fantasy_bb, FantasyBb.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "Z$c9tJqM!em3%VQZ5E5W",
-  database: "fantasy_bb_dev",
-  hostname: "localhost",
-  pool_size: 10
+	adapter: Ecto.Adapters.Postgres,
+	username: "postgres",
+	password: "Z$c9tJqM!em3%VQZ5E5W",
+	database: "fantasy_bb_dev",
+	hostname: "localhost",
+	pool_size: 10
