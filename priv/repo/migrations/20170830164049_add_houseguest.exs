@@ -9,5 +9,7 @@ defmodule FantasyBb.Repo.Migrations.AddHouseguest do
 
 			timestamps(updated_at: false)
 		end
+
+		create unique_index(:houseguest, [:season_id, :player_id])
 	end
 end

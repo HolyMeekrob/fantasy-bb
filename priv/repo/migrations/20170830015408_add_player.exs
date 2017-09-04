@@ -12,7 +12,7 @@ defmodule FantasyBb.Repo.Migrations.AddPlayer do
 		end
 
 		alter table(:user) do
-			modify :favorite_player, references(:player, type: :serial)
+			modify :favorite_player_id, references(:player, type: :serial)
 		end
 	end
 end

@@ -5,7 +5,6 @@ defmodule FantasyBb.Repo.Migrations.AddTradePiece do
 		create table(:trade_piece, primary_key: false) do
 			add :trade_id, references(:trade), primary_key: true
 			add :houseguest_id, references(:houseguest, type: :serial), primary_key: true
-			add :destination_team_id, references(:team), null: false
 		end
 	end
 end
