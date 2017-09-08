@@ -2,8 +2,9 @@ defmodule FantasyBb.Repo.Migrations.AddUser do
 	use Ecto.Migration
 
 	def change do
+		execute "CREATE EXTENSION IF NOT EXISTS citext"
 		create table(:user) do
-			add :email, :string, null: false
+			add :email, :citext, null: false
 			add :first_name, :string
 			add :last_name, :string
 			add :bio, :text
