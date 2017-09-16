@@ -1,8 +1,8 @@
-defmodule FantasyBb.Repo.Migrations.AddRuleset do
+defmodule FantasyBb.Repo.Migrations.AddRule do
 	use Ecto.Migration
 
 	def change do
-		create table(:ruleset) do
+		create table(:rule) do
 			add :league_id, references(:league), null: false
 			add :event_type_id, references(:event_type, type: :serial), null: false
 			add :point_value, :integer, null: false
@@ -10,6 +10,6 @@ defmodule FantasyBb.Repo.Migrations.AddRuleset do
 			timestamps()
 		end
 
-		create unique_index(:ruleset, [:league_id, :event_type_id])
+		create unique_index(:rule, [:league_id, :event_type_id])
 	end
 end

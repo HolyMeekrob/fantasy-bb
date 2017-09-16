@@ -1,6 +1,6 @@
 defmodule FantasyBb.Schema.Season do
 	use Ecto.Schema
-	import Ecto.Changeset, only: [cast: 3]
+	import Ecto.Changeset, only: [cast: 3, validate_required: 2]
 
 	schema "season" do
 		field :start, :date
@@ -15,5 +15,6 @@ defmodule FantasyBb.Schema.Season do
 	def changeset(season, params \\ %{}) do
 		season
 		|> cast(params, [:start, :subtitle])
+		|> validate_required([:start])
 	end
 end

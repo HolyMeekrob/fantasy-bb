@@ -1,6 +1,6 @@
 defmodule FantasyBb.Schema.Player do
 	use Ecto.Schema
-	import Ecto.Changeset, only: [cast: 3]
+	import Ecto.Changeset, only: [cast: 3, validate_required: 2]
 
 	schema "player" do
 		field :first_name, :string
@@ -16,5 +16,6 @@ defmodule FantasyBb.Schema.Player do
 	def changeset(player, params \\ %{}) do
 		player
 		|> cast(params, [:first_name, :last_name, :nick_name])
+		|> validate_required([:first_name, :last_name])
 	end
 end

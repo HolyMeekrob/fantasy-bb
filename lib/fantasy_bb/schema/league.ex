@@ -13,7 +13,7 @@ defmodule FantasyBb.Schema.League do
 		timestamps()
 
 		has_many :teams, FantasyBb.Schema.Team
-		has_many :rulesets, FantasyBb.Schema.Ruleset
+		has_many :rules, FantasyBb.Schema.Rule
 	end
 
 	def changeset(league, params \\ %{}) do
@@ -21,6 +21,7 @@ defmodule FantasyBb.Schema.League do
 		|> cast(params, [:name, :season_id, :commissioner_id])
 		|> validate_required([:name, :season_id, :commissioner_id])
 		|> assoc_constraint(:season)
+		|> assoc_constraint(:commisioner)
 		|> foreign_key_constraint(:commissioner_id)
 	end
 end
