@@ -4,7 +4,7 @@ defmodule FantasyBb.Schema.Season do
 
 	schema "season" do
 		field :start, :date
-		field :subtitle, :string
+		field :title, :string
 
 		timestamps()
 
@@ -14,7 +14,7 @@ defmodule FantasyBb.Schema.Season do
 
 	def changeset(season, params \\ %{}) do
 		season
-		|> cast(params, [:start, :subtitle])
+		|> cast(params, [:start, :title])
 		|> validate_required([:start])
 	end
 end

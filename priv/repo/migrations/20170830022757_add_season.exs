@@ -5,7 +5,7 @@ defmodule FantasyBb.Repo.Migrations.AddSeason do
 		create table(:season, primary_key: false) do
 			add :id, :serial, primary_key: true
 			add :start, :date, null: false
-			add :subtitle, :string
+			add :title, :string
 
 			timestamps()
 		end

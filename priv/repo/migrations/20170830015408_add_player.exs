@@ -7,6 +7,7 @@ defmodule FantasyBb.Repo.Migrations.AddPlayer do
 			add :first_name, :string, null: false
 			add :last_name, :string, null: false
 			add :nick_name, :string
+			add :birthday, :date
 
 			timestamps()
 		end
