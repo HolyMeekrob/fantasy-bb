@@ -11,10 +11,12 @@
 # and so on) as they will fail if something goes wrong.
 
 alias FantasyBb.Repo
+alias FantasyBb.Schema.Event
 alias FantasyBb.Schema.EventType
 alias FantasyBb.Schema.Houseguest
 alias FantasyBb.Schema.Player
 alias FantasyBb.Schema.Season
+alias FantasyBb.Schema.Week
 
 defmodule Seeds do
 	def create_event_type(name, description) do
@@ -26,14 +28,18 @@ defmodule Seeds do
 		Repo.insert!(event_type)
 	end
 
-	def build_season(start, title, houseguests) do
+	def build_season(start, title, houseguests, week_count) do
 		IO.puts("Creating season: #{title}")
 
 		season = Season.changeset(%Season{}, %{start: start, title: title})
 
 		season = Repo.insert!(season)
 
-		{season, Enum.map(houseguests, &(add_houseguest(&1, season.id)))}
+		{
+			season,
+			Enum.map(houseguests, &(add_houseguest(&1, season.id))),
+			Enum.map(1..week_count, &(add_week(&1, season.id)))
+		}
 	end
 
 	def add_houseguest(houseguest, season_id) do
@@ -49,6 +55,15 @@ defmodule Seeds do
 		Repo.insert!(hg)
 	end
 
+	def add_week(week_number, season_id) do
+		IO.puts("Creating week #{week_number}")
+
+		week = Week.changeset(%Week{},
+			%{season_id: season_id, week_number: week_number})
+
+		Repo.insert!(week)
+	end
+
 	def create_player(first_name, last_name, nick_name, birthday) do
 		IO.puts("Creating player: #{first_name} #{last_name}")
 
@@ -57,6 +72,14 @@ defmodule Seeds do
 				birthday: birthday})
 		
 		Repo.insert!(player)
+	end
+
+	def create_event(event_type_id, houseguest_id, week_id, additional_info) do
+		event = Event.changeset(%Event{},
+			%{event_type_id: event_type_id, houseguest_id: houseguest_id,
+				week_id: week_id, additional_info: additional_info})
+
+			Repo.insert!(event)
 	end
 end
 
@@ -209,6 +232,6 @@ season_19_houseguests = [
 		hometown: "DeValls Bluff, AR"
 	}]
 
-Seeds.build_season(~D[2017-06-28], "Big Brother 19", season_19_houseguests)
+Seeds.build_season(~D[2017-06-28], "Big Brother 19", season_19_houseguests, 14)
 
 IO.puts("Done!")

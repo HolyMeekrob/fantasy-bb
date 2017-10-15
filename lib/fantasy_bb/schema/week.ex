@@ -6,7 +6,7 @@ defmodule FantasyBb.Schema.Week do
 
 	schema "week" do
 		belongs_to :season, FantasyBb.Schema.Season
-		field :week_number
+		field :week_number, :integer
 
 		timestamps(updated_at: false)
 
@@ -17,7 +17,7 @@ defmodule FantasyBb.Schema.Week do
 		week
 		|> cast(params, [:season_id, :week_number])
 		|> validate_required([:season_id, :week_number])
-		|> unique_constraint(:season_id, :week_season_id_week_number_index)
+		|> unique_constraint(:season_id, name: :week_season_id_week_number_index)
 		|> assoc_constraint(:season)
 	end
 end
