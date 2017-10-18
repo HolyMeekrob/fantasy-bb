@@ -18,6 +18,7 @@ alias FantasyBb.Schema.Houseguest
 alias FantasyBb.Schema.Player
 alias FantasyBb.Schema.Season
 alias FantasyBb.Schema.Week
+alias FantasyBb.Schema.Vote
 
 defmodule Seeds do
 	def create_event_type(name, description) do
@@ -89,6 +90,13 @@ defmodule Seeds do
 			%{week_id: week_id, order: order})
 
 		Repo.insert!(eviction_ceremony)
+	end
+
+	def create_vote(eviction_ceremony_id, voter_id, candidate_id) do
+		vote = Vote.changeset(%Vote{},
+			%{eviction_ceremony_id: eviction_ceremony_id, voter_id: voter_id, candidate_id: candidate_id})
+
+		Repo.insert!(vote)
 	end
 end
 
@@ -230,5 +238,19 @@ get_ceremony = &(Enum.fetch!(eviction_ceremonies, &1))
 Seeds.create_event(nom.id, christmas.id, get_ceremony.(0).id)
 Seeds.create_event(nom.id, cameron.id, get_ceremony.(0).id)
 Seeds.create_event(nom.id, jillian.id, get_ceremony.(0).id)
+
+Seeds.create_vote(get_ceremony.(0).id, josh.id, christmas.id)
+Seeds.create_vote(get_ceremony.(0).id, kevin.id, cameron.id)
+Seeds.create_vote(get_ceremony.(0).id, alex.id, cameron.id)
+Seeds.create_vote(get_ceremony.(0).id, raven.id, cameron.id)
+Seeds.create_vote(get_ceremony.(0).id, jason.id, christmas.id)
+Seeds.create_vote(get_ceremony.(0).id, matt.id, jillian.id)
+Seeds.create_vote(get_ceremony.(0).id, mark.id, jillian.id)
+Seeds.create_vote(get_ceremony.(0).id, elena.id, cameron.id)
+Seeds.create_vote(get_ceremony.(0).id, cody.id, jillian.id)
+Seeds.create_vote(get_ceremony.(0).id, jessica.id, cameron.id)
+Seeds.create_vote(get_ceremony.(0).id, ramses.id, cameron.id)
+Seeds.create_vote(get_ceremony.(0).id, dom.id, cameron.id)
+Seeds.create_vote(get_ceremony.(0).id, megan.id, cameron.id)
 
 IO.puts("Done!")
