@@ -5,7 +5,7 @@ defmodule FantasyBb.Repo.Migrations.AddWeekTable do
 		create table(:week, primary_key: false) do
 			add :id, :serial, primary_key: true
 			add :season_id, references(:season, type: :serial), null: false
-			add :week_number, :integer, null: false
+			add :week_number, :smallint, null: false
 
 			timestamps(updated_at: false)
 		end

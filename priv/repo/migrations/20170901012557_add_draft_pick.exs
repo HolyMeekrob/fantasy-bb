@@ -7,7 +7,7 @@ defmodule FantasyBb.Repo.Migrations.AddDraftPick do
 			add :houseguest_id, references(:houseguest, type: :serial)
 			add :draft_order, :integer, null: false
 
-			timestamps()
+			timestamps(updated_at: false)
 		end
 	end
 end

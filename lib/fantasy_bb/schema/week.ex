@@ -10,7 +10,7 @@ defmodule FantasyBb.Schema.Week do
 
 		timestamps(updated_at: false)
 
-		has_many :events, FantasyBb.Schema.Event
+		has_many :eviction_ceremonies, FantasyBb.Schema.EvictionCeremony
 	end
 
 	def changeset(week, params \\ %{}) do

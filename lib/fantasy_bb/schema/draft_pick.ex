@@ -9,7 +9,7 @@ defmodule FantasyBb.Schema.DraftPick do
 		belongs_to :houseguest, FantasyBb.Schema.Houseguest
 		field :draft_order, :integer
 
-		timestamps()
+		timestamps(updated_at: false)
 	end
 
 	def changeset(draft_pick, params \\ %{}) do
