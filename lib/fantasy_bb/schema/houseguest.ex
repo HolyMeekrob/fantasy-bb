@@ -13,8 +13,9 @@ defmodule FantasyBb.Schema.Houseguest do
 
 		has_many :events, FantasyBb.Schema.Event
 		has_many :draft_picks, FantasyBb.Schema.DraftPick
-		has_many :votes, FantasyBb.Schema.Vote, foreign_key: :voter_id
-		has_many :votes_for, FantasyBb.Schema.Vote, foreign_key: :candidate_id
+		has_many :eviction_votes, FantasyBb.Schema.EvictionVote, foreign_key: :voter_id
+		has_many :eviction_votes_for, FantasyBb.Schema.EvictionVote, foreign_key: :candidate_id
+		
 		many_to_many :trades, FantasyBb.Schema.Trade, join_through: "trade_piece"
 	end
 

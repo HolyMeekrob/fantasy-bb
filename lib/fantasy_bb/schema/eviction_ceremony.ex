@@ -10,7 +10,7 @@ defmodule FantasyBb.Schema.EvictionCeremony do
 
 		timestamps(updated_at: false)
 
-		has_many :votes, FantasyBb.Schema.Vote
+		has_many :eviction_votes, FantasyBb.Schema.EvictionVote
 		has_many :events, FantasyBb.Schema.Event
 	end
 
