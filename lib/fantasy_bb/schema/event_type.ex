@@ -7,7 +7,6 @@ defmodule FantasyBb.Schema.EventType do
 
 	schema "event_type" do
 		field :name, :string
-		field :description, :string
 
 		timestamps()
 
@@ -17,7 +16,7 @@ defmodule FantasyBb.Schema.EventType do
 
 	def changeset(event_type, params \\ %{}) do
 		event_type
-		|> cast(params, [:name, :description])
+		|> cast(params, [:name])
 		|> validate_required([:name])
 		|> unique_constraint(:name)
 	end

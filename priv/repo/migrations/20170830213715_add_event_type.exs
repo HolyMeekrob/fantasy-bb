@@ -5,7 +5,6 @@ defmodule FantasyBb.Repo.Migrations.AddEventType do
 		create table(:event_type, primary_key: false) do
 			add :id, :serial, primary_key: true
 			add :name, :string, null: false
-			add :description, :text
 
 			timestamps()
 		end
