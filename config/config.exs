@@ -13,7 +13,7 @@ config :fantasy_bb,
 config :fantasy_bb, FantasyBbWeb.Endpoint,
 	url: [host: "localhost"],
 	secret_key_base: "0toKs9icObF4SXWlRjK+nki9fQaaDsMTpvVdOuHh+/GVvAQGXPJE8ibxj9kBBw71",
-	render_errors: [view: FantasyBbWeb.ErrorView, accepts: ~w(json)],
+	render_errors: [view: FantasyBbWeb.ErrorView, accepts: ~w(html json)],
 	pubsub: [name: FantasyBb.PubSub,
 					 adapter: Phoenix.PubSub.PG2]
 
