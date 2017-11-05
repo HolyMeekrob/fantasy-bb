@@ -14,10 +14,20 @@ defmodule FantasyBbWeb.Router do
 		plug :accepts, ["json"]
 	end
 
+	pipeline :authenticated do
+		plug :authenticate
+	end
+
 	scope "/", FantasyBbWeb do
 		pipe_through :browser
 
 		get "/", PageController, :index
+	end
+
+	scope "/login", FantasyBbWeb do
+		pipe_through :browser
+
+		get "/", LoginController, :index
 	end
 
 	scope "/auth", FantasyBbWeb do
@@ -38,5 +48,18 @@ defmodule FantasyBbWeb.Router do
 	# Fetch the current user from the session and add it to `conn.assigns`.
 	defp assign_current_user(conn, _) do
 		assign(conn, :current_user, get_session(conn, :current_user))
+	end
+
+	# Check if the user is authenticated.
+	# If not, redirect them to the login page.
+	defp authenticate(conn, _params) do
+		if(conn.assigns.current_user) do
+			conn
+		else
+			conn
+			|> put_flash(:error, "You must be logged in to access that page.")
+			|> redirect(to: "/login")
+			|> halt()
+		end
 	end
 end
