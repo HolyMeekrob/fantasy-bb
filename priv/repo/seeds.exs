@@ -60,7 +60,6 @@ defmodule Seeds do
 
 		IO.puts("Creating houseguest: #{houseguest.first_name} #{houseguest.last_name}")
 
-		# TODO: Create houseguest
 		hg = Houseguest.changeset(%Houseguest{},
 			%{season_id: season_id, player_id: player.id, hometown: houseguest.hometown})
 

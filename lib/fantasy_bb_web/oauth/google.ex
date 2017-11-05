@@ -5,21 +5,18 @@ defmodule FantasyBbWeb.OAuth.Google do
 
 	use OAuth2.Strategy
 
-	# TODO: Move environment variable retrieval to config.exs
 	defp config do
 		[
 			strategy: __MODULE__,
-			client_id: System.get_env("FBB_GOOGLE_CLIENT_ID"),
-			client_secret: System.get_env("FBB_GOOGLE_CLIENT_SECRET"),
-			redirect_uri: System.get_env("FBB_REDIRECT_URI"),
-			site: "https://accounts.google.com",
 			authorize_url: "https://accounts.google.com/o/oauth2/v2/auth",
 			token_url: "https://www.googleapis.com/oauth2/v4/token"
 		]
 	end
 
 	def client do
-		OAuth2.Client.new(config())
+		Application.get_env(:fantasy_bb, __MODULE__)
+		|> Keyword.merge(config())
+		|> OAuth2.Client.new()
 	end
 
 	def authorize_url!(params \\ []) do

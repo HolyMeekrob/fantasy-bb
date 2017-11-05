@@ -17,6 +17,12 @@ config :fantasy_bb, FantasyBbWeb.Endpoint,
 	pubsub: [name: FantasyBb.PubSub,
 					 adapter: Phoenix.PubSub.PG2]
 
+# Configures Google OAuth
+config :fantasy_bb, FantasyBbWeb.OAuth.Google,
+	client_id: System.get_env("FBB_GOOGLE_CLIENT_ID"),
+	client_secret: System.get_env("FBB_GOOGLE_CLIENT_SECRET"),
+	redirect_uri: System.get_env("FBB_REDIRECT_URI")
+
 # Configures Elixir's Logger
 config :logger, :console,
 	format: "$time $metadata[$level] $message\n",
