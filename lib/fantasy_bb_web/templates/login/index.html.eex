@@ -11,6 +11,9 @@
 		<link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
 	</head>
 	<body>
+		<p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+		<p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
 		<a class="btn btn-primary btn-lg" href="<%= auth_path(@conn, :index, "google") %>">
 			<i class="fa fa-google"></i>
 			Sign in with Google

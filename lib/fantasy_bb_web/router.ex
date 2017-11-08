@@ -37,8 +37,14 @@ defmodule FantasyBbWeb.Router do
 		get "/:provider/callback", AuthController, :callback
 		delete "/logout", AuthController, :delete
 	end
+
+	scope "/account", FantasyBbWeb do
+		pipe_through([:browser, :authenticated])
+
+		get "/profile", AccountController, :profile
+	end
 	
-	scope "/Houseguests", FantasyBbWeb do
+	scope "/houseguests", FantasyBbWeb do
 		pipe_through :api
 
 		get "/", HouseguestController, :index
