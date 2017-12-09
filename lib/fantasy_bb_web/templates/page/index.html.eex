@@ -1,4 +1,4 @@
-<div id="elm_target"></div>
+<div id="elm_target" data-elm-module="Main"></div>
 
 <div class="jumbotron">
 	<h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>

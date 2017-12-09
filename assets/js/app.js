@@ -22,10 +22,24 @@ import "phoenix_html"
 
 import Elm from './elm';
 
-const elmDiv = document.querySelector('#elm_target');
 
-if (elmDiv) {
-	Elm.Main.embed(elmDiv)
-} else {
-	console.error('Elm cannot be embedded. Missing div with id="elm_target"');
-}
+(() => {
+	const elmDiv = document.querySelector('#elm_target');
+
+	if (!elmDiv) {
+		console.error('Elm cannot be embedded. Missing div with id="elm_target"');
+		return;
+	}
+
+	
+	let moduleAttr = elmDiv.attributes.getNamedItem('data-elm-module');
+	if (moduleAttr === null) {
+		console.error('Elm cannot be embedded. '
+		+ 'Missing div with attribute data-elm-module="<module name>"');
+
+		return;
+	}
+
+	let moduleName = moduleAttr.value;
+	Elm[moduleName].embed(elmDiv);
+})();
