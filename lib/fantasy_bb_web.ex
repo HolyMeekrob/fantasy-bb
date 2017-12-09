@@ -28,7 +28,7 @@ defmodule FantasyBbWeb do
 
 	def view do
 		quote do
-			use Phoenix.View, root: "lib/fantasy_bb_web/templates",
+			use Phoenix.View, root: "lib/fantasy_bb_web/pages",
 												namespace: FantasyBbWeb
 
 			# Import convenience functions from controllers
