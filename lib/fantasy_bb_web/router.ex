@@ -21,7 +21,7 @@ defmodule FantasyBbWeb.Router do
 	scope "/", FantasyBbWeb do
 		pipe_through :browser
 
-		get "/", PageController, :index
+		get "/", HomeController, :index
 	end
 
 	scope "/login", FantasyBbWeb do
