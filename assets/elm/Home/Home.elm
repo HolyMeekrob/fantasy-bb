@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Home exposing (..)
 
 import Html exposing (Html, text)
 

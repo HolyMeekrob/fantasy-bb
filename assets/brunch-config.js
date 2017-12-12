@@ -53,7 +53,7 @@ exports.config = {
 			// (required)
 			// Set to the elm file(s) containing your "main" function.
 			// `elm make` handles all elm dependencies relative to `elmFolder`
-			mainModules: ['Main.elm'],
+			mainModules: ['Home/Home.elm'],
 	
 			// (optional)
 			// Set to path where elm-package.json is located.
