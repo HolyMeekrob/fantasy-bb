@@ -51,6 +51,12 @@ defmodule FantasyBbWeb.Router do
 		get "/:id", HouseguestController, :show
 	end
 
+	scope "/api/account", FantasyBbWeb do
+		pipe_through [:api, :authenticated]
+
+		get "/user", AccountController, :user
+	end
+
 	# Fetch the current user from the session and add it to `conn.assigns`.
 	defp assign_current_user(conn, _) do
 		assign(conn, :current_user, get_session(conn, :current_user))
