@@ -12,6 +12,8 @@ defmodule FantasyBbWeb.Router do
 	
 	pipeline :api do
 		plug :accepts, ["json"]
+		plug :fetch_session
+		plug :assign_current_user
 	end
 
 	pipeline :authenticated do
@@ -42,6 +44,7 @@ defmodule FantasyBbWeb.Router do
 		pipe_through([:browser, :authenticated])
 
 		get "/profile", AccountController, :profile
+		get "/user", AccountController, :user
 	end
 	
 	scope "/houseguests", FantasyBbWeb do
@@ -49,12 +52,6 @@ defmodule FantasyBbWeb.Router do
 
 		get "/", HouseguestController, :index
 		get "/:id", HouseguestController, :show
-	end
-
-	scope "/api/account", FantasyBbWeb do
-		pipe_through [:api, :authenticated]
-
-		get "/user", AccountController, :user
 	end
 
 	# Fetch the current user from the session and add it to `conn.assigns`.

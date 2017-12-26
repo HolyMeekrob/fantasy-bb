@@ -6,6 +6,6 @@ defmodule FantasyBbWeb.AccountController do
 	end
 
 	def user(conn, _params) do
-		json conn, %{firstName: "Test", lastName: "User"}
+		render conn, "user.json", conn.assigns.current_user
 	end
 end

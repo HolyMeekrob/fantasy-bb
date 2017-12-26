@@ -3,12 +3,14 @@ module Profile exposing (..)
 import Html exposing (Html, div, program, text)
 import Http exposing (get)
 import Json.Decode exposing (Decoder, string)
-import Json.Decode.Pipeline exposing (decode, required)
+import Json.Decode.Pipeline exposing (decode, optional, required)
 
 
 type alias Model =
     { firstName : String
     , lastName : String
+    , email : String
+    , bio : String
     }
 
 
@@ -16,6 +18,8 @@ getInitialModel : Model
 getInitialModel =
     { firstName = "Unknown"
     , lastName = "Unkown"
+    , email = "Unknown"
+    , bio = "Unknown"
     }
 
 
@@ -27,7 +31,7 @@ fetchProfile : Cmd Msg
 fetchProfile =
     let
         url =
-            "http://localhost:4000/api/account/user"
+            "http://localhost:4000/account/user"
     in
         Http.get url profileDecoder
             |> Http.send SetProfile
@@ -38,6 +42,8 @@ profileDecoder =
     decode Model
         |> required "firstName" string
         |> required "lastName" string
+        |> required "email" string
+        |> optional "bio" string "No bio"
 
 
 init : ( Model, Cmd Msg )
@@ -49,7 +55,21 @@ view : Model -> Html Msg
 view model =
     div
         []
-        [ text model.firstName ]
+        [ div
+            []
+            [ text <| fullName model ]
+        , div
+            []
+            [ text model.email ]
+        , div
+            []
+            [ text model.bio ]
+        ]
+
+
+fullName : Model -> String
+fullName user =
+    user.firstName ++ " " ++ user.lastName
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -59,7 +79,14 @@ update msg model =
             ( { model | firstName = "Error", lastName = "Error" }, Cmd.none )
 
         SetProfile (Ok newModel) ->
-            ( { model | firstName = newModel.firstName, lastName = newModel.lastName }, Cmd.none )
+            ( { model
+                | firstName = newModel.firstName
+                , lastName = newModel.lastName
+                , email = newModel.email
+                , bio = newModel.bio
+              }
+            , Cmd.none
+            )
 
 
 subscriptions : Model -> Sub Msg
