@@ -9,15 +9,18 @@ defmodule FantasyBbWeb.Router do
 		plug :put_secure_browser_headers
 		plug :assign_current_user
 	end
-	
-	pipeline :api do
-		plug :accepts, ["json"]
-		plug :fetch_session
-		plug :assign_current_user
-	end
 
 	pipeline :authenticated do
 		plug :authenticate
+	end
+	
+	pipeline :ajax do
+		plug :accepts, ["json"]
+		plug :fetch_session
+		plug :protect_from_forgery
+		plug :put_secure_browser_headers
+		plug :assign_current_user
+		plug :ajax_authenticate
 	end
 
 	scope "/", FantasyBbWeb do
@@ -44,14 +47,12 @@ defmodule FantasyBbWeb.Router do
 		pipe_through([:browser, :authenticated])
 
 		get "/profile", AccountController, :profile
-		get "/user", AccountController, :user
 	end
-	
-	scope "/houseguests", FantasyBbWeb do
-		pipe_through :api
 
-		get "/", HouseguestController, :index
-		get "/:id", HouseguestController, :show
+	scope "/ajax/account", FantasyBbWeb do
+		pipe_through :ajax
+
+		get "/user", AccountController, :user
 	end
 
 	# Fetch the current user from the session and add it to `conn.assigns`.
@@ -62,13 +63,29 @@ defmodule FantasyBbWeb.Router do
 	# Check if the user is authenticated.
 	# If not, redirect them to the login page.
 	defp authenticate(conn, _params) do
-		if(conn.assigns.current_user) do
-			conn
-		else
-			conn
-			|> put_flash(:error, "You must be logged in to access that page.")
-			|> redirect(to: "/login")
-			|> halt()
+		case Map.fetch(conn.assigns, :current_user) do
+			{:ok, user} ->
+				conn
+
+			:error ->
+				conn
+				|> put_flash(:error, "You must be logged in to access that page.")
+				|> redirect(to: "/login")
+				|> halt()
+		end
+	end
+
+	# Check if the user is authenticated.
+	# If not, return a 401.
+	defp ajax_authenticate(conn, _params) do
+		case Map.fetch(conn.assigns, :current_user) do
+			{:ok, user} ->
+				conn
+
+			:error ->
+				conn
+				|> send_resp(401, "Unauthorized")
+				|> halt()
 		end
 	end
 end

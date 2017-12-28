@@ -31,7 +31,7 @@ fetchProfile : Cmd Msg
 fetchProfile =
     let
         url =
-            "http://localhost:4000/account/user"
+            "http://localhost:4000/ajax/account/user"
     in
         Http.get url profileDecoder
             |> Http.send SetProfile
