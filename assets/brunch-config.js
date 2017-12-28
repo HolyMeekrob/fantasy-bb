@@ -49,6 +49,12 @@ exports.config = {
 			ignore: [/vendor/]
 		},
 
+		sass: {
+			options: {
+				includePaths: ["css"]
+			}
+		},
+
 		elmBrunch: {
 			// (required)
 			// Set to the elm file(s) containing your "main" function.
