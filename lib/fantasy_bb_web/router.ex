@@ -63,29 +63,30 @@ defmodule FantasyBbWeb.Router do
 	# Check if the user is authenticated.
 	# If not, redirect them to the login page.
 	defp authenticate(conn, _params) do
-		case Map.fetch(conn.assigns, :current_user) do
-			{:ok, user} ->
-				conn
-
-			:error ->
+		case Map.get(conn.assigns, :current_user) do
+			nil ->
 				conn
 				|> put_flash(:error, "You must be logged in to access that page.")
 				|> redirect(to: "/login")
 				|> halt()
+
+			_ ->
+				conn
+				
 		end
 	end
 
 	# Check if the user is authenticated.
 	# If not, return a 401.
 	defp ajax_authenticate(conn, _params) do
-		case Map.fetch(conn.assigns, :current_user) do
-			{:ok, user} ->
-				conn
-
-			:error ->
+		case Map.get(conn.assigns, :current_user) do
+			nil ->
 				conn
 				|> send_resp(401, "Unauthorized")
 				|> halt()
+
+			_ ->
+				conn
 		end
 	end
 end

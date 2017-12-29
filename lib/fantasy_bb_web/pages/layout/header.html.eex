@@ -1,7 +1,7 @@
 <%= if assigns[:current_user] do %>
 	<h2>Welcome, <%= @current_user.email %>!</h2>
-	<img src="<%= @current_user.avatar %>" class="img-circle"/>
-	<%= button "Logout", to: auth_path(@conn, :delete), method: :delete, class: "btn btn-danger" %>
+	<img src="<%= @current_user.avatar %>" />
+	<%= button "Logout", to: auth_path(@conn, :delete), method: :delete %>
 
 <% else %>
 	<a href="<%= login_path(@conn, :index) %>">

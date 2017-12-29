@@ -1,12 +1,1 @@
 <div id="elm_target" data-elm-module="Profile"></div>
-
-<dl>
-	<dd>Email</dd>
-	<dt><%= @current_user.email %></dt>
-	<dd>First Name</dd>
-	<dt><%= @current_user.first_name %></dt>
-	<dd>Last Name</dd>
-	<dt><%= @current_user.last_name %></dt>
-	<dd>Bio</dd>
-	<dt><%= @current_user.bio %></dt>
-<dl>
