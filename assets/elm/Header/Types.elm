@@ -5,6 +5,7 @@ import Http
 
 type alias Model =
     { user : User
+    , isLoggedIn : Bool
     }
 
 
@@ -17,3 +18,5 @@ type alias User =
 
 type Msg
     = SetUser (Result Http.Error User)
+    | RequestLogOut
+    | LogOut (Result Http.Error String)

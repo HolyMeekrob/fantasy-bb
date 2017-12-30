@@ -1,12 +1,13 @@
 module Header.View exposing (view)
 
-import Header.Types exposing (Model, Msg)
-import Html exposing (Html, div, h5, img, text)
+import Header.Types as Types exposing (Model, Msg)
+import Html exposing (Html, button, div, h5, img, text)
 import Html.Attributes exposing (src)
+import Html.Events exposing (onClick)
 import String
 
 
-view : Model -> Html msg
+view : Model -> Html Msg
 view model =
     div
         []
@@ -16,6 +17,7 @@ view model =
             , img
                 [ src model.user.avatarUrl ]
                 []
+            , logout model
             ]
         ]
 
@@ -36,3 +38,13 @@ greeting model =
                 ", " ++ model.user.firstName
     in
         String.join "" [ "Welcome", firstName, lastName, "!" ]
+
+
+logout : Model -> Html Msg
+logout model =
+    if model.isLoggedIn then
+        button
+            [ onClick Types.RequestLogOut ]
+            [ text "Log out" ]
+    else
+        text ""

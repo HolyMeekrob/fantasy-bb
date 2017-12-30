@@ -1,4 +1,4 @@
-module Header.Rest exposing (updateUser)
+module Header.Rest exposing (updateUser, logOut)
 
 import Header.Types as Types exposing (Msg)
 import Http
@@ -22,3 +22,21 @@ userDecoder =
         |> required "firstName" string
         |> required "lastName" string
         |> required "avatar" string
+
+
+logOut : Cmd Msg
+logOut =
+    let
+        url =
+            "http://localhost:4000/auth/logout"
+    in
+        Http.request
+            { method = "DELETE"
+            , headers = []
+            , url = url
+            , body = Http.emptyBody
+            , expect = Http.expectString
+            , timeout = Maybe.Nothing
+            , withCredentials = False
+            }
+            |> Http.send Types.LogOut

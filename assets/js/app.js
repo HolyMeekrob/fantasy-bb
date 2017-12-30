@@ -23,6 +23,19 @@ import "phoenix_html"
 import Elm from './elm';
 
 
+// Insert CSRF token into outgoing requests
+const appendCsrfHeaders = () => {
+	const send = XMLHttpRequest.prototype.send;
+	const token = document
+			.querySelector('meta[name=csrf-token]')
+			.getAttribute('content');
+
+	XMLHttpRequest.prototype.send = function(data) {
+		this.setRequestHeader('X-CSRF-Token', token);
+		return send.apply(this, arguments);
+	};
+};
+
 (() => {
 	const elmDiv = document.querySelector('#elm_target');
 
@@ -31,8 +44,7 @@ import Elm from './elm';
 		return;
 	}
 
-	
-	let moduleAttr = elmDiv.attributes.getNamedItem('data-elm-module');
+	const moduleAttr = elmDiv.attributes.getNamedItem('data-elm-module');
 	if (moduleAttr === null) {
 		console.error('Elm cannot be embedded. '
 		+ 'Missing div with attribute data-elm-module="<module name>"');
@@ -40,6 +52,12 @@ import Elm from './elm';
 		return;
 	}
 
-	let moduleName = moduleAttr.value;
-	Elm[moduleName].embed(elmDiv);
+	appendCsrfHeaders();
+	const moduleName = moduleAttr.value;
+	const app = Elm[moduleName].embed(elmDiv);
+
+	// Allow Elm to redirect
+	app.ports.navigate.subscribe(function (url) {
+		window.location.href = url;
+	});
 })();

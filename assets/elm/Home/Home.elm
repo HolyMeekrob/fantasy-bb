@@ -3,7 +3,7 @@ module Home exposing (..)
 import Header.Types
 import Header.State
 import Header.View
-import Html exposing (Html, div, header, program, text)
+import Html exposing (Html, div, header, main_, program, text)
 
 
 type alias Model =
@@ -30,10 +30,10 @@ update msg model =
     case msg of
         HeaderMsg headerMsg ->
             let
-                headerModel =
+                ( headerModel, headerCmd ) =
                     Header.State.update headerMsg model.header
             in
-                ( { model | header = headerModel }, Cmd.none )
+                ( { model | header = headerModel }, Cmd.map HeaderMsg headerCmd )
 
 
 subscriptions : Model -> Sub Msg
@@ -47,8 +47,8 @@ view model =
         []
         [ header
             []
-            [ Header.View.view model.header ]
-        , div
+            [ Html.map HeaderMsg <| Header.View.view model.header ]
+        , main_
             []
             [ text "Home page" ]
         ]
