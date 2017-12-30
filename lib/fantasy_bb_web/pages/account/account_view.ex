@@ -6,7 +6,8 @@ defmodule FantasyBbWeb.AccountView do
 			firstName: user.first_name,
 			lastName: user.last_name,
 			email: user.email,
-			bio: user.bio
+			bio: user.bio,
+			avatar: user.avatar
 		}
 	end
 end
