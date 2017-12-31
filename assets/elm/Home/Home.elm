@@ -4,6 +4,7 @@ import Header.Types
 import Header.State
 import Header.View
 import Html exposing (Html, div, header, main_, program, text)
+import Html.Attributes exposing (class)
 
 
 type alias Model =
@@ -44,12 +45,12 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     div
-        []
+        [ class "wrapper" ]
         [ header
-            []
+            [ class "header" ]
             [ Html.map HeaderMsg <| Header.View.view model.header ]
         , main_
-            []
+            [ class "content" ]
             [ text "Home page" ]
         ]
 
