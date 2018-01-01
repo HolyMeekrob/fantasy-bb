@@ -1,13 +1,16 @@
 module Account.Profile.Types exposing (..)
 
 import Common exposing (User)
+import Header.Types
 import Http
 
 
 type alias Model =
-    { user : User
+    { header : Header.Types.Model
+    , user : User
     }
 
 
 type Msg
-    = SetUser (Result Http.Error User)
+    = HeaderMsg Header.Types.Msg
+    | SetUser (Result Http.Error User)
