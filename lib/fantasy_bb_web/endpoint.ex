@@ -9,7 +9,7 @@ defmodule FantasyBbWeb.Endpoint do
 	# when deploying your static files in production.
 	plug Plug.Static,
 		at: "/", from: :fantasy_bb, gzip: false,
-		only: ~w(css fonts images js favicon.ico robots.txt)
+		only: ~w(css fonts images js android-chrome-192x192.png  android-chrome-256x256.png apple-touch-icon.png browserconfig.xml favicon-16x16.png favicon-32x32.png favicon.ico manifest.json mstile-150x150.png robots.txt safari-pinned-tab.svg)
 
 	# Code reloading can be explicitly enabled under the
 	# :code_reloader configuration of your endpoint.
