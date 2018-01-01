@@ -1,9 +1,9 @@
-module Home exposing (..)
+module Home exposing (main)
 
 import Home.State exposing (init, update, subscriptions)
 import Home.Types as Types exposing (Model, Msg)
 import Home.View as View exposing (view)
-import Html exposing (Html, div, header, main_, program, text)
+import Html exposing (program)
 
 
 main : Program Never Model Msg

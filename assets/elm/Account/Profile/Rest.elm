@@ -1,7 +1,7 @@
-module Home.Rest exposing (fetchUser)
+module Account.Profile.Rest exposing (fetchUser)
 
+import Account.Profile.Types as Types exposing (Model, Msg)
 import Common exposing (User)
-import Home.Types as Types exposing (Msg)
 import Http
 import Json.Decode exposing (Decoder, string)
 import Json.Decode.Pipeline exposing (decode, optional, required)
@@ -23,5 +23,5 @@ userDecoder =
         |> required "firstName" string
         |> required "lastName" string
         |> required "email" string
-        |> optional "bio" string ""
+        |> optional "bio" string "No bio"
         |> required "avatar" string
