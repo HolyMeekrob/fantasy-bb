@@ -1,5 +1,14 @@
 /* This file is for your main application css. */
 
+@import 'sanitize';
+@import 'colors';
+
+body {
+	color: $text-color;
+	background-color: $background;
+	font-size: 16pt;
+}
+
 .wrapper {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
