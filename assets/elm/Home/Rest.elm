@@ -1,10 +1,8 @@
 module Home.Rest exposing (fetchUser)
 
-import Common exposing (User)
+import Common exposing (userDecoder)
 import Home.Types as Types exposing (Msg)
 import Http
-import Json.Decode exposing (Decoder, string)
-import Json.Decode.Pipeline exposing (decode, optional, required)
 
 
 fetchUser : Cmd Msg
@@ -15,13 +13,3 @@ fetchUser =
     in
         Http.get url userDecoder
             |> Http.send Types.SetUser
-
-
-userDecoder : Decoder User
-userDecoder =
-    decode User
-        |> required "firstName" string
-        |> required "lastName" string
-        |> required "email" string
-        |> optional "bio" string ""
-        |> required "avatar" string

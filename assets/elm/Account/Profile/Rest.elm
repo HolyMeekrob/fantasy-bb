@@ -1,10 +1,8 @@
 module Account.Profile.Rest exposing (fetchUser)
 
 import Account.Profile.Types as Types exposing (Model, Msg)
-import Common exposing (User)
+import Common exposing (userDecoder)
 import Http
-import Json.Decode exposing (Decoder, string)
-import Json.Decode.Pipeline exposing (decode, optional, required)
 
 
 fetchUser : Cmd Msg
@@ -15,13 +13,3 @@ fetchUser =
     in
         Http.get url userDecoder
             |> Http.send Types.SetUser
-
-
-userDecoder : Decoder User
-userDecoder =
-    decode User
-        |> required "firstName" string
-        |> required "lastName" string
-        |> required "email" string
-        |> optional "bio" string "No bio"
-        |> required "avatar" string
