@@ -1,22 +1,13 @@
 module Header.Types exposing (..)
 
+import Common exposing (User)
 import Http
 
 
 type alias Model =
-    { user : User
-    , isLoggedIn : Bool
-    }
-
-
-type alias User =
-    { firstName : String
-    , lastName : String
-    , avatarUrl : String
-    }
+    Maybe User
 
 
 type Msg
-    = SetUser (Result Http.Error User)
-    | RequestLogOut
+    = RequestLogOut
     | LogOut (Result Http.Error String)

@@ -1,52 +1,61 @@
 module Header.View exposing (view)
 
+import Common exposing (User)
 import Header.Types as Types exposing (Model, Msg)
-import Html exposing (Html, a, button, div, h5, img, text)
-import Html.Attributes exposing (href, src)
+import Html exposing (Html, a, button, div, img, text)
+import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (onClick)
 import String
 
 
 view : Model -> Html Msg
 view model =
+    case model of
+        Nothing ->
+            loggedOut
+
+        Just user ->
+            loggedIn user
+
+
+loggedOut : Html Msg
+loggedOut =
+    a
+        [ href "/login" ]
+        [ text "Log in" ]
+
+
+loggedIn : User -> Html Msg
+loggedIn user =
     div
         []
-        [ h5
-            []
-            [ text (greeting model)
-            , img
-                [ src model.user.avatarUrl ]
-                []
-            , loginLogout model
+        [ img
+            [ src user.avatarUrl
+            , class "avatar"
             ]
+            []
+        , div
+            [ class "greeting" ]
+            [ text (greeting user) ]
+        , button
+            [ onClick Types.RequestLogOut ]
+            [ text "Log out" ]
         ]
 
 
-greeting : Model -> String
-greeting model =
+greeting : User -> String
+greeting user =
     let
         lastName =
-            if model.user.lastName == "" then
+            if user.lastName == "" then
                 ""
             else
-                " " ++ model.user.lastName
+                " " ++ user.lastName
 
         firstName =
-            if model.user.firstName == "" then
+            if user.firstName == "" then
                 ""
             else
-                ", " ++ model.user.firstName
+                ", " ++ user.firstName
     in
         String.join "" [ "Welcome", firstName, lastName, "!" ]
-
-
-loginLogout : Model -> Html Msg
-loginLogout model =
-    if model.isLoggedIn then
-        button
-            [ onClick Types.RequestLogOut ]
-            [ text "Log out" ]
-    else
-        a
-            [ href "/login" ]
-            [ text "Log in" ]
