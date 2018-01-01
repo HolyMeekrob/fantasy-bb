@@ -29,11 +29,14 @@ loggedIn : User -> Html Msg
 loggedIn user =
     div
         []
-        [ img
-            [ src user.avatarUrl
-            , class "avatar"
+        [ a
+            [ href "/account/profile" ]
+            [ img
+                [ src user.avatarUrl
+                , class "avatar"
+                ]
+                []
             ]
-            []
         , div
             [ class "greeting" ]
             [ text (greeting user) ]
