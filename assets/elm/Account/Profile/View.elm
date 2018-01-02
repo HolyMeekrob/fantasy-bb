@@ -24,9 +24,11 @@ profile model =
             [ text "User Profile" ]
         , dl
             [ class "profile-list" ]
-            (descriptionItem "Name" (fullName model.user)
-                ++ descriptionItem "Email" model.user.email
-                ++ descriptionItem "Bio" model.user.bio
+            (List.concat
+                [ descriptionItem "Name" (fullName model.user)
+                , descriptionItem "Email" model.user.email
+                , descriptionItem "Bio" model.user.bio
+                ]
             )
         ]
 
