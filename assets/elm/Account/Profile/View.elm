@@ -4,7 +4,7 @@ import Account.Profile.Types as Types exposing (Model, Msg)
 import Common.Types exposing (User)
 import Common.Views exposing (layout)
 import Header.View
-import Html exposing (Html, div, dd, dl, dt, h1, section, text)
+import Html exposing (Html, dd, dl, dt, h1, section, text)
 import Html.Attributes exposing (class)
 
 
