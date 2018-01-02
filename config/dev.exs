@@ -12,7 +12,9 @@ config :fantasy_bb, FantasyBbWeb.Endpoint,
 	code_reloader: true,
 	check_origin: false,
 	watchers: [
-		npm: ["start", cd: Path.expand("../assets/", __DIR__)]
+		node: [
+			"node_modules/webpack/bin/webpack.js", "--watch", "--colors", "--progress",
+			cd: Path.expand("../assets/", __DIR__)]
 	]
 
 # ## SSL Support
