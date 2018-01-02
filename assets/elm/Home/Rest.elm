@@ -1,6 +1,6 @@
 module Home.Rest exposing (fetchUser)
 
-import Common exposing (userDecoder)
+import Common.Types exposing (userDecoder)
 import Home.Types as Types exposing (Msg)
 import Http
 

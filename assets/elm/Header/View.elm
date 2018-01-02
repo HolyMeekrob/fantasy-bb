@@ -1,6 +1,6 @@
 module Header.View exposing (view)
 
-import Common exposing (User)
+import Common.Types exposing (User)
 import Header.Types as Types exposing (Model, Msg)
 import Html exposing (Html, a, button, div, img, text)
 import Html.Attributes exposing (class, href, src)

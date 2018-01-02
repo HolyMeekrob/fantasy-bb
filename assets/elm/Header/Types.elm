@@ -1,6 +1,6 @@
 module Header.Types exposing (..)
 
-import Common exposing (User)
+import Common.Types exposing (User)
 import Http
 
 

@@ -1,4 +1,4 @@
-module Common exposing (..)
+module Common.Types exposing (..)
 
 import Json.Decode exposing (Decoder, string)
 import Json.Decode.Pipeline exposing (decode, optional, required)

@@ -1,7 +1,7 @@
 module Account.Profile.View exposing (view)
 
 import Account.Profile.Types as Types exposing (Model, Msg)
-import Common exposing (User)
+import Common.Types exposing (User)
 import Common.Views exposing (layout)
 import Header.View
 import Html exposing (Html, div, text)

@@ -1,7 +1,7 @@
 module Account.Profile.Rest exposing (fetchUser)
 
 import Account.Profile.Types as Types exposing (Model, Msg)
-import Common exposing (userDecoder)
+import Common.Types exposing (userDecoder)
 import Http
 
 
