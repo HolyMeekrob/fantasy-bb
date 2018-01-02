@@ -2,22 +2,16 @@ module Account.Profile.View exposing (view)
 
 import Account.Profile.Types as Types exposing (Model, Msg)
 import Common exposing (User)
+import Common.Views exposing (layout)
 import Header.View
-import Html exposing (Html, div, header, main_, text)
-import Html.Attributes exposing (class)
+import Html exposing (Html, div, text)
 
 
 view : Model -> Html Msg
 view model =
-    div
-        [ class "wrapper" ]
-        [ header
-            [ class "header" ]
-            [ Html.map Types.HeaderMsg <| Header.View.view model.header ]
-        , main_
-            [ class "content" ]
-            [ profile model ]
-        ]
+    layout
+        (Html.map Types.HeaderMsg <| Header.View.view model.header)
+        (profile model)
 
 
 profile : Model -> Html Msg
