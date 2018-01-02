@@ -1,0 +1,25 @@
+.profile {
+	h1 {
+		text-align: center;
+	}
+
+	.profile-list {
+		display: grid;
+		grid-template-columns: 25% auto;
+		grid-column-gap: 1em;
+		grid-row-gap: 1em;
+
+		dt {
+			justify-self: end;
+		}
+
+		dt::after {
+			content: ":"
+		}
+
+		dd {
+			justify-self: start;
+			margin: 0;
+		}
+	}
+}

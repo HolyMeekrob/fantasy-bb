@@ -4,7 +4,8 @@ import Account.Profile.Types as Types exposing (Model, Msg)
 import Common.Types exposing (User)
 import Common.Views exposing (layout)
 import Header.View
-import Html exposing (Html, div, text)
+import Html exposing (Html, div, dd, dl, dt, h1, section, text)
+import Html.Attributes exposing (class)
 
 
 view : Model -> Html Msg
@@ -16,18 +17,29 @@ view model =
 
 profile : Model -> Html Msg
 profile model =
-    div
-        []
-        [ div
+    section
+        [ class "profile" ]
+        [ h1
             []
-            [ text <| fullName model.user ]
-        , div
-            []
-            [ text model.user.email ]
-        , div
-            []
-            [ text model.user.bio ]
+            [ text "User Profile" ]
+        , dl
+            [ class "profile-list" ]
+            (descriptionItem "Name" (fullName model.user)
+                ++ descriptionItem "Email" model.user.email
+                ++ descriptionItem "Bio" model.user.bio
+            )
         ]
+
+
+descriptionItem : String -> String -> List (Html msg)
+descriptionItem term description =
+    [ dt
+        []
+        [ text term ]
+    , dd
+        []
+        [ text description ]
+    ]
 
 
 fullName : User -> String
