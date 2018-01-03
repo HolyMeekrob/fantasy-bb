@@ -20,8 +20,13 @@ import "phoenix_html"
 
 // import socket from "./socket"
 
-import Elm from './elm';
+import Home from '../elm/Home/Home';
+import Profile from '../elm/Account/Profile/Profile';
 
+const elmModules = {
+	Home: Home,
+	Profile: Profile
+};
 
 // Insert CSRF token into outgoing requests
 const appendCsrfHeaders = () => {
@@ -54,7 +59,7 @@ const appendCsrfHeaders = () => {
 
 	appendCsrfHeaders();
 	const moduleName = moduleAttr.value;
-	const app = Elm[moduleName].embed(elmDiv);
+	const app = elmModules[moduleName][moduleName].embed(elmDiv);
 
 	// Allow Elm to redirect
 	app.ports.navigate.subscribe(function (url) {

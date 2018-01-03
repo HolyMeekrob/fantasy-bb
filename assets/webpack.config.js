@@ -12,7 +12,7 @@ const isProduction = env === "prod";
 
 module.exports = {
 	entry: {
-		app: ['./css/app.scss', './js/app.js', './elm/Home/Home.elm']
+		app: ['./css/app.scss', './js/app.js']
 	},
 	devtool: 'source-map',
 	plugins: [
@@ -61,7 +61,7 @@ module.exports = {
 			test: /\.elm$/,
 			exclude: ['/elm-stuff', '/node_modules'],
 			loader: 'elm-webpack-loader',
-			options: { cwd: elmSource, debug: true }
+			options: { cwd: elmSource, debug: !isProduction }
 		}],
 		noParse: [/\.elm$/]
 	}
