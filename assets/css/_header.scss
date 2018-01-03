@@ -1,4 +1,8 @@
 .header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
 	.greeting {
 		font-size: 0.7em;
 		font-weight: bold;
@@ -8,5 +12,18 @@
 
 	.avatar {
 		@extend .circular;
+	}
+
+	.user-area {
+		flex-grow: 0
+	}
+
+	.banner {
+		flex-grow: 1;
+	}
+
+	.banner-image {
+		width: auto;
+		height: 100px;
 	}
 }

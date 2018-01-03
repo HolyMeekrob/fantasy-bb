@@ -33,9 +33,10 @@ h1, h2, h3, h4, h5 {
 
 .header {
 	grid-area: header;
-	margin-left: auto;
+	margin-top: 3rem;
 }
 
 .content {
 	grid-area: main;
+	margin-top: 10rem;
 }
