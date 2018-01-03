@@ -21,11 +21,11 @@ import "phoenix_html"
 // import socket from "./socket"
 
 import Home from '../elm/Home/Home';
-import Profile from '../elm/Account/Profile/Profile';
+import Account_Profile from '../elm/Account/Profile/Profile';
 
 const elmModules = {
-	Home: Home,
-	Profile: Profile
+	Home: Home.Home,
+	Account_Profile: Account_Profile.Account.Profile
 };
 
 // Insert CSRF token into outgoing requests
@@ -58,8 +58,8 @@ const appendCsrfHeaders = () => {
 	}
 
 	appendCsrfHeaders();
-	const moduleName = moduleAttr.value;
-	const app = elmModules[moduleName][moduleName].embed(elmDiv);
+	const moduleName = moduleAttr.value.replace('.', '_');
+	const app = elmModules[moduleName].embed(elmDiv);
 
 	// Allow Elm to redirect
 	app.ports.navigate.subscribe(function (url) {

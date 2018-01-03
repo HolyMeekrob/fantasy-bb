@@ -1,4 +1,4 @@
-module Profile exposing (main)
+module Account.Profile exposing (main)
 
 import Account.Profile.State as State exposing (init, subscriptions, update)
 import Account.Profile.Types as Types exposing (Model, Msg)
