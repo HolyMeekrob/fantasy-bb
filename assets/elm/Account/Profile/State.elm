@@ -3,6 +3,7 @@ module Account.Profile.State exposing (init, subscriptions, update)
 import Account.Profile.Rest as Rest exposing (fetchUser)
 import Account.Profile.Types as Types exposing (Model, Msg)
 import Header.State
+import Common.Commands exposing (send)
 
 
 initialModel : Model
@@ -15,12 +16,13 @@ initialModel =
         , avatarUrl = ""
         }
     , header = Header.State.initialModel
+    , pageState = Types.Loading
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( initialModel, fetchUser )
+    ( initialModel, send Types.FetchUser )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -35,11 +37,20 @@ update msg model =
                 , Cmd.map Types.HeaderMsg headerCmd
                 )
 
+        Types.FetchUser ->
+            ( { model | pageState = Types.Loading }, fetchUser )
+
         Types.SetUser (Err _) ->
             ( initialModel, Cmd.none )
 
         Types.SetUser (Ok newUser) ->
-            ( { model | user = newUser, header = Just newUser }, Cmd.none )
+            ( { model
+                | user = newUser
+                , header = Just newUser
+                , pageState = Types.Loaded
+              }
+            , Cmd.none
+            )
 
 
 subscriptions : Model -> Sub Msg

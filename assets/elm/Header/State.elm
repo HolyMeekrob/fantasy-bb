@@ -2,7 +2,7 @@ module Header.State exposing (..)
 
 import Header.Rest exposing (logOut)
 import Header.Types as Types exposing (Model, Msg)
-import Utils.Navigation exposing (navigate)
+import Common.Navigation exposing (navigate)
 
 
 initialModel : Model
