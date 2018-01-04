@@ -1,3 +1,6 @@
+# Editor config
+.vscode
+
 # App artifacts
 /_build
 /db
