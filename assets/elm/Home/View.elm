@@ -17,5 +17,4 @@ content : Model -> Html Msg
 content model =
     div
         []
-        [ text " Home page"
-        ]
+        [ text " Home page" ]

@@ -19,7 +19,7 @@ module Common.Icons
         , setTransform
         )
 
-import Html exposing (Html, span)
+import Html exposing (Attribute, Html, span)
 import Html.Attributes exposing (attribute, class)
 import String exposing (cons, isEmpty)
 
@@ -78,20 +78,42 @@ setMask mask icon =
     { icon | mask = mask }
 
 
-icon : Name -> Html msg
-icon n =
-    create n
-        |> elem
-
-
-elem : Icon -> Html msg
-elem icon =
+icon : Name -> List (Attribute msg) -> List (Html msg) -> Html msg
+icon name attributes elements =
     let
-        iconStyle =
-            style icon.style
+        icon =
+            create name
+    in
+        elem icon attributes elements
 
-        classes =
-            [ name icon.name
+
+elem : Icon -> List (Attribute msg) -> List (Html msg) -> Html msg
+elem icon attributes elements =
+    let
+        classAttr =
+            class (classes icon)
+
+        transformAttr =
+            transform icon.transform
+
+        maskAttr =
+            mask icon.mask
+    in
+        span
+            (classAttr
+                :: transform icon.transform
+                ++ mask icon.mask
+                ++ attributes
+            )
+            elements
+
+
+classes : Icon -> String
+classes icon =
+    let
+        classNames =
+            [ style icon.style
+            , name icon.name
             , size icon.size
             , width icon.hasFixedWidth
             , border icon.hasBorder
@@ -99,19 +121,15 @@ elem icon =
             , animation icon.animation
             ]
 
-        prependSpace str =
-            if (isEmpty str) then
-                ""
+        prependSpace class classes =
+            if (isEmpty classes) then
+                class
+            else if (isEmpty class) then
+                classes
             else
-                cons ' ' str
+                classes ++ " " ++ class
     in
-        span
-            (class
-                (String.join "" (iconStyle :: List.map prependSpace classes))
-                :: transform icon.transform
-                ++ mask icon.mask
-            )
-            []
+        List.foldl prependSpace "" classNames
 
 
 name : Name -> String
