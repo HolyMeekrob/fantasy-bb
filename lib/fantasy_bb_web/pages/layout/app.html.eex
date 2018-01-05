@@ -20,6 +20,7 @@
 
 		<title>Fantasy Big Brother</title>
 		<link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
 	</head>
 
 	<body>

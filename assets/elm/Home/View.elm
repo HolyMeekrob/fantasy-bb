@@ -10,4 +10,12 @@ view : Model -> Html Msg
 view model =
     layout
         (List.map (Html.map Types.HeaderMsg) (Header.View.view model.header))
-        (text "Home page")
+        (content model)
+
+
+content : Model -> Html Msg
+content model =
+    div
+        []
+        [ text " Home page"
+        ]
