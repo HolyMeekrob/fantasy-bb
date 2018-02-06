@@ -1,57 +1,66 @@
 defmodule FantasyBbWeb.Endpoint do
-	use Phoenix.Endpoint, otp_app: :fantasy_bb
+  use Phoenix.Endpoint, otp_app: :fantasy_bb
 
-	socket "/socket", FantasyBbWeb.UserSocket
+  socket("/socket", FantasyBbWeb.UserSocket)
 
-	# Serve at "/" the static files from "priv/static" directory.
-	#
-	# You should set gzip to true if you are running phoenix.digest
-	# when deploying your static files in production.
-	plug Plug.Static,
-		at: "/", from: :fantasy_bb, gzip: false,
-		only: ~w(css fonts images js android-chrome-192x192.png  android-chrome-256x256.png apple-touch-icon.png browserconfig.xml favicon-16x16.png favicon-32x32.png favicon.ico manifest.json mstile-150x150.png robots.txt safari-pinned-tab.svg)
+  # Serve at "/" the static files from "priv/static" directory.
+  #
+  # You should set gzip to true if you are running phoenix.digest
+  # when deploying your static files in production.
+  plug(
+    Plug.Static,
+    at: "/",
+    from: :fantasy_bb,
+    gzip: false,
+    only:
+      ~w(css fonts images js android-chrome-192x192.png  android-chrome-256x256.png apple-touch-icon.png browserconfig.xml favicon-16x16.png favicon-32x32.png favicon.ico manifest.json mstile-150x150.png robots.txt safari-pinned-tab.svg)
+  )
 
-	# Code reloading can be explicitly enabled under the
-	# :code_reloader configuration of your endpoint.
-	if code_reloading? do
-		socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
-		plug Phoenix.LiveReloader
-		plug Phoenix.CodeReloader
-	end
+  # Code reloading can be explicitly enabled under the
+  # :code_reloader configuration of your endpoint.
+  if code_reloading? do
+    socket("/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket)
+    plug(Phoenix.LiveReloader)
+    plug(Phoenix.CodeReloader)
+  end
 
-	plug Plug.RequestId
-	plug Plug.Logger
+  plug(Plug.RequestId)
+  plug(Plug.Logger)
 
-	plug Plug.Parsers,
-		parsers: [:urlencoded, :multipart, :json],
-		pass: ["*/*"],
-		json_decoder: Poison
+  plug(
+    Plug.Parsers,
+    parsers: [:urlencoded, :multipart, :json],
+    pass: ["*/*"],
+    json_decoder: Poison
+  )
 
-	plug Plug.MethodOverride
-	plug Plug.Head
+  plug(Plug.MethodOverride)
+  plug(Plug.Head)
 
-	# The session will be stored in the cookie and signed,
-	# this means its contents can be read but not tampered with.
-	# Set :encryption_salt if you would also like to encrypt it.
-	plug Plug.Session,
-		store: :cookie,
-		key: "_fantasy_bb_key",
-		signing_salt: "1Zoo9pFL"
+  # The session will be stored in the cookie and signed,
+  # this means its contents can be read but not tampered with.
+  # Set :encryption_salt if you would also like to encrypt it.
+  plug(
+    Plug.Session,
+    store: :cookie,
+    key: "_fantasy_bb_key",
+    signing_salt: "1Zoo9pFL"
+  )
 
-	plug FantasyBbWeb.Router
+  plug(FantasyBbWeb.Router)
 
-	@doc """
-	Callback invoked for dynamically configuring the endpoint.
+  @doc """
+  Callback invoked for dynamically configuring the endpoint.
 
-	It receives the endpoint configuration and checks if
-	configuration should be loaded from the system environment.
-	"""
-	def init(_key, config) do
-		if config[:load_from_system_env] do
-			port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
-			{:ok, Keyword.put(config, :http, [:inet6, port: port])}
-		else
-			{:ok, config}
-		end
-	end
+  It receives the endpoint configuration and checks if
+  configuration should be loaded from the system environment.
+  """
+  def init(_key, config) do
+    if config[:load_from_system_env] do
+      port = System.get_env("PORT") || raise "expected the PORT environment variable to be set"
+      {:ok, Keyword.put(config, :http, [:inet6, port: port])}
+    else
+      {:ok, config}
+    end
+  end
 end

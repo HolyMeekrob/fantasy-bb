@@ -1,23 +1,28 @@
 defmodule FantasyBb.Schema.Week do
-	use Ecto.Schema
-	import Ecto.Changeset, only: [
-		cast: 3, validate_required: 2, unique_constraint: 3, assoc_constraint: 2
-	]
+  use Ecto.Schema
 
-	schema "week" do
-		belongs_to :season, FantasyBb.Schema.Season
-		field :week_number, :integer
+  import Ecto.Changeset,
+    only: [
+      cast: 3,
+      validate_required: 2,
+      unique_constraint: 3,
+      assoc_constraint: 2
+    ]
 
-		timestamps(updated_at: false)
+  schema "week" do
+    belongs_to(:season, FantasyBb.Schema.Season)
+    field(:week_number, :integer)
 
-		has_many :eviction_ceremonies, FantasyBb.Schema.EvictionCeremony
-	end
+    timestamps(updated_at: false)
 
-	def changeset(week, params \\ %{}) do
-		week
-		|> cast(params, [:season_id, :week_number])
-		|> validate_required([:season_id, :week_number])
-		|> unique_constraint(:season_id, name: :week_season_id_week_number_index)
-		|> assoc_constraint(:season)
-	end
+    has_many(:eviction_ceremonies, FantasyBb.Schema.EvictionCeremony)
+  end
+
+  def changeset(week, params \\ %{}) do
+    week
+    |> cast(params, [:season_id, :week_number])
+    |> validate_required([:season_id, :week_number])
+    |> unique_constraint(:season_id, name: :week_season_id_week_number_index)
+    |> assoc_constraint(:season)
+  end
 end

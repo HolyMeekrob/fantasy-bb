@@ -1,3 +1,3 @@
 defmodule FantasyBbWeb.LayoutView do
-	use FantasyBbWeb, :view
+  use FantasyBbWeb, :view
 end

@@ -1,3 +1,3 @@
 defmodule FantasyBbWeb.HomeView do
-	use FantasyBbWeb, :view
+  use FantasyBbWeb, :view
 end
