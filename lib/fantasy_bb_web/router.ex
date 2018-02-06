@@ -53,6 +53,7 @@ defmodule FantasyBbWeb.Router do
 		pipe_through :ajax
 
 		get "/user", AccountController, :user
+		put "/user", AccountController, :update_user
 	end
 
 	# Fetch the current user from the session and add it to `conn.assigns`.

@@ -19,5 +19,5 @@ userDecoder =
         |> required "firstName" string
         |> required "lastName" string
         |> required "email" string
-        |> optional "bio" string "No bio"
+        |> optional "bio" string ""
         |> required "avatar" string

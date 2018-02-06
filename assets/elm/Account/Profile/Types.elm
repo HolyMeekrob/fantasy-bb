@@ -9,15 +9,27 @@ type alias Model =
     { header : Header.Types.Model
     , user : User
     , pageState : PageState
+    , input : Input
+    }
+
+
+type alias Input =
+    { bio : String
     }
 
 
 type PageState
     = Loading
-    | Loaded
+    | View
+    | Edit
 
 
 type Msg
     = HeaderMsg Header.Types.Msg
     | FetchUser
     | SetUser (Result Http.Error User)
+    | EditProfile
+    | CancelEdit
+    | SaveEdit
+    | ViewProfile (Result Http.Error Bool)
+    | BioChanged String

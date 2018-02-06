@@ -1,6 +1,6 @@
 module Account.Profile.State exposing (init, subscriptions, update)
 
-import Account.Profile.Rest as Rest exposing (fetchUser)
+import Account.Profile.Rest as Rest exposing (fetchUser, saveProfile)
 import Account.Profile.Types as Types exposing (Model, Msg)
 import Header.State
 import Common.Commands exposing (send)
@@ -17,6 +17,9 @@ initialModel =
         }
     , header = Header.State.initialModel
     , pageState = Types.Loading
+    , input =
+        { bio = "Unknown"
+        }
     }
 
 
@@ -38,19 +41,62 @@ update msg model =
                 )
 
         Types.FetchUser ->
-            ( { model | pageState = Types.Loading }, fetchUser )
+            { model | pageState = Types.Loading } ! [ fetchUser ]
 
         Types.SetUser (Err _) ->
-            ( initialModel, Cmd.none )
+            initialModel ! []
 
         Types.SetUser (Ok newUser) ->
             ( { model
                 | user = newUser
                 , header = Just newUser
-                , pageState = Types.Loaded
+                , pageState = Types.View
+                , input =
+                    { bio = newUser.bio
+                    }
               }
             , Cmd.none
             )
+
+        Types.EditProfile ->
+            { model | pageState = Types.Edit } ! []
+
+        Types.CancelEdit ->
+            let
+                existingInput =
+                    model.input
+
+                newInput =
+                    { existingInput | bio = model.user.bio }
+            in
+                { model | input = newInput, pageState = Types.View } ! []
+
+        Types.SaveEdit ->
+            let
+                existingUser =
+                    model.user
+
+                newUser =
+                    { existingUser | bio = model.input.bio }
+            in
+                { model | user = newUser, pageState = Types.Loading }
+                    ! [ saveProfile model.input.bio ]
+
+        Types.ViewProfile (Ok _) ->
+            { model | pageState = Types.View } ! []
+
+        Types.ViewProfile (Err _) ->
+            { model | pageState = Types.View } ! []
+
+        Types.BioChanged newBio ->
+            let
+                existingInput =
+                    model.input
+
+                newInput =
+                    { existingInput | bio = newBio }
+            in
+                { model | input = newInput } ! []
 
 
 subscriptions : Model -> Sub Msg
