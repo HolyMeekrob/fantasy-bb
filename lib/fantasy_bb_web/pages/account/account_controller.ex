@@ -1,6 +1,8 @@
 defmodule FantasyBbWeb.AccountController do
   use FantasyBbWeb, :controller
 
+  import FantasyBb.Account, only: [upsert_user: 1]
+
   def profile(conn, _params) do
     render(conn, "profile.html")
   end
@@ -30,13 +32,7 @@ defmodule FantasyBbWeb.AccountController do
       |> Map.take([:first_name, :last_name, :email, :bio, :avatar])
       |> Map.merge(fix_keys.(params))
 
-    changeset =
-      FantasyBb.Schema.User.changeset(
-        %FantasyBb.Schema.User{id: conn.assigns.current_user.id},
-        user
-      )
-
-    case FantasyBb.Repo.update(changeset) do
+    case upsert_user(user) do
       {:ok, updated_user} ->
         conn
         |> put_session(:current_user, updated_user)
