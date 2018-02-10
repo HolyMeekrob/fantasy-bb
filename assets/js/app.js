@@ -9,10 +9,12 @@ import "phoenix_html"
 
 import Home from '../elm/Home/Home';
 import Account_Profile from '../elm/Account/Profile/Profile';
+import Season_Create from '../elm/Season/Create/Create'
 
 const elmModules = {
 	Home: Home.Home,
-	Account_Profile: Account_Profile.Account.Profile
+	Account_Profile: Account_Profile.Account.Profile,
+	Season_Create: Season_Create.Season.Create
 };
 
 // Insert CSRF token into outgoing requests
