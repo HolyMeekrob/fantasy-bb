@@ -4,7 +4,7 @@ import Account.Profile.Types as Types exposing (Model, Msg)
 import Common.Types exposing (User)
 import Common.Views exposing (empty, layout, loading)
 import FontAwesome as FA exposing (edit, iconWithOptions)
-import Header.View
+import Header.View exposing (headerView)
 import Html exposing (Html, a, button, dd, dl, dt, h1, section, text, textarea)
 import Html.Attributes exposing (class, href, value)
 import Html.Events exposing (onClick, onInput)
@@ -13,7 +13,7 @@ import Html.Events exposing (onClick, onInput)
 view : Model -> Html Msg
 view model =
     layout
-        (List.map (Html.map Types.HeaderMsg) (Header.View.view model.header))
+        (headerView Types.HeaderMsg model.header)
         (profile model)
 
 

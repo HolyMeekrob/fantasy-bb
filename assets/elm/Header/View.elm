@@ -1,4 +1,4 @@
-module Header.View exposing (view)
+module Header.View exposing (headerView, view)
 
 import Common.Types exposing (User)
 import Header.Types as Types exposing (Model, Msg)
@@ -6,6 +6,11 @@ import Html exposing (Html, a, button, div, img, text)
 import Html.Attributes exposing (alt, attribute, class, href, src)
 import Html.Events exposing (onClick)
 import String
+
+
+headerView : (Msg -> msg) -> Model -> List (Html msg)
+headerView createMsg model =
+    (List.map (Html.map createMsg) (view model))
 
 
 view : Model -> List (Html Msg)

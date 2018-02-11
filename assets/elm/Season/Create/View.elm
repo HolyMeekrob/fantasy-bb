@@ -2,14 +2,14 @@ module Season.Create.View exposing (view)
 
 import Season.Create.Types as Types exposing (Model, Msg)
 import Common.Views exposing (layout)
-import Header.View
+import Header.View exposing (headerView)
 import Html exposing (Html, div, h1, section, text)
 
 
 view : Model -> Html Msg
 view model =
     layout
-        (List.map (Html.map Types.HeaderMsg) (Header.View.view model.header))
+        (headerView Types.HeaderMsg model.header)
         (primaryView model)
 
 
