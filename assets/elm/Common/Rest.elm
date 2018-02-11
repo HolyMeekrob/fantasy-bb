@@ -2,7 +2,7 @@ module Common.Rest exposing (fetchUser, put)
 
 import Common.Types exposing (User)
 import Http exposing (Body, Request, expectJson, request)
-import Json.Decode exposing (Decoder, string)
+import Json.Decode exposing (Decoder, bool, string)
 import Json.Decode.Pipeline exposing (decode, optional, required)
 
 
@@ -27,6 +27,7 @@ userDecoder =
         |> required "email" string
         |> optional "bio" string ""
         |> required "avatar" string
+        |> optional "isAdmin" bool False
 
 
 fetchUser : (Result Http.Error User -> msg) -> Cmd msg

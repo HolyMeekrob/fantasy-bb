@@ -15,6 +15,7 @@ initialModel =
         , email = "Unknown"
         , bio = "Unknown"
         , avatarUrl = ""
+        , isAdmin = False
         }
     , header = Header.State.initialModel
     , pageState = Types.Loading

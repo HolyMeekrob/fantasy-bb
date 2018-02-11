@@ -3,6 +3,7 @@
 @import 'sanitize';
 
 @import 'colors';
+@import 'common';
 @import 'fonts';
 @import 'images';
 @import 'loading';
@@ -34,12 +35,12 @@ h1, h2, h3, h4, h5 {
 
 .header {
 	grid-area: header;
-	margin-top: 3rem;
+	margin-top: 0.5rem;
 }
 
 .content {
 	grid-area: main;
-	margin-top: 10rem;
+	margin-top: 1rem;
 }
 
 .clickable {

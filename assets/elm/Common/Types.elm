@@ -7,4 +7,5 @@ type alias User =
     , email : String
     , bio : String
     , avatarUrl : String
+    , isAdmin : Bool
     }

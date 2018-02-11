@@ -30,4 +30,8 @@ defmodule FantasyBb.Account do
   def get_user_by_email(email) do
     Repo.get_by(User, email: email)
   end
+
+  def is_admin(user) do
+    true
+  end
 end

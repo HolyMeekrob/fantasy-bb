@@ -1,4 +1,4 @@
-.header {
+.header-top {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -25,5 +25,58 @@
 	.banner-image {
 		width: auto;
 		height: 100px;
+	}
+}
+
+nav {
+	background-color: $accent;
+	color: $highlight;
+
+	a {
+		text-decoration: none;
+		color: $highlight;
+	}
+
+	a:hover {
+		color: darken($highlight, 30%);
+	}
+
+	.top-nav {
+		display: flex;
+		flex-wrap: nowrap;
+		margin-top: 0.5em;
+		margin-left: 3em;
+		background-color: inherit;
+	}
+
+	.nav-item {
+		background-color: inherit;
+	}
+	
+	.sub-nav {
+		display: none;
+		width: inherit;
+		position: absolute;
+		padding: 0 1em;
+		font-size: .7em;
+		background-color: inherit;
+
+		.nav-item {
+			margin: 0.5em 0;
+		}
+	}
+
+	.nav-item.has-sub::after {
+		display: inline-block;
+		content: "^";
+		transform: rotate(180deg);
+		font-size: 0.7em;
+		margin-left: 0.3em;
+	}
+
+	.nav-item:hover {
+		.sub-nav {
+			display: block;
+		}
 	}
 }
