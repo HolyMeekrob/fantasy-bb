@@ -1,5 +1,6 @@
 module Common.Rest exposing (..)
 
+import Common.Types exposing (User, userDecoder)
 import Http exposing (Body, Request, expectJson, request)
 import Json.Decode exposing (Decoder)
 
@@ -15,3 +16,13 @@ put url body decoder =
         , timeout = Nothing
         , withCredentials = False
         }
+
+
+fetchUser : (Result Http.Error User -> msg) -> Cmd msg
+fetchUser createUser =
+    let
+        url =
+            "/ajax/account/user"
+    in
+        Http.get url userDecoder
+            |> Http.send createUser

@@ -1,6 +1,6 @@
 module Season.Create.State exposing (init, subscriptions, update)
 
-import Season.Create.Rest exposing (fetchUser)
+import Common.Rest exposing (fetchUser)
 import Season.Create.Types as Types exposing (Model, Msg)
 import Header.State
 import Common.Commands exposing (send)
@@ -30,7 +30,7 @@ update msg model =
                     ! [ Cmd.map Types.HeaderMsg headerCmd ]
 
         Types.FetchUser ->
-            model ! [ fetchUser ]
+            model ! [ fetchUser Types.SetUser ]
 
         Types.SetUser (Err _) ->
             initialModel ! []

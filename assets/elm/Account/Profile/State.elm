@@ -1,9 +1,10 @@
 module Account.Profile.State exposing (init, subscriptions, update)
 
-import Account.Profile.Rest as Rest exposing (fetchUser, saveProfile)
+import Account.Profile.Rest as Rest exposing (saveProfile)
 import Account.Profile.Types as Types exposing (Model, Msg)
 import Header.State
 import Common.Commands exposing (send)
+import Common.Rest exposing (fetchUser)
 
 
 initialModel : Model
@@ -41,7 +42,7 @@ update msg model =
                 )
 
         Types.FetchUser ->
-            { model | pageState = Types.Loading } ! [ fetchUser ]
+            { model | pageState = Types.Loading } ! [ fetchUser Types.SetUser ]
 
         Types.SetUser (Err _) ->
             initialModel ! []

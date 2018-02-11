@@ -1,21 +1,10 @@
-module Account.Profile.Rest exposing (fetchUser, saveProfile)
+module Account.Profile.Rest exposing (saveProfile)
 
 import Account.Profile.Types as Types exposing (Model, Msg)
 import Common.Rest exposing (put)
-import Common.Types exposing (userDecoder)
 import Http
 import Json.Decode exposing (succeed)
 import Json.Encode as Encode
-
-
-fetchUser : Cmd Msg
-fetchUser =
-    let
-        url =
-            "/ajax/account/user"
-    in
-        Http.get url userDecoder
-            |> Http.send Types.SetUser
 
 
 saveProfile : String -> Cmd Msg
