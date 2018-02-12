@@ -2,8 +2,10 @@ module Season.Create.View exposing (view)
 
 import Season.Create.Types as Types exposing (Model, Msg)
 import Common.Views exposing (layout)
+import Common.Views.Forms exposing (form)
 import Header.View exposing (headerView)
 import Html exposing (Html, div, h1, section, text)
+import Html.Attributes exposing (class)
 
 
 view : Model -> Html Msg
@@ -18,9 +20,20 @@ primaryView model =
     section
         []
         [ h1
-            []
+            [ class "page-title" ]
             [ text "Create Season" ]
         , div
             []
-            [ text "Page content goes here" ]
+            [ form
+                Types.SubmitForm
+                "Submit"
+                [ { id = "season-name"
+                  , type_ = "text"
+                  , label = "Name"
+                  , placeholder = "Season name"
+                  , value = model.name
+                  , onInput = Types.SetName
+                  }
+                ]
+            ]
         ]

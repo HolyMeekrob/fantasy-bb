@@ -15,3 +15,5 @@ type Msg
     = HeaderMsg Header.Types.Msg
     | FetchUser
     | SetUser (Result Http.Error User)
+    | SetName String
+    | SubmitForm

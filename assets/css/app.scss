@@ -8,8 +8,9 @@
 @import 'images';
 @import 'loading';
 
-@import 'header';
-@import 'profile';
+@import 'pages/header';
+@import 'pages/Account/profile';
+@import 'pages/Season/create';
 
 body {
 	color: $text-color;

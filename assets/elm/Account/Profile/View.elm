@@ -33,7 +33,9 @@ viewProfile model =
         [ class "profile" ]
         [ loadingOverlay model
         , h1
-            [ onClick Types.EditProfile ]
+            [ class "page-title"
+            , onClick Types.EditProfile
+            ]
             [ text "User Profile "
             , iconWithOptions
                 edit

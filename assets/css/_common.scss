@@ -1,3 +1,36 @@
 .not-displayed {
 	display: none;
 }
+
+.page-title {
+	text-align: center;
+}
+
+.simple-form {
+	display: grid;
+	grid-template-areas:
+		"label input"
+		". submit";
+	grid-template-columns: 5em auto;
+	grid-column-gap: 2em;
+	grid-row-gap: 1em;
+
+	.form-label {
+		font-weight: bold;
+		grid-area: label;
+	}
+
+	.form-input {
+		grid-area: input;
+		justify-self: end;
+	}
+
+	.form-label::after {
+		content: ":"
+	}
+
+	.form-submit {
+		grid-area: submit;
+		justify-self: end;
+	}
+}

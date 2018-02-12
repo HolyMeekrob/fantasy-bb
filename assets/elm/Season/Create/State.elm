@@ -38,6 +38,12 @@ update msg model =
         Types.SetUser (Ok newUser) ->
             { model | header = Just newUser } ! []
 
+        Types.SetName name ->
+            { model | name = name } ! []
+
+        Types.SubmitForm ->
+            model ! []
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
