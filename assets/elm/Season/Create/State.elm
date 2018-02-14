@@ -1,15 +1,17 @@
 module Season.Create.State exposing (init, subscriptions, update)
 
-import Common.Rest exposing (fetchUser)
-import Season.Create.Types as Types exposing (Model, Msg)
-import Header.State
+import Season.Create.Types as Types exposing (Error, Model, Msg)
 import Common.Commands exposing (send)
+import Common.Rest exposing (fetchUser)
+import Header.State
+import Validate exposing (Validator, validate)
 
 
 initialModel : Model
 initialModel =
     { header = Header.State.initialModel
     , name = ""
+    , errors = []
     }
 
 
@@ -42,9 +44,19 @@ update msg model =
             { model | name = name } ! []
 
         Types.SubmitForm ->
-            model ! []
+            let
+                validationErrors =
+                    Validate.validate validator model
+            in
+                { model | errors = validationErrors } ! []
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
+
+
+validator : Validator Error Model
+validator =
+    Validate.all
+        [ Validate.ifBlank .name ( Types.Name, "Name is required" ) ]

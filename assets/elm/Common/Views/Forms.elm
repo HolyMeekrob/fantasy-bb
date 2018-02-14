@@ -1,6 +1,6 @@
 module Common.Views.Forms exposing (Input, form)
 
-import Html exposing (Html, button, div, label, text)
+import Html exposing (Html, button, div, label, li, text, ul)
 import Html.Attributes exposing (class, for, id, placeholder, type_, value)
 import Html.Events exposing (onInput)
 
@@ -12,6 +12,8 @@ type alias Input msg =
     , placeholder : String
     , value : String
     , onInput : String -> msg
+    , isRequired : Bool
+    , errors : List String
     }
 
 
@@ -35,7 +37,7 @@ inputField input =
         [ class "form-label" ]
         [ label
             [ for input.id ]
-            [ text input.label ]
+            [ text (inputLabel input) ]
         ]
     , div
         [ class "form-input" ]
@@ -48,4 +50,27 @@ inputField input =
             ]
             []
         ]
+    , formErrors input.errors
     ]
+
+
+inputLabel : Input msg -> String
+inputLabel input =
+    if input.isRequired then
+        input.label ++ "*"
+    else
+        input.label
+
+
+formErrors : List String -> Html msg
+formErrors errors =
+    ul
+        [ class "validation-errors" ]
+        (List.map errorLineItem errors)
+
+
+errorLineItem : String -> Html msg
+errorLineItem errorText =
+    li
+        [ class "validation-error" ]
+        [ text errorText ]

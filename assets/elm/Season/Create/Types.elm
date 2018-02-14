@@ -8,7 +8,16 @@ import Http
 type alias Model =
     { header : Header.Types.Model
     , name : String
+    , errors : List Error
     }
+
+
+type FormField
+    = Name
+
+
+type alias Error =
+    ( FormField, String )
 
 
 type Msg

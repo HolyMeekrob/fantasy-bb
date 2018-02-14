@@ -1,6 +1,6 @@
 module Season.Create.View exposing (view)
 
-import Season.Create.Types as Types exposing (Model, Msg)
+import Season.Create.Types as Types exposing (FormField, Model, Msg)
 import Common.Views exposing (layout)
 import Common.Views.Forms exposing (form)
 import Header.View exposing (headerView)
@@ -33,7 +33,19 @@ primaryView model =
                   , placeholder = "Season name"
                   , value = model.name
                   , onInput = Types.SetName
+                  , isRequired = True
+                  , errors = errors Types.Name model
                   }
                 ]
             ]
         ]
+
+
+errors : FormField -> Model -> List String
+errors field model =
+    let
+        fieldMatches =
+            \( errorField, _ ) -> field == errorField
+    in
+        List.filter fieldMatches model.errors
+            |> List.map Tuple.second

@@ -10,6 +10,7 @@
 	display: grid;
 	grid-template-areas:
 		"label input"
+		"validation validation"
 		". submit";
 	grid-template-columns: 5em auto;
 	grid-column-gap: 2em;
@@ -32,5 +33,14 @@
 	.form-submit {
 		grid-area: submit;
 		justify-self: end;
+	}
+
+	.validation-errors {
+		grid-area: validation;
+	}
+
+	.validation-error {
+		color: $error;
+		margin-top: -1em;
 	}
 }
