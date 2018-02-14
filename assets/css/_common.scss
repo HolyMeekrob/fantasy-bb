@@ -7,23 +7,16 @@
 }
 
 .simple-form {
-	display: grid;
-	grid-template-areas:
-		"label input"
-		"validation validation"
-		". submit";
-	grid-template-columns: 5em auto;
-	grid-column-gap: 2em;
-	grid-row-gap: 1em;
 
 	.form-label {
 		font-weight: bold;
-		grid-area: label;
+		width: 7em;
+		display: inline-block;
 	}
 
 	.form-input {
-		grid-area: input;
-		justify-self: end;
+		width: auto;
+		display: inline-block;
 	}
 
 	.form-label::after {
@@ -31,16 +24,14 @@
 	}
 
 	.form-submit {
-		grid-area: submit;
-		justify-self: end;
+		margin-left: 7em;
 	}
 
 	.validation-errors {
-		grid-area: validation;
+		width: 100%;
 	}
 
 	.validation-error {
 		color: $error;
-		margin-top: -1em;
 	}
 }

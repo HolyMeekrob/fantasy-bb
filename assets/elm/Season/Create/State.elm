@@ -4,6 +4,7 @@ import Season.Create.Types as Types exposing (Error, Model, Msg)
 import Common.Commands exposing (send)
 import Common.Rest exposing (fetchUser)
 import Header.State
+import Date exposing (Date)
 import Validate exposing (Validator, validate)
 
 
@@ -11,6 +12,7 @@ initialModel : Model
 initialModel =
     { header = Header.State.initialModel
     , name = ""
+    , start = Nothing
     , errors = []
     }
 
@@ -43,6 +45,14 @@ update msg model =
         Types.SetName name ->
             { model | name = name } ! []
 
+        Types.SetStart dateStr ->
+            case Date.fromString dateStr of
+                Ok newDate ->
+                    { model | start = Just newDate } ! []
+
+                Err _ ->
+                    { model | start = Nothing } ! []
+
         Types.SubmitForm ->
             let
                 validationErrors =
@@ -59,4 +69,6 @@ subscriptions model =
 validator : Validator Error Model
 validator =
     Validate.all
-        [ Validate.ifBlank .name ( Types.Name, "Name is required" ) ]
+        [ Validate.ifBlank .name ( Types.Name, "Name is required" )
+        , Validate.ifNothing .start ( Types.Start, "Start date is required" )
+        ]

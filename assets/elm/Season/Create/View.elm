@@ -1,7 +1,7 @@
 module Season.Create.View exposing (view)
 
 import Season.Create.Types as Types exposing (FormField, Model, Msg)
-import Common.Views exposing (layout)
+import Common.Views exposing (layout, showMaybeDate)
 import Common.Views.Forms exposing (form)
 import Header.View exposing (headerView)
 import Html exposing (Html, div, h1, section, text)
@@ -35,6 +35,15 @@ primaryView model =
                   , onInput = Types.SetName
                   , isRequired = True
                   , errors = errors Types.Name model
+                  }
+                , { id = "season-start"
+                  , type_ = "date"
+                  , label = "Start date"
+                  , placeholder = "Season start date"
+                  , value = showMaybeDate model.start
+                  , onInput = Types.SetStart
+                  , isRequired = True
+                  , errors = errors Types.Start model
                   }
                 ]
             ]
