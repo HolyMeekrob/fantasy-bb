@@ -15,6 +15,6 @@ defmodule FantasyBb.Schema.Season do
   def changeset(season, params \\ %{}) do
     season
     |> cast(params, [:start, :title])
-    |> validate_required([:start])
+    |> validate_required([:start, :title])
   end
 end
