@@ -1,6 +1,7 @@
 module Season.Create.State exposing (init, subscriptions, update)
 
 import Season.Create.Types as Types exposing (Error, Model, Msg)
+import Season.Create.Rest exposing (createSeason)
 import Common.Commands exposing (send)
 import Common.Rest exposing (fetchUser)
 import Header.State
@@ -11,7 +12,7 @@ import Validate exposing (Validator, validate)
 initialModel : Model
 initialModel =
     { header = Header.State.initialModel
-    , name = ""
+    , title = ""
     , start = Nothing
     , errors = []
     }
@@ -42,8 +43,8 @@ update msg model =
         Types.SetUser (Ok newUser) ->
             { model | header = Just newUser } ! []
 
-        Types.SetName name ->
-            { model | name = name } ! []
+        Types.SetTitle title ->
+            { model | title = title } ! []
 
         Types.SetStart dateStr ->
             case Date.fromString dateStr of
@@ -58,7 +59,23 @@ update msg model =
                 validationErrors =
                     Validate.validate validator model
             in
-                { model | errors = validationErrors } ! []
+                if (List.isEmpty validationErrors) then
+                    model ! [ createSeason model ]
+                else
+                    { model | errors = validationErrors } ! []
+
+        Types.SeasonCreated (Err _) ->
+            let
+                newModel =
+                    { model
+                        | errors =
+                            [ ( Types.Summary, "Error creating season" ) ]
+                    }
+            in
+                newModel ! []
+
+        Types.SeasonCreated (Ok season) ->
+            model ! []
 
 
 subscriptions : Model -> Sub Msg
@@ -69,6 +86,6 @@ subscriptions model =
 validator : Validator Error Model
 validator =
     Validate.all
-        [ Validate.ifBlank .name ( Types.Name, "Name is required" )
+        [ Validate.ifBlank .title ( Types.Title, "Title is required" )
         , Validate.ifNothing .start ( Types.Start, "Start date is required" )
         ]

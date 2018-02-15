@@ -8,15 +8,23 @@ import Http
 
 type alias Model =
     { header : Header.Types.Model
-    , name : String
+    , title : String
     , start : Maybe Date
     , errors : List Error
     }
 
 
+type alias Season =
+    { id : Int
+    , title : String
+    , start : String
+    }
+
+
 type FormField
-    = Name
+    = Title
     | Start
+    | Summary
 
 
 type alias Error =
@@ -27,6 +35,7 @@ type Msg
     = HeaderMsg Header.Types.Msg
     | FetchUser
     | SetUser (Result Http.Error User)
-    | SetName String
+    | SetTitle String
     | SetStart String
     | SubmitForm
+    | SeasonCreated (Result Http.Error Season)

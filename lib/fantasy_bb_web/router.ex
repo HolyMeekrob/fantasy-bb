@@ -56,10 +56,16 @@ defmodule FantasyBbWeb.Router do
     put("/user", AccountController, :update_user)
   end
 
+  scope "/ajax/season", FantasyBbWeb do
+    pipe_through(:ajax)
+
+    post("/", SeasonController, :create)
+  end
+
   scope "/admin", FantasyBbWeb do
     pipe_through([:browser, :authenticated])
 
-    get("/season/create", SeasonController, :create)
+    get("/season/create", SeasonController, :create_view)
   end
 
   # Fetch the current user from the session and add it to `conn.assigns`.

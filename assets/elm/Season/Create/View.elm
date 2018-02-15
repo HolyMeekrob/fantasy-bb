@@ -1,7 +1,8 @@
 module Season.Create.View exposing (view)
 
 import Season.Create.Types as Types exposing (FormField, Model, Msg)
-import Common.Views exposing (layout, showMaybeDate)
+import Common.Date exposing (dateToString)
+import Common.Views exposing (layout)
 import Common.Views.Forms exposing (form)
 import Header.View exposing (headerView)
 import Html exposing (Html, div, h1, section, text)
@@ -27,20 +28,24 @@ primaryView model =
             [ form
                 Types.SubmitForm
                 "Submit"
-                [ { id = "season-name"
+                (errors Types.Summary model)
+                [ { id = "season-title"
                   , type_ = "text"
-                  , label = "Name"
-                  , placeholder = "Season name"
-                  , value = model.name
-                  , onInput = Types.SetName
+                  , label = "Title"
+                  , placeholder = "Season title"
+                  , value = model.title
+                  , onInput = Types.SetTitle
                   , isRequired = True
-                  , errors = errors Types.Name model
+                  , errors = errors Types.Title model
                   }
                 , { id = "season-start"
                   , type_ = "date"
                   , label = "Start date"
                   , placeholder = "Season start date"
-                  , value = showMaybeDate model.start
+                  , value =
+                        model.start
+                            |> Maybe.map dateToString
+                            |> Maybe.withDefault ""
                   , onInput = Types.SetStart
                   , isRequired = True
                   , errors = errors Types.Start model

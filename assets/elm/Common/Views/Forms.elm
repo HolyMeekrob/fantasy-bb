@@ -17,14 +17,17 @@ type alias Input msg =
     }
 
 
-form : msg -> String -> List (Input msg) -> Html msg
-form onSubmit submitText inputs =
+form : msg -> String -> List String -> List (Input msg) -> Html msg
+form onSubmit submitText summaryErrors inputs =
     Html.form
         [ class "simple-form"
         , Html.Events.onSubmit onSubmit
         ]
     <|
-        List.concatMap inputField inputs
+        div
+            [ class "validation-summary" ]
+            [ formErrors summaryErrors ]
+            :: List.concatMap inputField inputs
             ++ [ button
                     [ class "form-submit" ]
                     [ text submitText ]
