@@ -1,4 +1,4 @@
-module Common.Rest exposing (fetchUser, userDecoder, put)
+module Common.Rest exposing (fetch, userRequest, put)
 
 import Common.Types exposing (User)
 import Http exposing (Body, Request, expectJson, request)
@@ -30,11 +30,11 @@ userDecoder =
         |> optional "isAdmin" bool False
 
 
-fetchUser : (Result Http.Error User -> msg) -> Cmd msg
-fetchUser createUser =
-    let
-        url =
-            "/ajax/account/user"
-    in
-        Http.get url userDecoder
-            |> Http.send createUser
+userRequest : Request User
+userRequest =
+    Http.get "/ajax/account/user" userDecoder
+
+
+fetch : Request a -> (Result Http.Error a -> msg) -> Cmd msg
+fetch request create =
+    Http.send create request

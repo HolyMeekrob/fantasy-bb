@@ -1,6 +1,6 @@
 module Home.State exposing (init, update, subscriptions)
 
-import Common.Rest exposing (fetchUser)
+import Common.Rest exposing (fetch, userRequest)
 import Header.State
 import Home.Types as Types exposing (Model, Msg)
 
@@ -12,7 +12,7 @@ init =
             { header = Header.State.initialModel
             }
     in
-        ( model, fetchUser Types.SetUser )
+        ( model, fetch userRequest Types.SetUser )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

@@ -4,7 +4,7 @@ import Account.Profile.Rest as Rest exposing (saveProfile)
 import Account.Profile.Types as Types exposing (Model, Msg)
 import Header.State
 import Common.Commands exposing (send)
-import Common.Rest exposing (fetchUser)
+import Common.Rest exposing (fetch, userRequest)
 
 
 initialModel : Model
@@ -43,7 +43,7 @@ update msg model =
                 )
 
         Types.FetchUser ->
-            { model | pageState = Types.Loading } ! [ fetchUser Types.SetUser ]
+            { model | pageState = Types.Loading } ! [ fetch userRequest Types.SetUser ]
 
         Types.SetUser (Err _) ->
             initialModel ! []

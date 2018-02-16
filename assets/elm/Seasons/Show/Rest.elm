@@ -1,21 +1,15 @@
 module Seasons.Show.Rest exposing (initialize)
 
 import Seasons.Show.Types as Types exposing (Msg, Season)
-import Common.Rest exposing (userDecoder)
-import Common.Types exposing (User)
+import Common.Rest exposing (userRequest)
 import Http exposing (Request, toTask)
 import Json.Decode exposing (Decoder, int, string)
 import Json.Decode.Pipeline exposing (decode, required)
 import Task
 
 
-fetchUser : Request User
-fetchUser =
-    Http.get "/ajax/account/user" userDecoder
-
-
-fetchSeason : Int -> Request Season
-fetchSeason id =
+seasonRequest : Int -> Request Season
+seasonRequest id =
     let
         url =
             "/ajax/season/" ++ toString id
@@ -27,8 +21,8 @@ initialize : Int -> Cmd Msg
 initialize id =
     Task.map2
         (\user season -> ( user, season ))
-        (toTask fetchUser)
-        (toTask <| fetchSeason id)
+        (toTask userRequest)
+        (toTask <| seasonRequest id)
         |> Task.attempt Types.SetInitialData
 
 
