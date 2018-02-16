@@ -11,4 +11,8 @@ defmodule FantasyBb.Season do
     Season.changeset(season)
     |> Repo.insert!()
   end
+
+  def get_by_id(id) do
+    Repo.get(Season, id)
+  end
 end

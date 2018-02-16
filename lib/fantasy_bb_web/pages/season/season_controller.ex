@@ -25,4 +25,14 @@ defmodule FantasyBbWeb.SeasonController do
   def show(conn, %{"id" => id}) do
     render(conn, "show.html")
   end
+
+  def get(conn, %{"id" => id}) do
+    case Season.get_by_id(id) do
+      nil ->
+        send_resp(conn, :bad_request, "Season #{id} does not exist")
+
+      season ->
+        render(conn, "season.json", season)
+    end
+  end
 end

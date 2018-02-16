@@ -12,6 +12,7 @@ import Validate exposing (Validator, validate)
 initialModel : Model
 initialModel =
     { header = Header.State.initialModel
+    , pageState = Types.Loading
     , title = ""
     , start = Nothing
     , errors = []
@@ -41,7 +42,7 @@ update msg model =
             initialModel ! []
 
         Types.SetUser (Ok newUser) ->
-            { model | header = Just newUser } ! []
+            { model | header = Just newUser, pageState = Types.Loaded } ! []
 
         Types.SetTitle title ->
             { model | title = title } ! []

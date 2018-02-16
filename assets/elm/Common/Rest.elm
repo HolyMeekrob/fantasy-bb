@@ -1,4 +1,4 @@
-module Common.Rest exposing (fetchUser, put)
+module Common.Rest exposing (fetchUser, userDecoder, put)
 
 import Common.Types exposing (User)
 import Http exposing (Body, Request, expectJson, request)

@@ -48,9 +48,23 @@ const appendCsrfHeaders = () => {
 		return;
 	}
 
+	const getLocation = () => ({ location: window.location.href });
+
+	const flags = {
+		"Seasons.Show": getLocation
+	}
+
+	const getFlags = () => {
+		const key = moduleAttr.value
+		if (!Object.keys(flags).includes(key)) {
+			return undefined;
+		}
+		return flags[key]();
+	};
+
 	appendCsrfHeaders();
 	const moduleName = moduleAttr.value.replace('.', '_');
-	const app = elmModules[moduleName].embed(elmDiv);
+	const app = elmModules[moduleName].embed(elmDiv, getFlags());
 
 	// Allow Elm to redirect
 	app.ports.navigate.subscribe(function (url) {

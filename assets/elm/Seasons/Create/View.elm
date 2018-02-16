@@ -2,7 +2,7 @@ module Seasons.Create.View exposing (view)
 
 import Seasons.Create.Types as Types exposing (FormField, Model, Msg)
 import Common.Date exposing (dateToString)
-import Common.Views exposing (layout)
+import Common.Views exposing (empty, layout, loading)
 import Common.Views.Forms exposing (form)
 import Header.View exposing (headerView)
 import Html exposing (Html, div, h1, section, text)
@@ -20,7 +20,8 @@ primaryView : Model -> Html Msg
 primaryView model =
     section
         []
-        [ h1
+        [ loadingOverlay model
+        , h1
             [ class "page-title" ]
             [ text "Create Season" ]
         , div
@@ -53,6 +54,16 @@ primaryView model =
                 ]
             ]
         ]
+
+
+loadingOverlay : Model -> Html Msg
+loadingOverlay model =
+    case model.pageState of
+        Types.Loading ->
+            loading
+
+        _ ->
+            empty
 
 
 errors : FormField -> Model -> List String

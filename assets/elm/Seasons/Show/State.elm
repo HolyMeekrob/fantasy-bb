@@ -1,20 +1,52 @@
 module Seasons.Show.State exposing (init, subscriptions, update)
 
-import Seasons.Show.Types as Types exposing (Model, Msg)
+import Seasons.Show.Rest exposing (initialize)
+import Seasons.Show.Types as Types exposing (Flags, Model, Msg)
 import Common.Commands exposing (send)
-import Common.Rest exposing (fetchUser)
 import Header.State
+import Regex exposing (regex)
 
 
-initialModel : Model
-initialModel =
+initialModel : String -> Model
+initialModel idStr =
     { header = Header.State.initialModel
+    , pageState = Types.Loading
+    , season =
+        { id = findId idStr
+        , title = ""
+        , start = ""
+        }
     }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( initialModel, send Types.FetchUser )
+findId : String -> Int
+findId url =
+    let
+        expr =
+            regex "^.+\\/(\\d+)$"
+
+        matches =
+            Regex.find Regex.All expr url
+
+        match =
+            List.head matches
+    in
+        case match of
+            Nothing ->
+                0
+
+            Just m ->
+                m.submatches
+                    |> List.map (Maybe.withDefault "")
+                    |> List.head
+                    |> Maybe.withDefault "0"
+                    |> String.toInt
+                    |> Result.withDefault 0
+
+
+init : Flags -> ( Model, Cmd Msg )
+init flags =
+    ( initialModel flags.location, send Types.FetchInitialData )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -25,17 +57,21 @@ update msg model =
                 ( headerModel, headerCmd ) =
                     Header.State.update headerMsg model.header
             in
-                { model | header = headerModel }
-                    ! [ Cmd.map Types.HeaderMsg headerCmd ]
+                { model | header = headerModel } ! []
 
-        Types.FetchUser ->
-            model ! [ fetchUser Types.SetUser ]
+        Types.FetchInitialData ->
+            model ! [ initialize model.season.id ]
 
-        Types.SetUser (Err _) ->
-            initialModel ! []
+        Types.SetInitialData (Err _) ->
+            model ! []
 
-        Types.SetUser (Ok newUser) ->
-            { model | header = Just newUser } ! []
+        Types.SetInitialData (Ok ( user, season )) ->
+            { model
+                | header = Just user
+                , season = season
+                , pageState = Types.View
+            }
+                ! []
 
 
 subscriptions : Model -> Sub Msg

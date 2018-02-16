@@ -8,10 +8,16 @@ import Http
 
 type alias Model =
     { header : Header.Types.Model
+    , pageState : PageState
     , title : String
     , start : Maybe Date
     , errors : List Error
     }
+
+
+type PageState
+    = Loading
+    | Loaded
 
 
 type alias Season =
