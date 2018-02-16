@@ -1,6 +1,6 @@
-module Season.Create.View exposing (view)
+module Seasons.Create.View exposing (view)
 
-import Season.Create.Types as Types exposing (FormField, Model, Msg)
+import Seasons.Create.Types as Types exposing (FormField, Model, Msg)
 import Common.Date exposing (dateToString)
 import Common.Views exposing (layout)
 import Common.Views.Forms exposing (form)

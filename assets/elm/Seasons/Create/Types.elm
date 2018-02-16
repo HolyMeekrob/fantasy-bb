@@ -1,4 +1,4 @@
-module Season.Create.Types exposing (..)
+module Seasons.Create.Types exposing (..)
 
 import Common.Types exposing (User)
 import Header.Types

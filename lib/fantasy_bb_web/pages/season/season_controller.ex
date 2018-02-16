@@ -21,4 +21,8 @@ defmodule FantasyBbWeb.SeasonController do
         send_resp(conn, :internal_server_error, "Error creating season")
     end
   end
+
+  def show(conn, %{"id" => id}) do
+    render(conn, "show.html")
+  end
 end

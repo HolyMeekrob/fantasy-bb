@@ -1,7 +1,7 @@
-module Season.Create.State exposing (init, subscriptions, update)
+module Seasons.Create.State exposing (init, subscriptions, update)
 
-import Season.Create.Types as Types exposing (Error, Model, Msg)
-import Season.Create.Rest exposing (createSeason)
+import Seasons.Create.Types as Types exposing (Error, Model, Msg)
+import Seasons.Create.Rest exposing (createSeason)
 import Common.Commands exposing (send)
 import Common.Rest exposing (fetchUser)
 import Header.State
