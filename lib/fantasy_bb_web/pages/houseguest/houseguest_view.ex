@@ -1,21 +1,25 @@
 defmodule FantasyBbWeb.HouseguestView do
   use FantasyBbWeb, :view
 
-  def render("index.json", %{houseguests: houseguests}) do
-    %{data: render_many(houseguests, __MODULE__, "houseguest.json")}
-  end
+  alias FantasyBbWeb.PlayerView
 
-  def render("show.json", %{houseguest: houseguest}) do
-    %{data: render_one(houseguest, __MODULE__, "houseguest.json")}
-  end
-
-  def render("houseguest.json", %{houseguest: houseguest}) do
+  def render("houseguest.json", houseguest) do
     %{
       id: houseguest.id,
       season_id: houseguest.season_id,
       player_id: houseguest.player_id,
-      hometown: houseguest.hometown,
-      inserted_at: houseguest.inserted_at
+      hometown: houseguest.hometown
     }
+  end
+
+  def render("houseguest_with_player.json", %{houseguest: houseguest}) do
+    render("houseguest_with_player.json", houseguest)
+  end
+
+  def render("houseguest_with_player.json", houseguest) do
+    Map.merge(
+      render("houseguest.json", houseguest),
+      render(PlayerView, "player.json", houseguest.player)
+    )
   end
 end

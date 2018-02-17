@@ -2,6 +2,8 @@ defmodule FantasyBb.Season do
   alias FantasyBb.Repo
   alias FantasyBb.Schema.Season
 
+  import Ecto.Query, only: [from: 1, from: 2]
+
   def create(season) do
     Season.changeset(season)
     |> Repo.insert()
@@ -12,7 +14,16 @@ defmodule FantasyBb.Season do
     |> Repo.insert!()
   end
 
-  def get_by_id(id) do
-    Repo.get(Season, id)
+  def query() do
+    from(season in Season)
+  end
+
+  def with_players(query) do
+    from(
+      season in query,
+      left_join: houseguests in assoc(season, :houseguests),
+      join: player in assoc(houseguests, :player),
+      preload: [houseguests: {houseguests, player: player}]
+    )
   end
 end

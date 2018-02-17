@@ -1,6 +1,7 @@
 defmodule FantasyBbWeb.SeasonController do
   use FantasyBbWeb, :controller
 
+  alias FantasyBb.Repo
   alias FantasyBb.Season
 
   def create_view(conn, _params) do
@@ -22,17 +23,22 @@ defmodule FantasyBbWeb.SeasonController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => _}) do
     render(conn, "show.html")
   end
 
   def get(conn, %{"id" => id}) do
-    case Season.get_by_id(id) do
+    season =
+      Season.query()
+      |> Season.with_players()
+      |> Repo.get(id)
+
+    case season do
       nil ->
         send_resp(conn, :bad_request, "Season #{id} does not exist")
 
-      season ->
-        render(conn, "season.json", season)
+      _ ->
+        render(conn, "season_with_players.json", season)
     end
   end
 end
