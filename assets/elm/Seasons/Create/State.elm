@@ -3,6 +3,7 @@ module Seasons.Create.State exposing (init, subscriptions, update)
 import Seasons.Create.Types as Types exposing (Error, Model, Msg)
 import Seasons.Create.Rest exposing (createSeason)
 import Common.Commands exposing (send)
+import Common.Navigation exposing (navigate)
 import Common.Rest exposing (fetch, userRequest)
 import Header.State
 import Date exposing (Date)
@@ -76,7 +77,11 @@ update msg model =
                 newModel ! []
 
         Types.SeasonCreated (Ok season) ->
-            model ! []
+            let
+                url =
+                    "/seasons/" ++ (toString season.id)
+            in
+                model ! [ navigate url ]
 
 
 subscriptions : Model -> Sub Msg
