@@ -3,8 +3,8 @@ module Seasons.Show.View exposing (view)
 import Seasons.Show.Types as Types exposing (Houseguest, Model, Msg, Season)
 import Common.Views exposing (empty, layout, loading)
 import Header.View exposing (headerView)
-import Html exposing (Html, dd, div, dl, dt, h1, li, section, text, ul)
-import Html.Attributes exposing (class)
+import Html exposing (Html, a, dd, div, dl, dt, h1, li, section, text, ul)
+import Html.Attributes exposing (class, href)
 
 
 view : Model -> Html Msg
@@ -76,11 +76,16 @@ houseguestInfo houseguest =
             [houseguest.firstName, nickname, houseguest.lastName]
             |> List.filter (\str -> not (String.isEmpty str))
             |> String.join " "
+
+        url = "/houseguests/" ++ toString houseguest.id
     in
         
     li
         []
-        [text name]
+        [a
+            [href url]
+            [text name]
+        ]
 
 
 loadingOverlay : Model -> Html Msg
