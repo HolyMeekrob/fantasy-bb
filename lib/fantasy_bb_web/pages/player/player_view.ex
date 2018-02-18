@@ -3,9 +3,9 @@ defmodule FantasyBbWeb.PlayerView do
 
   def render("player.json", player) do
     %{
-      first_name: player.first_name,
-      last_name: player.last_name,
-      nick_name: player.nick_name,
+      firstName: player.first_name,
+      lastName: player.last_name,
+      nickname: player.nick_name,
       birthday: player.birthday
     }
   end

@@ -1,9 +1,9 @@
 module Seasons.Show.View exposing (view)
 
-import Seasons.Show.Types as Types exposing (Model, Msg)
+import Seasons.Show.Types as Types exposing (Houseguest, Model, Msg, Season)
 import Common.Views exposing (empty, layout, loading)
 import Header.View exposing (headerView)
-import Html exposing (Html, dd, div, dl, dt, h1, section, text)
+import Html exposing (Html, dd, div, dl, dt, h1, li, section, text, ul)
 import Html.Attributes exposing (class)
 
 
@@ -22,31 +22,65 @@ primaryView model =
         , h1
             [ class "page-title" ]
             [ text "View Season" ]
-        , div
+        , seasonInfo model.season
+        , houseguests model.season.houseguests
+        ]
+
+seasonInfo : Season -> Html Msg
+seasonInfo season =
+    div
+        []
+        [ dl
             []
-            [ dl
+            [ dt
                 []
-                [ dt
-                    []
-                    [ text "Id" ]
-                , dd
-                    []
-                    [ text (toString model.season.id) ]
-                , dt
-                    []
-                    [ text "Title" ]
-                , dd
-                    []
-                    [ text model.season.title ]
-                , dt
-                    []
-                    [ text "Start" ]
-                , dd
-                    []
-                    [ text model.season.start ]
-                ]
+                [ text "Id" ]
+            , dd
+                []
+                [ text (toString season.id) ]
+            , dt
+                []
+                [ text "Title" ]
+            , dd
+                []
+                [ text season.title ]
+            , dt
+                []
+                [ text "Start" ]
+            , dd
+                []
+                [ text season.start ]
             ]
         ]
+
+houseguests : List Houseguest -> Html Msg
+houseguests houseguests =
+    div
+        []
+        [ text "Houseguests"
+        , ul
+            []
+            (List.map houseguestInfo houseguests)
+        ]
+
+houseguestInfo : Houseguest -> Html Msg
+houseguestInfo houseguest =
+    let
+        nickname =
+            case houseguest.nickname of
+                Just name ->
+                    "\"" ++ name ++ "\""
+                Nothing ->
+                    ""
+        name =
+            [houseguest.firstName, nickname, houseguest.lastName]
+            |> List.filter (\str -> not (String.isEmpty str))
+            |> String.join " "
+    in
+        
+    li
+        []
+        [text name]
 
 
 loadingOverlay : Model -> Html Msg

@@ -6,8 +6,8 @@ defmodule FantasyBbWeb.HouseguestView do
   def render("houseguest.json", houseguest) do
     %{
       id: houseguest.id,
-      season_id: houseguest.season_id,
-      player_id: houseguest.player_id,
+      seasonId: houseguest.season_id,
+      playerId: houseguest.player_id,
       hometown: houseguest.hometown
     }
   end
