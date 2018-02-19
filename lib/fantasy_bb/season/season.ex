@@ -21,9 +21,8 @@ defmodule FantasyBb.Season do
   def with_players(query) do
     from(
       season in query,
-      left_join: houseguests in assoc(season, :houseguests),
-      join: player in assoc(houseguests, :player),
-      preload: [houseguests: {houseguests, player: player}]
+      left_join: player in assoc(season, :players),
+      preload: [players: player]
     )
   end
 end

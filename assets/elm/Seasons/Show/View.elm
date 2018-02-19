@@ -1,6 +1,6 @@
 module Seasons.Show.View exposing (view)
 
-import Seasons.Show.Types as Types exposing (Houseguest, Model, Msg, Season)
+import Seasons.Show.Types as Types exposing (Player, Model, Msg, Season)
 import Common.Views exposing (empty, layout, loading)
 import Header.View exposing (headerView)
 import Html exposing (Html, a, dd, div, dl, dt, h1, li, section, text, ul)
@@ -23,8 +23,9 @@ primaryView model =
             [ class "page-title" ]
             [ text "View Season" ]
         , seasonInfo model.season
-        , houseguests model.season.houseguests
+        , houseguests model.season.players
         ]
+
 
 seasonInfo : Season -> Html Msg
 seasonInfo season =
@@ -53,39 +54,43 @@ seasonInfo season =
             ]
         ]
 
-houseguests : List Houseguest -> Html Msg
-houseguests houseguests =
+
+houseguests : List Player -> Html Msg
+houseguests players =
     div
         []
         [ text "Houseguests"
         , ul
             []
-            (List.map houseguestInfo houseguests)
+            (List.map houseguestInfo players)
         ]
 
-houseguestInfo : Houseguest -> Html Msg
-houseguestInfo houseguest =
+
+houseguestInfo : Player -> Html Msg
+houseguestInfo player =
     let
         nickname =
-            case houseguest.nickname of
+            case player.nickname of
                 Just name ->
                     "\"" ++ name ++ "\""
+
                 Nothing ->
                     ""
-        name =
-            [houseguest.firstName, nickname, houseguest.lastName]
-            |> List.filter (\str -> not (String.isEmpty str))
-            |> String.join " "
 
-        url = "/houseguests/" ++ toString houseguest.id
+        name =
+            [ player.firstName, nickname, player.lastName ]
+                |> List.filter (\str -> not (String.isEmpty str))
+                |> String.join " "
+
+        url =
+            "/players/" ++ toString player.id
     in
-        
-    li
-        []
-        [a
-            [href url]
-            [text name]
-        ]
+        li
+            []
+            [ a
+                [ href url ]
+                [ text name ]
+            ]
 
 
 loadingOverlay : Model -> Html Msg

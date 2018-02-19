@@ -9,7 +9,7 @@ defmodule FantasyBb.Schema.Season do
     timestamps()
 
     has_many(:leagues, FantasyBb.Schema.League)
-    has_many(:houseguests, FantasyBb.Schema.Houseguest)
+    many_to_many(:players, FantasyBb.Schema.Player, join_through: FantasyBb.Schema.Houseguest)
   end
 
   def changeset(season, params \\ %{}) do

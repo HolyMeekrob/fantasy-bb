@@ -12,7 +12,6 @@ defmodule FantasyBb.Schema.Houseguest do
   schema "houseguest" do
     belongs_to(:season, FantasyBb.Schema.Season)
     belongs_to(:player, FantasyBb.Schema.Player)
-    field(:hometown, :string)
 
     timestamps(updated_at: false)
 
@@ -26,7 +25,7 @@ defmodule FantasyBb.Schema.Houseguest do
 
   def changeset(houseguest, params \\ %{}) do
     houseguest
-    |> cast(params, [:season_id, :player_id, :hometown])
+    |> cast(params, [:season_id, :player_id])
     |> validate_required([:season_id, :player_id])
     |> unique_constraint(:player_id, name: :houseguest_season_id_player_id_index)
     |> assoc_constraint(:season)

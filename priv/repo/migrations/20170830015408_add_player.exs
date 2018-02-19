@@ -6,7 +6,8 @@ defmodule FantasyBb.Repo.Migrations.AddPlayer do
       add(:id, :serial, primary_key: true)
       add(:first_name, :string, null: false)
       add(:last_name, :string, null: false)
-      add(:nick_name, :string)
+      add(:nickname, :string)
+      add(:hometown, :string)
       add(:birthday, :date)
 
       timestamps()

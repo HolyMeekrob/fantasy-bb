@@ -11,19 +11,22 @@ type alias Model =
     , season : Season
     }
 
-type alias Houseguest =
+
+type alias Player =
     { id : Int
     , firstName : String
     , lastName : String
     , nickname : Maybe String
     }
 
+
 type alias Season =
     { id : Int
     , title : String
     , start : String
-    , houseguests : List Houseguest
+    , players : List Player
     }
+
 
 type alias Flags =
     { location : String }

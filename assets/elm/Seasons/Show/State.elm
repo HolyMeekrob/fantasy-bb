@@ -15,7 +15,7 @@ initialModel idStr =
         { id = findId idStr
         , title = ""
         , start = ""
-        , houseguests = []
+        , players = []
         }
     }
 

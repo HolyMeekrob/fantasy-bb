@@ -5,7 +5,8 @@ defmodule FantasyBb.Schema.Player do
   schema "player" do
     field(:first_name, :string)
     field(:last_name, :string)
-    field(:nick_name, :string)
+    field(:nickname, :string)
+    field(:hometown, :string)
     field(:birthday, :date)
 
     timestamps()
@@ -16,7 +17,7 @@ defmodule FantasyBb.Schema.Player do
 
   def changeset(player, params \\ %{}) do
     player
-    |> cast(params, [:first_name, :last_name, :nick_name, :birthday])
+    |> cast(params, [:first_name, :last_name, :nickname, :birthday, :hometown])
     |> validate_required([:first_name, :last_name])
   end
 end

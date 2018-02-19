@@ -6,7 +6,6 @@ defmodule FantasyBb.Repo.Migrations.AddHouseguest do
       add(:id, :serial, primary_key: true)
       add(:season_id, references(:season, type: :serial), null: false)
       add(:player_id, references(:player, type: :serial), null: false)
-      add(:hometown, :string)
 
       timestamps(updated_at: false)
     end

@@ -63,7 +63,8 @@ defmodule Seeds do
       create_player(
         houseguest.first_name,
         houseguest.last_name,
-        houseguest.nick_name,
+        houseguest.nickname,
+        houseguest.hometown,
         houseguest.birthday
       )
 
@@ -72,8 +73,7 @@ defmodule Seeds do
     hg =
       Houseguest.changeset(%Houseguest{}, %{
         season_id: season_id,
-        player_id: player.id,
-        hometown: houseguest.hometown
+        player_id: player.id
       })
 
     Repo.insert!(hg)
@@ -87,14 +87,15 @@ defmodule Seeds do
     Repo.insert!(week)
   end
 
-  def create_player(first_name, last_name, nick_name, birthday) do
+  def create_player(first_name, last_name, nickname, hometown, birthday) do
     IO.puts("Creating player: #{first_name} #{last_name}")
 
     player =
       Player.changeset(%Player{}, %{
         first_name: first_name,
         last_name: last_name,
-        nick_name: nick_name,
+        nickname: nickname,
+        hometown: hometown,
         birthday: birthday
       })
 
@@ -354,119 +355,119 @@ season_19_houseguests = [
   %{
     first_name: "Alexandra",
     last_name: "Ow",
-    nick_name: "Alex",
+    nickname: "Alex",
     birthday: ~D[1988-12-20],
     hometown: "Thousand Oaks, CA"
   },
   %{
     first_name: "Cameron",
     last_name: "Heard",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1992-08-27],
     hometown: "North Aurora, IL"
   },
   %{
     first_name: "Christmas",
     last_name: "Abbott",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1981-12-20],
     hometown: "Lynchburg, VA"
   },
   %{
     first_name: "Cody",
     last_name: "Nickson",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1985-04-13],
     hometown: "Lake Mills, IA"
   },
   %{
     first_name: "Dominique",
     last_name: "Cooper",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1986-07-11],
     hometown: "Tuskegee, AL"
   },
   %{
     first_name: "Elena",
     last_name: "Davies",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1990-08-19],
     hometown: "Fort Worth, TX"
   },
   %{
     first_name: "Jason",
     last_name: "Dent",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1979-07-12],
     hometown: "Humeston, IA"
   },
   %{
     first_name: "Jessica",
     last_name: "Graf",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1990-12-11],
     hometown: "Cranston, RI"
   },
   %{
     first_name: "Jillian",
     last_name: "Parker",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1993-05-12],
     hometown: "Celebration, FL"
   },
   %{
     first_name: "Joshua",
     last_name: "Martinez",
-    nick_name: "Josh",
+    nickname: "Josh",
     birthday: ~D[1994-01-04],
     hometown: "Miami, FL"
   },
   %{
     first_name: "Kevin",
     last_name: "Schlehuber",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1961-08-07],
     hometown: "Boston, MA"
   },
   %{
     first_name: "Mark",
     last_name: "Jansen",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1991-06-13],
     hometown: "Grand Island, NY"
   },
   %{
     first_name: "Matthew",
     last_name: "Clines",
-    nick_name: "Matt",
+    nickname: "Matt",
     birthday: nil,
     hometown: "Arlington, VA"
   },
   %{
     first_name: "Megan",
     last_name: "Lowder",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1989-03-07],
     hometown: "Cathedral City, CA"
   },
   %{
     first_name: "Paul",
     last_name: "Abrahamian",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1993-06-13],
     hometown: "Tarzana, CA"
   },
   %{
     first_name: "Ramses",
     last_name: "Soto",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1995-12-18],
     hometown: "Grand Rapids, MI"
   },
   %{
     first_name: "Raven",
     last_name: "Walton",
-    nick_name: nil,
+    nickname: nil,
     birthday: ~D[1994-06-10],
     hometown: "DeValls Bluff, AR"
   }

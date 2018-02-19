@@ -1,7 +1,7 @@
 defmodule FantasyBbWeb.SeasonView do
   use FantasyBbWeb, :view
 
-  alias FantasyBbWeb.HouseguestView
+  alias FantasyBbWeb.PlayerView
 
   def render("season.json", season) do
     %{
@@ -14,11 +14,11 @@ defmodule FantasyBbWeb.SeasonView do
   def render("season_with_players.json", season) do
     render("season.json", season)
     |> Map.put(
-      :houseguests,
+      :players,
       render_many(
-        season.houseguests,
-        HouseguestView,
-        "houseguest_with_player.json"
+        season.players,
+        PlayerView,
+        "player.json"
       )
     )
   end

@@ -1,6 +1,6 @@
 module Seasons.Show.Rest exposing (initialize)
 
-import Seasons.Show.Types as Types exposing (Houseguest, Msg, Season)
+import Seasons.Show.Types as Types exposing (Player, Msg, Season)
 import Common.Rest exposing (userRequest)
 import Http exposing (Request, toTask)
 import Json.Decode exposing (Decoder, int, list, nullable, string)
@@ -32,11 +32,12 @@ seasonDecoder =
         |> required "id" int
         |> required "title" string
         |> required "start" string
-        |> optional "houseguests" (list houseguestDecoder) []
+        |> optional "players" (list playerDecoder) []
 
-houseguestDecoder : Decoder Houseguest
-houseguestDecoder =
-    decode Houseguest
+
+playerDecoder : Decoder Player
+playerDecoder =
+    decode Player
         |> required "id" int
         |> required "firstName" string
         |> required "lastName" string
