@@ -1,6 +1,7 @@
 module Seasons.Show.Types exposing (..)
 
 import Common.Types exposing (User)
+import Editable exposing (Editable)
 import Header.Types
 import Http
 
@@ -8,7 +9,7 @@ import Http
 type alias Model =
     { header : Header.Types.Model
     , pageState : PageState
-    , season : Season
+    , season : Editable Season
     }
 
 
@@ -34,10 +35,15 @@ type alias Flags =
 
 type PageState
     = Loading
-    | View
+    | Loaded
 
 
 type Msg
     = HeaderMsg Header.Types.Msg
     | FetchInitialData
     | SetInitialData (Result Http.Error ( User, Season ))
+    | EditSeason
+    | CancelEdit
+    | SetTitle String
+    | SetStart String
+    | SubmitForm

@@ -10,19 +10,20 @@ import Common.Rest exposing (fetch, userRequest)
 
 initialModel : Model
 initialModel =
-    let user =
-        { firstName = "Unknown"
-        , lastName = "Unkown"
-        , email = "Unknown"
-        , bio = "Unknown"
-        , avatarUrl = ""
-        , isAdmin = False
-        }
+    let
+        user =
+            { firstName = ""
+            , lastName = ""
+            , email = ""
+            , bio = ""
+            , avatarUrl = ""
+            , isAdmin = False
+            }
     in
         { user = Editable.ReadOnly user
         , header = Header.State.initialModel
         , pageState = Types.Loading
-    }
+        }
 
 
 init : ( Model, Cmd Msg )
@@ -43,7 +44,8 @@ update msg model =
                 )
 
         Types.FetchUser ->
-            { model | pageState = Types.Loading } ! [ fetch userRequest Types.SetUser ]
+            { model | pageState = Types.Loading }
+                ! [ fetch userRequest Types.SetUser ]
 
         Types.SetUser (Err _) ->
             initialModel ! []
@@ -62,21 +64,21 @@ update msg model =
                 | user = Editable.edit model.user
                 , pageState = Types.Edit
             }
-            ! []
+                ! []
 
         Types.CancelEdit ->
             { model
-                | user = Editable.cancel model.user 
+                | user = Editable.cancel model.user
                 , pageState = Types.View
             }
-            ! []
+                ! []
 
         Types.SaveEdit ->
             { model
                 | user = Editable.save model.user
                 , pageState = Types.Loading
             }
-            ! [ saveProfile <| .bio (Editable.value model.user) ]
+                ! [ saveProfile <| .bio (Editable.value model.user) ]
 
         Types.ViewProfile (Ok _) ->
             { model | pageState = Types.View } ! []
@@ -92,6 +94,7 @@ update msg model =
                             Editable.Editable
                                 saved
                                 { modified | bio = newBio }
+
                         Editable.ReadOnly _ ->
                             model.user
             in

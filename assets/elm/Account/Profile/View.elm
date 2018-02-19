@@ -30,8 +30,9 @@ profile model =
 
 viewProfile : Model -> Html Msg
 viewProfile model =
-    let user =
-        getUser model
+    let
+        user =
+            getUser model
     in
         section
             [ class "profile" ]
@@ -45,8 +46,7 @@ viewProfile model =
                     edit
                     FA.Solid
                     [ FA.Size FA.ExtraSmall ]
-                    [ class "clickable"
-                    ]
+                    [ class "clickable" ]
                 ]
             , dl
                 [ class "profile-list" ]
@@ -57,6 +57,7 @@ viewProfile model =
                     ]
                 )
             ]
+
 
 getUser : Model -> User
 getUser model =
@@ -74,7 +75,8 @@ getBio user =
 editProfile : Model -> Html Msg
 editProfile model =
     let
-        user = getUser model
+        user =
+            getUser model
     in
         section
             [ class "profile" ]
