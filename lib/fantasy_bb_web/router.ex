@@ -56,13 +56,25 @@ defmodule FantasyBbWeb.Router do
     put("/user", AccountController, :update_user)
   end
 
+  scope "/players", FantasyBbWeb do
+    pipe_through([:browser, :authenticated])
+
+    get("/:id", PlayerController, :show)
+  end
+
+  scope "/ajax/players", FantasyBbWeb do
+    pipe_through(:ajax)
+
+    get("/:id", PlayerController, :get)
+  end
+
   scope "/seasons", FantasyBbWeb do
     pipe_through([:browser, :authenticated])
 
     get("/:id", SeasonController, :show)
   end
 
-  scope "/ajax/season", FantasyBbWeb do
+  scope "/ajax/seasons", FantasyBbWeb do
     pipe_through(:ajax)
 
     get("/:id", SeasonController, :get)

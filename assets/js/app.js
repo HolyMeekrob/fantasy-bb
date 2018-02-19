@@ -9,12 +9,14 @@ import "phoenix_html"
 
 import Home from '../elm/Home/Home';
 import Account_Profile from '../elm/Account/Profile/Profile';
+import Players_Show from '../elm/Players/Show/Show'
 import Seasons_Create from '../elm/Seasons/Create/Create'
 import Seasons_Show from '../elm/Seasons/Show/Show'
 
 const elmModules = {
 	Home: Home.Home,
 	Account_Profile: Account_Profile.Account.Profile,
+	Players_Show: Players_Show.Players.Show,
 	Seasons_Create: Seasons_Create.Seasons.Create,
 	Seasons_Show: Seasons_Show.Seasons.Show
 };
@@ -51,7 +53,8 @@ const appendCsrfHeaders = () => {
 	const getLocation = () => ({ location: window.location.href });
 
 	const flags = {
-		"Seasons.Show": getLocation
+		"Seasons.Show": getLocation,
+		"Players.Show": getLocation
 	}
 
 	const getFlags = () => {

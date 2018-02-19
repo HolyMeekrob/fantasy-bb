@@ -1,7 +1,8 @@
 module Seasons.Show.View exposing (view)
 
-import Seasons.Show.Types as Types exposing (Player, Model, Msg, Season)
+import Seasons.Show.Types as Types exposing (Model, Msg, Player, Season)
 import Common.Views exposing (empty, layout, loading)
+import Common.Views.Text exposing (playerName)
 import Header.View exposing (headerView)
 import Html exposing (Html, a, dd, div, dl, dt, h1, li, section, text, ul)
 import Html.Attributes exposing (class, href)
@@ -69,18 +70,8 @@ houseguests players =
 houseguestInfo : Player -> Html Msg
 houseguestInfo player =
     let
-        nickname =
-            case player.nickname of
-                Just name ->
-                    "\"" ++ name ++ "\""
-
-                Nothing ->
-                    ""
-
         name =
-            [ player.firstName, nickname, player.lastName ]
-                |> List.filter (\str -> not (String.isEmpty str))
-                |> String.join " "
+            playerName player.firstName player.lastName player.nickname
 
         url =
             "/players/" ++ toString player.id

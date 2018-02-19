@@ -12,7 +12,7 @@ createSeason : Model -> Cmd Msg
 createSeason model =
     let
         url =
-            "/ajax/season"
+            "/ajax/seasons"
 
         data =
             Encode.object

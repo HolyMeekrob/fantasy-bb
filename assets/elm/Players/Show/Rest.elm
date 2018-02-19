@@ -1,6 +1,6 @@
-module Seasons.Show.Rest exposing (initialize)
+module Players.Show.Rest exposing (initialize)
 
-import Seasons.Show.Types as Types exposing (Player, Msg, Season)
+import Players.Show.Types as Types exposing (Player, Msg)
 import Common.Rest exposing (userRequest)
 import Http exposing (Request, toTask)
 import Json.Decode exposing (Decoder, int, list, nullable, string)
@@ -8,31 +8,22 @@ import Json.Decode.Pipeline exposing (decode, optional, required)
 import Task
 
 
-seasonRequest : Int -> Request Season
-seasonRequest id =
+playerRequest : Int -> Request Player
+playerRequest id =
     let
         url =
-            "/ajax/seasons/" ++ toString id
+            "/ajax/players/" ++ toString id
     in
-        Http.get url seasonDecoder
+        Http.get url playerDecoder
 
 
 initialize : Int -> Cmd Msg
 initialize id =
     Task.map2
-        (\user season -> ( user, season ))
+        (\user player -> ( user, player ))
         (toTask userRequest)
-        (toTask <| seasonRequest id)
+        (toTask <| playerRequest id)
         |> Task.attempt Types.SetInitialData
-
-
-seasonDecoder : Decoder Season
-seasonDecoder =
-    decode Season
-        |> required "id" int
-        |> required "title" string
-        |> required "start" string
-        |> optional "players" (list playerDecoder) []
 
 
 playerDecoder : Decoder Player
@@ -42,3 +33,5 @@ playerDecoder =
         |> required "firstName" string
         |> required "lastName" string
         |> optional "nickname" (nullable string) Nothing
+        |> optional "hometown" (nullable string) Nothing
+        |> optional "birthday" (nullable string) Nothing

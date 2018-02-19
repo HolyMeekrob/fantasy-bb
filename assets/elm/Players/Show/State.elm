@@ -1,7 +1,7 @@
-module Seasons.Show.State exposing (init, subscriptions, update)
+module Players.Show.State exposing (init, subscriptions, update)
 
-import Seasons.Show.Rest exposing (initialize)
-import Seasons.Show.Types as Types exposing (Flags, Model, Msg)
+import Players.Show.Rest exposing (initialize)
+import Players.Show.Types as Types exposing (Flags, Model, Msg)
 import Common.Commands exposing (send)
 import Common.Navigation exposing (findId)
 import Header.State
@@ -11,11 +11,13 @@ initialModel : String -> Model
 initialModel idStr =
     { header = Header.State.initialModel
     , pageState = Types.Loading
-    , season =
+    , player =
         { id = findId idStr
-        , title = ""
-        , start = ""
-        , players = []
+        , firstName = ""
+        , lastName = ""
+        , nickname = Nothing
+        , hometown = Nothing
+        , birthday = Nothing
         }
     }
 
@@ -36,15 +38,15 @@ update msg model =
                 { model | header = headerModel } ! []
 
         Types.FetchInitialData ->
-            model ! [ initialize model.season.id ]
+            model ! [ initialize model.player.id ]
 
         Types.SetInitialData (Err _) ->
             model ! []
 
-        Types.SetInitialData (Ok ( user, season )) ->
+        Types.SetInitialData (Ok ( user, player )) ->
             { model
                 | header = Just user
-                , season = season
+                , player = player
                 , pageState = Types.View
             }
                 ! []
