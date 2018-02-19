@@ -2,6 +2,7 @@ module Account.Profile.State exposing (init, subscriptions, update)
 
 import Account.Profile.Rest as Rest exposing (saveProfile)
 import Account.Profile.Types as Types exposing (Model, Msg)
+import Editable
 import Header.State
 import Common.Commands exposing (send)
 import Common.Rest exposing (fetch, userRequest)
@@ -9,7 +10,7 @@ import Common.Rest exposing (fetch, userRequest)
 
 initialModel : Model
 initialModel =
-    { user =
+    let user =
         { firstName = "Unknown"
         , lastName = "Unkown"
         , email = "Unknown"
@@ -17,11 +18,10 @@ initialModel =
         , avatarUrl = ""
         , isAdmin = False
         }
-    , header = Header.State.initialModel
-    , pageState = Types.Loading
-    , input =
-        { bio = "Unknown"
-        }
+    in
+        { user = Editable.ReadOnly user
+        , header = Header.State.initialModel
+        , pageState = Types.Loading
     }
 
 
@@ -50,39 +50,33 @@ update msg model =
 
         Types.SetUser (Ok newUser) ->
             ( { model
-                | user = newUser
+                | user = Editable.ReadOnly newUser
                 , header = Just newUser
                 , pageState = Types.View
-                , input =
-                    { bio = newUser.bio
-                    }
               }
             , Cmd.none
             )
 
         Types.EditProfile ->
-            { model | pageState = Types.Edit } ! []
+            { model
+                | user = Editable.edit model.user
+                , pageState = Types.Edit
+            }
+            ! []
 
         Types.CancelEdit ->
-            let
-                existingInput =
-                    model.input
-
-                newInput =
-                    { existingInput | bio = model.user.bio }
-            in
-                { model | input = newInput, pageState = Types.View } ! []
+            { model
+                | user = Editable.cancel model.user 
+                , pageState = Types.View
+            }
+            ! []
 
         Types.SaveEdit ->
-            let
-                existingUser =
-                    model.user
-
-                newUser =
-                    { existingUser | bio = model.input.bio }
-            in
-                { model | user = newUser, pageState = Types.Loading }
-                    ! [ saveProfile model.input.bio ]
+            { model
+                | user = Editable.save model.user
+                , pageState = Types.Loading
+            }
+            ! [ saveProfile <| .bio (Editable.value model.user) ]
 
         Types.ViewProfile (Ok _) ->
             { model | pageState = Types.View } ! []
@@ -92,13 +86,16 @@ update msg model =
 
         Types.BioChanged newBio ->
             let
-                existingInput =
-                    model.input
-
-                newInput =
-                    { existingInput | bio = newBio }
+                updatedUser =
+                    case model.user of
+                        Editable.Editable saved modified ->
+                            Editable.Editable
+                                saved
+                                { modified | bio = newBio }
+                        Editable.ReadOnly _ ->
+                            model.user
             in
-                { model | input = newInput } ! []
+                { model | user = updatedUser } ! []
 
 
 subscriptions : Model -> Sub Msg

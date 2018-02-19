@@ -1,20 +1,15 @@
 module Account.Profile.Types exposing (..)
 
 import Common.Types exposing (User)
+import Editable exposing (Editable)
 import Header.Types
 import Http
 
 
 type alias Model =
     { header : Header.Types.Model
-    , user : User
+    , user : Editable User
     , pageState : PageState
-    , input : Input
-    }
-
-
-type alias Input =
-    { bio : String
     }
 
 
