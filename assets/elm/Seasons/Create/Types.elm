@@ -1,7 +1,7 @@
 module Seasons.Create.Types exposing (..)
 
-import Common.Views.Forms exposing (Error)
 import Common.Types exposing (User)
+import Common.Views.Forms exposing (Error)
 import Date exposing (Date)
 import Header.Types
 import Http

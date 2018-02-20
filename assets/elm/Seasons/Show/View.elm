@@ -1,6 +1,13 @@
 module Seasons.Show.View exposing (view)
 
-import Seasons.Show.Types as Types exposing (Model, Msg, Player, Season)
+import Seasons.Show.Types as Types
+    exposing
+        ( FormField
+        , Model
+        , Msg
+        , Player
+        , Season
+        )
 import Common.Views exposing (empty, layout, loading)
 import Common.Views.Forms exposing (form)
 import Common.Views.Text exposing (playerName)
@@ -35,19 +42,19 @@ primaryView model =
                 [ FA.Size FA.ExtraSmall ]
                 [ class "clickable" ]
             ]
-        , season model.season
+        , season model
         , houseguests model.season
         ]
 
 
-season : Editable Season -> Html Msg
-season season =
-    case season of
+season : Model -> Html Msg
+season model =
+    case model.season of
         Editable.ReadOnly value ->
             viewSeason value
 
-        Editable.Editable _ modifiedSeason ->
-            editSeason modifiedSeason
+        Editable.Editable _ _ ->
+            editSeason model
 
 
 viewSeason : Season -> Html Msg
@@ -78,38 +85,42 @@ viewSeason season =
         ]
 
 
-editSeason : Season -> Html Msg
-editSeason season =
-    div
-        []
-        [ form
-            Types.SubmitForm
-            "Save"
+editSeason : Model -> Html Msg
+editSeason model =
+    let
+        season =
+            Editable.value model.season
+    in
+        div
             []
-            [ { id = "season-title"
-              , type_ = "text"
-              , label = "Title"
-              , placeholder = "Season title"
-              , value = season.title
-              , onInput = Types.SetTitle
-              , isRequired = True
-              , errors = []
-              }
-            , { id = "season-start"
-              , type_ = "date"
-              , label = "Start date"
-              , placeholder = "Season start date"
-              , value = season.start
+            [ form
+                Types.SubmitForm
+                "Save"
+                (errors Types.Summary model)
+                [ { id = "season-title"
+                  , type_ = "text"
+                  , label = "Title"
+                  , placeholder = "Season title"
+                  , value = season.title
+                  , onInput = Types.SetTitle
+                  , isRequired = True
+                  , errors = errors Types.Title model
+                  }
+                , { id = "season-start"
+                  , type_ = "date"
+                  , label = "Start date"
+                  , placeholder = "Season start date"
+                  , value = season.start
 
-              -- model.start
-              --     |> Maybe.map dateToString
-              --     |> Maybe.withDefault ""
-              , onInput = Types.SetStart
-              , isRequired = True
-              , errors = []
-              }
+                  -- model.start
+                  --     |> Maybe.map dateToString
+                  --     |> Maybe.withDefault ""
+                  , onInput = Types.SetStart
+                  , isRequired = True
+                  , errors = errors Types.Start model
+                  }
+                ]
             ]
-        ]
 
 
 houseguests : Editable Season -> Html Msg
@@ -153,3 +164,13 @@ loadingOverlay model =
 
         _ ->
             empty
+
+
+errors : FormField -> Model -> List String
+errors field model =
+    let
+        fieldMatches =
+            \( errorField, _ ) -> field == errorField
+    in
+        List.filter fieldMatches model.errors
+            |> List.map Tuple.second

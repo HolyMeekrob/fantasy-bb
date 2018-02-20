@@ -1,11 +1,13 @@
 module Seasons.Show.State exposing (init, subscriptions, update)
 
 import Seasons.Show.Rest exposing (initialize)
-import Seasons.Show.Types as Types exposing (Flags, Model, Msg)
+import Seasons.Show.Types as Types exposing (Flags, FormField, Model, Msg, Season)
 import Common.Commands exposing (send)
 import Common.Navigation exposing (findId)
+import Common.Views.Forms exposing (Error)
 import Editable
 import Header.State
+import Validate exposing (Validator, validate)
 
 
 initialModel : String -> Model
@@ -21,6 +23,7 @@ initialModel idStr =
         { header = Header.State.initialModel
         , pageState = Types.Loading
         , season = Editable.ReadOnly season
+        , errors = []
         }
 
 
@@ -78,9 +81,39 @@ update msg model =
                 { model | season = updatedSeason } ! []
 
         Types.SubmitForm ->
-            { model | season = Editable.save model.season } ! []
+            let
+                validationErrors =
+                    Validate.validate validator model
+            in
+                if (List.isEmpty validationErrors) then
+                    { model | season = Editable.save model.season } ! []
+                else
+                    { model | errors = validationErrors } ! []
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
+
+
+getSeason : Model -> Season
+getSeason model =
+    Editable.value model.season
+
+
+getTitle : Model -> String
+getTitle =
+    getSeason >> .title
+
+
+getStart : Model -> String
+getStart =
+    getSeason >> .start
+
+
+validator : Validator (Error FormField) Model
+validator =
+    Validate.all
+        [ Validate.ifBlank getTitle ( Types.Title, "Title is required" )
+        , Validate.ifBlank getStart ( Types.Start, "Start date is required" )
+        ]

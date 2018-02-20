@@ -1,6 +1,7 @@
 module Seasons.Show.Types exposing (..)
 
 import Common.Types exposing (User)
+import Common.Views.Forms exposing (Error)
 import Editable exposing (Editable)
 import Header.Types
 import Http
@@ -10,6 +11,7 @@ type alias Model =
     { header : Header.Types.Model
     , pageState : PageState
     , season : Editable Season
+    , errors : List (Error FormField)
     }
 
 
@@ -36,6 +38,11 @@ type alias Flags =
 type PageState
     = Loading
     | Loaded
+
+type FormField
+    = Title
+    | Start
+    | Summary
 
 
 type Msg
