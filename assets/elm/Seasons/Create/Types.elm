@@ -1,8 +1,9 @@
 module Seasons.Create.Types exposing (..)
 
+import Common.Views.Forms exposing (Error)
 import Common.Types exposing (User)
-import Header.Types
 import Date exposing (Date)
+import Header.Types
 import Http
 
 
@@ -11,7 +12,7 @@ type alias Model =
     , pageState : PageState
     , title : String
     , start : Maybe Date
-    , errors : List Error
+    , errors : List (Error FormField)
     }
 
 
@@ -31,10 +32,6 @@ type FormField
     = Title
     | Start
     | Summary
-
-
-type alias Error =
-    ( FormField, String )
 
 
 type Msg

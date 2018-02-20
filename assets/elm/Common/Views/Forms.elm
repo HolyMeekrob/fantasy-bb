@@ -1,9 +1,11 @@
-module Common.Views.Forms exposing (Input, form)
+module Common.Views.Forms exposing (Error, Input, form)
 
 import Html exposing (Html, button, div, label, li, text, ul)
 import Html.Attributes exposing (class, for, id, placeholder, type_, value)
 import Html.Events exposing (onInput)
 
+type alias Error a =
+    ( a, String )
 
 type alias Input msg =
     { id : String

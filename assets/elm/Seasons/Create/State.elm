@@ -1,10 +1,11 @@
 module Seasons.Create.State exposing (init, subscriptions, update)
 
-import Seasons.Create.Types as Types exposing (Error, Model, Msg)
+import Seasons.Create.Types as Types exposing (FormField, Model, Msg)
 import Seasons.Create.Rest exposing (createSeason)
 import Common.Commands exposing (send)
 import Common.Navigation exposing (navigate)
 import Common.Rest exposing (fetch, userRequest)
+import Common.Views.Forms exposing (Error)
 import Header.State
 import Date exposing (Date)
 import Validate exposing (Validator, validate)
@@ -89,7 +90,7 @@ subscriptions model =
     Sub.none
 
 
-validator : Validator Error Model
+validator : Validator (Error FormField) Model
 validator =
     Validate.all
         [ Validate.ifBlank .title ( Types.Title, "Title is required" )
