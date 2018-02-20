@@ -20,12 +20,10 @@ view model =
 
 profile : Model -> Html Msg
 profile model =
-    case model.pageState of
-        Types.Edit ->
-            editProfile model
-
-        _ ->
-            viewProfile model
+    if (Editable.isEditable model.user) then
+        editProfile model
+    else
+        viewProfile model
 
 
 viewProfile : Model -> Html Msg
@@ -89,7 +87,7 @@ editProfile model =
                 (List.concat
                     [ descriptionItem "Name" (fullName user)
                     , descriptionItem "Email" user.email
-                    , editItem "Bio" user.bio Types.BioChanged
+                    , editItem "Bio" user.bio Types.UpdateBio
                     ]
                 )
             , button

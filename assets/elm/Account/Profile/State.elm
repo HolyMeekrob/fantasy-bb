@@ -54,24 +54,16 @@ update msg model =
             ( { model
                 | user = Editable.ReadOnly newUser
                 , header = Just newUser
-                , pageState = Types.View
+                , pageState = Types.Loaded
               }
             , Cmd.none
             )
 
         Types.EditProfile ->
-            { model
-                | user = Editable.edit model.user
-                , pageState = Types.Edit
-            }
-                ! []
+            { model | user = Editable.edit model.user } ! []
 
         Types.CancelEdit ->
-            { model
-                | user = Editable.cancel model.user
-                , pageState = Types.View
-            }
-                ! []
+            { model | user = Editable.cancel model.user } ! []
 
         Types.SaveEdit ->
             { model
@@ -81,12 +73,12 @@ update msg model =
                 ! [ saveProfile <| .bio (Editable.value model.user) ]
 
         Types.ViewProfile (Ok _) ->
-            { model | pageState = Types.View } ! []
+            { model | pageState = Types.Loaded } ! []
 
         Types.ViewProfile (Err _) ->
-            { model | pageState = Types.View } ! []
+            { model | pageState = Types.Loaded } ! []
 
-        Types.BioChanged newBio ->
+        Types.UpdateBio newBio ->
             let
                 updatedUser =
                     case model.user of

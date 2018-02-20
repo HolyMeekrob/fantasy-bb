@@ -15,8 +15,7 @@ type alias Model =
 
 type PageState
     = Loading
-    | View
-    | Edit
+    | Loaded
 
 
 type Msg
@@ -27,4 +26,4 @@ type Msg
     | CancelEdit
     | SaveEdit
     | ViewProfile (Result Http.Error Bool)
-    | BioChanged String
+    | UpdateBio String
