@@ -77,8 +77,9 @@ defmodule FantasyBbWeb.Router do
   scope "/ajax/seasons", FantasyBbWeb do
     pipe_through(:ajax)
 
-    get("/:id", SeasonController, :get)
     post("/", SeasonController, :create)
+    get("/:id", SeasonController, :get)
+    put("/:id", SeasonController, :update)
   end
 
   scope "/admin", FantasyBbWeb do

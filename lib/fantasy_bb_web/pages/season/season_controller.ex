@@ -41,4 +41,16 @@ defmodule FantasyBbWeb.SeasonController do
         render(conn, "season_with_players.json", season)
     end
   end
+
+  def update(conn, %{"id" => id, "title" => title, "start" => start}) do
+    input = %{title: title, start: Date.from_iso8601!(start)}
+
+    case Season.update(id, input) do
+      {:ok, season} ->
+        render(conn, "season.json", season)
+
+      {:error, _} ->
+        send_resp(conn, :internal_server_error, "Error updating season")
+    end
+  end
 end

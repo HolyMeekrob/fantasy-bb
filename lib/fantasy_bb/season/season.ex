@@ -4,14 +4,18 @@ defmodule FantasyBb.Season do
 
   import Ecto.Query, only: [from: 1, from: 2]
 
+  def get(id) do
+    Repo.get(Season, id)
+  end
+
   def create(season) do
     Season.changeset(season)
     |> Repo.insert()
   end
 
-  def create!(season) do
-    Season.changeset(season)
-    |> Repo.insert!()
+  def update(id, changes) do
+    Season.changeset(get(id), changes)
+    |> Repo.update()
   end
 
   def query() do

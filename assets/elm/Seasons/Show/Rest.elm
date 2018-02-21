@@ -1,10 +1,11 @@
-module Seasons.Show.Rest exposing (initialize)
+module Seasons.Show.Rest exposing (initialize, updateSeason)
 
 import Seasons.Show.Types as Types exposing (Player, Msg, Season)
-import Common.Rest exposing (userRequest)
+import Common.Rest exposing (put, userRequest)
 import Http exposing (Request, toTask)
-import Json.Decode exposing (Decoder, int, list, nullable, string)
+import Json.Decode exposing (Decoder, int, list, nullable, string, succeed)
 import Json.Decode.Pipeline exposing (decode, optional, required)
+import Json.Encode as Encode
 import Task
 
 
@@ -24,6 +25,23 @@ initialize id =
         (toTask userRequest)
         (toTask <| seasonRequest id)
         |> Task.attempt Types.SetInitialData
+
+
+updateSeason : Season -> Cmd Msg
+updateSeason season =
+    let
+        url =
+            "/ajax/seasons/" ++ toString season.id
+
+        data =
+            Encode.object
+                [ ( "title", Encode.string season.title )
+                , ( "start", Encode.string season.start )
+                ]
+                |> Http.jsonBody
+    in
+        put url data seasonDecoder
+            |> Http.send Types.SeasonUpdated
 
 
 seasonDecoder : Decoder Season

@@ -1,6 +1,6 @@
 module Seasons.Show.State exposing (init, subscriptions, update)
 
-import Seasons.Show.Rest exposing (initialize)
+import Seasons.Show.Rest exposing (initialize, updateSeason)
 import Seasons.Show.Types as Types exposing (Flags, FormField, Model, Msg, Season)
 import Common.Commands exposing (send)
 import Common.Navigation exposing (findId)
@@ -86,9 +86,27 @@ update msg model =
                     Validate.validate validator model
             in
                 if (List.isEmpty validationErrors) then
-                    { model | season = Editable.save model.season } ! []
+                    let
+                        newSeason =
+                            Editable.save model.season
+                    in
+                        { model | season = newSeason }
+                            ! [ updateSeason (Editable.value newSeason) ]
                 else
                     { model | errors = validationErrors } ! []
+
+        Types.SeasonUpdated (Err _) ->
+            let
+                newModel =
+                    { model
+                        | errors =
+                            [ ( Types.Summary, "Error creating season" ) ]
+                    }
+            in
+                newModel ! []
+
+        Types.SeasonUpdated (Ok season) ->
+            model ! []
 
 
 subscriptions : Model -> Sub Msg

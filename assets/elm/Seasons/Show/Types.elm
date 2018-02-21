@@ -39,6 +39,7 @@ type PageState
     = Loading
     | Loaded
 
+
 type FormField
     = Title
     | Start
@@ -54,3 +55,4 @@ type Msg
     | SetTitle String
     | SetStart String
     | SubmitForm
+    | SeasonUpdated (Result Http.Error Season)
