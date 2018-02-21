@@ -1,9 +1,18 @@
+%small {
+	font-size: 1rem;
+}
+
+%rounded {
+	border-radius: 0.2em;
+}
+
 .not-displayed {
 	display: none;
 }
 
 .page-title {
 	text-align: center;
+	margin-bottom: 0;
 }
 
 .simple-form {

@@ -5,6 +5,7 @@ import Common.Views.Forms exposing (Error)
 import Editable exposing (Editable)
 import Header.Types
 import Http
+import Time exposing (Time)
 
 
 type alias Model =
@@ -12,6 +13,7 @@ type alias Model =
     , pageState : PageState
     , season : Editable Season
     , errors : List (Error FormField)
+    , messages : List FlashMessage
     }
 
 
@@ -28,6 +30,12 @@ type alias Season =
     , title : String
     , start : String
     , players : List Player
+    }
+
+
+type alias FlashMessage =
+    { message : String
+    , timer : Int
     }
 
 
@@ -56,3 +64,4 @@ type Msg
     | SetStart String
     | SubmitForm
     | SeasonUpdated (Result Http.Error Season)
+    | UpdateFlashMessages Time

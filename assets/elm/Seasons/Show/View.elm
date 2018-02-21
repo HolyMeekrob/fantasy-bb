@@ -2,7 +2,8 @@ module Seasons.Show.View exposing (view)
 
 import Seasons.Show.Types as Types
     exposing
-        ( FormField
+        ( FlashMessage
+        , FormField
         , Model
         , Msg
         , Player
@@ -42,6 +43,7 @@ primaryView model =
                 [ FA.Size FA.ExtraSmall ]
                 [ class "clickable" ]
             ]
+        , flashMessages model.messages
         , season model
         , houseguests model.season
         ]
@@ -174,3 +176,20 @@ errors field model =
     in
         List.filter fieldMatches model.errors
             |> List.map Tuple.second
+
+
+flashMessages : List FlashMessage -> Html Msg
+flashMessages messages =
+    div
+        [ class "flash-messages" ]
+        [ ul
+            []
+            (List.map flashMessage messages)
+        ]
+
+
+flashMessage : FlashMessage -> Html Msg
+flashMessage message =
+    li
+        [ class "flash-message" ]
+        [ text message.message ]

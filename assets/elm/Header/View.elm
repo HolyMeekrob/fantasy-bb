@@ -36,38 +36,34 @@ view model =
             [ class "user-area" ]
             (userArea model)
         ]
-    , navigation model
+    , Maybe.map navigation model
+        |> Maybe.withDefault empty
     ]
 
 
-navigation : Model -> Html Msg
-navigation model =
-    case model of
-        Just user ->
-            nav
-                []
-                [ div
-                    [ class "top-nav" ]
-                    [ div
-                        [ classList
-                            [ ( "nav-item", True )
-                            , ( "has-sub", True )
-                            , ( "not-displayed", not user.isAdmin )
-                            ]
-                        ]
-                        [ text "Admin"
-                        , div
-                            [ class "sub-nav" ]
-                            [ navLink
-                                "/admin/season/create"
-                                "Create season"
-                            ]
-                        ]
+navigation : User -> Html Msg
+navigation user =
+    nav
+        []
+        [ div
+            [ class "top-nav" ]
+            [ div
+                [ classList
+                    [ ( "nav-item", True )
+                    , ( "has-sub", True )
+                    , ( "not-displayed", not user.isAdmin )
                     ]
                 ]
-
-        Nothing ->
-            empty
+                [ text "Admin"
+                , div
+                    [ class "sub-nav" ]
+                    [ navLink
+                        "/admin/season/create"
+                        "Create season"
+                    ]
+                ]
+            ]
+        ]
 
 
 navLink : String -> String -> Html Msg

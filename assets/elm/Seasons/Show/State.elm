@@ -1,12 +1,21 @@
 module Seasons.Show.State exposing (init, subscriptions, update)
 
 import Seasons.Show.Rest exposing (initialize, updateSeason)
-import Seasons.Show.Types as Types exposing (Flags, FormField, Model, Msg, Season)
+import Seasons.Show.Types as Types
+    exposing
+        ( Flags
+        , FlashMessage
+        , FormField
+        , Model
+        , Msg
+        , Season
+        )
 import Common.Commands exposing (send)
 import Common.Navigation exposing (findId)
 import Common.Views.Forms exposing (Error)
 import Editable
 import Header.State
+import Time
 import Validate exposing (Validator, validate)
 
 
@@ -24,6 +33,7 @@ initialModel idStr =
         , pageState = Types.Loading
         , season = Editable.ReadOnly season
         , errors = []
+        , messages = []
         }
 
 
@@ -106,12 +116,46 @@ update msg model =
                 newModel ! []
 
         Types.SeasonUpdated (Ok season) ->
-            model ! []
+            let
+                messages =
+                    model.messages
+                        ++ [ { message = "Season updated"
+                             , timer = messageTimer
+                             }
+                           ]
+            in
+                { model | messages = messages } ! []
+
+        Types.UpdateFlashMessages _ ->
+            let
+                messages =
+                    List.map tickMessage model.messages
+                        |> List.filter isMessageActive
+            in
+                { model | messages = messages } ! []
+
+
+messageTimer : Int
+messageTimer =
+    3
+
+
+tickMessage : FlashMessage -> FlashMessage
+tickMessage message =
+    { message | timer = message.timer - 1 }
+
+
+isMessageActive : FlashMessage -> Bool
+isMessageActive message =
+    message.timer > 0
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    if (List.isEmpty model.messages) then
+        Sub.none
+    else
+        Time.every Time.second Types.UpdateFlashMessages
 
 
 getSeason : Model -> Season
