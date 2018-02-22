@@ -98,8 +98,8 @@ editSeason model =
         div
             []
             [ form
-                Types.SubmitForm
-                "Save"
+                ( "Save", Types.SubmitForm )
+                [ ( "Cancel", Types.CancelEdit ) ]
                 (errors Types.Summary model)
                 [ { id = "season-title"
                   , type_ = "text"

@@ -31,8 +31,21 @@
 		content: ":"
 	}
 
-	.form-submit {
-		margin-left: 7em;
+	.form-buttons {
+		display: flex;
+		flex-wrap: wrap;
+
+		button {
+			margin: 0 0.5em;
+		}
+
+		button:first-child {
+			margin-left: 0;
+		}
+
+		button:last-child {
+			margin-right: 0;
+		}
 	}
 
 	.validation-errors {

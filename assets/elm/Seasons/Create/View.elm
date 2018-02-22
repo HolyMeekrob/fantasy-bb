@@ -27,8 +27,8 @@ primaryView model =
         , div
             []
             [ form
-                Types.SubmitForm
-                "Submit"
+                ( "Submit", Types.SubmitForm )
+                []
                 (errors Types.Summary model)
                 [ { id = "season-title"
                   , type_ = "text"
