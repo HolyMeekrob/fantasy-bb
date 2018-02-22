@@ -2,8 +2,8 @@ module Header.View exposing (headerView, view)
 
 import Common.Types exposing (User)
 import Common.Views exposing (empty)
-import Header.Types as Types exposing (Model, Msg)
-import Html exposing (Html, a, button, div, img, nav, span, text)
+import Header.Types as Types exposing (Model, Msg, Notification)
+import Html exposing (Html, a, button, div, img, li, nav, span, text, ul)
 import Html.Attributes exposing (alt, attribute, class, classList, href, src)
 import Html.Events exposing (onClick)
 import String
@@ -34,10 +34,11 @@ view model =
             ]
         , div
             [ class "user-area" ]
-            (userArea model)
+            (userArea model.user)
         ]
-    , Maybe.map navigation model
+    , Maybe.map navigation model.user
         |> Maybe.withDefault empty
+    , notifications model.notifications
     ]
 
 
@@ -76,7 +77,7 @@ navLink link linkText =
         ]
 
 
-userArea : Model -> List (Html Msg)
+userArea : Maybe User -> List (Html Msg)
 userArea model =
     case model of
         Nothing ->
@@ -123,3 +124,20 @@ greeting user =
                 ", " ++ user.firstName
     in
         String.join "" [ "Welcome", firstName, "!" ]
+
+
+notifications : List Notification -> Html Msg
+notifications messages =
+    div
+        [ class "notification-area" ]
+        [ ul
+            [ class "notification-list" ]
+            (List.map notification messages)
+        ]
+
+
+notification : Notification -> Html Msg
+notification message =
+    li
+        [ class "notification" ]
+        [ text message.message ]

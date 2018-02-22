@@ -1,3 +1,6 @@
+$nav-z-index: 2;
+$notification-z-index: 1;
+
 .header-top {
 	display: flex;
 	justify-content: space-between;
@@ -47,10 +50,12 @@ nav {
 		margin-top: 0.5em;
 		margin-left: 3em;
 		background-color: inherit;
+		z-index: $nav-z-index;
 	}
 
 	.nav-item {
 		background-color: inherit;
+		z-index: inherit;
 	}
 	
 	.sub-nav {
@@ -60,6 +65,7 @@ nav {
 		padding: 0 1em;
 		font-size: .7em;
 		background-color: inherit;
+		z-index: inherit;
 
 		.nav-item {
 			margin: 0.5em 0;
@@ -78,5 +84,28 @@ nav {
 		.sub-nav {
 			display: block;
 		}
+	}
+}
+
+.notification-area {
+	@extend %small;
+	position: relative;
+	height: 1.5em;
+	z-index: $notification-z-index;
+
+	ul.notification-list {
+		position: absolute;
+		list-style-type: none;
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	li.notification {
+		@extend %rounded;
+		color: $light;
+		background-color: $primary;
+		display: inline;
+		margin-right: 3em;
+		padding: 0.25em 0.5em;
 	}
 }

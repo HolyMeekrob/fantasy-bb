@@ -40,32 +40,8 @@ h1, h2, h3, h4, h5 {
 
 .content {
 	grid-area: main;
-	margin-top: 1rem;
 }
 
 .clickable {
 	cursor: pointer;
-}
-
-.flash-messages {
-	@extend %small;
-	position: relative;
-	display: block;
-	height: 1.5em;
-
-	ul {
-		list-style-type: none;
-		position: absolute;
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	li.flash-message {
-		@extend %rounded;
-		color: $light;
-		background-color: $primary;
-		display: inline;
-		margin-right: 3em;
-		padding: 0.25em 0.5em;
-	}
 }

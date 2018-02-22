@@ -44,12 +44,19 @@ update msg model =
             model ! []
 
         Types.SetInitialData (Ok ( user, player )) ->
-            { model
-                | header = Just user
-                , player = player
-                , pageState = Types.View
-            }
-                ! []
+            let
+                header =
+                    model.header
+
+                headerModel =
+                    { header | user = Just user }
+            in
+                { model
+                    | header = headerModel
+                    , player = player
+                    , pageState = Types.View
+                }
+                    ! []
 
 
 subscriptions : Model -> Sub Msg

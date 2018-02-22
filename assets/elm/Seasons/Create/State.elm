@@ -44,7 +44,14 @@ update msg model =
             initialModel ! []
 
         Types.SetUser (Ok newUser) ->
-            { model | header = Just newUser, pageState = Types.Loaded } ! []
+            let
+                header =
+                    model.header
+
+                headerModel =
+                    { header | user = Just newUser }
+            in
+                { model | header = headerModel, pageState = Types.Loaded } ! []
 
         Types.SetTitle title ->
             { model | title = title } ! []

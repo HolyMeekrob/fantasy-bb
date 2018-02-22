@@ -51,13 +51,20 @@ update msg model =
             initialModel ! []
 
         Types.SetUser (Ok newUser) ->
-            ( { model
-                | user = Editable.ReadOnly newUser
-                , header = Just newUser
-                , pageState = Types.Loaded
-              }
-            , Cmd.none
-            )
+            let
+                header =
+                    model.header
+
+                headerModel =
+                    { header | user = Just newUser }
+            in
+                ( { model
+                    | user = Editable.ReadOnly newUser
+                    , header = headerModel
+                    , pageState = Types.Loaded
+                  }
+                , Cmd.none
+                )
 
         Types.EditProfile ->
             { model | user = Editable.edit model.user } ! []

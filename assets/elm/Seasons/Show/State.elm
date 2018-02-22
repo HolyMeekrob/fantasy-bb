@@ -4,7 +4,6 @@ import Seasons.Show.Rest exposing (initialize, updateSeason)
 import Seasons.Show.Types as Types
     exposing
         ( Flags
-        , FlashMessage
         , FormField
         , Model
         , Msg
@@ -15,7 +14,8 @@ import Common.Navigation exposing (findId)
 import Common.Views.Forms exposing (Error)
 import Editable
 import Header.State
-import Time
+import Header.Types
+import Task
 import Validate exposing (Validator, validate)
 
 
@@ -33,7 +33,6 @@ initialModel idStr =
         , pageState = Types.Loading
         , season = Editable.ReadOnly season
         , errors = []
-        , messages = []
         }
 
 
@@ -59,12 +58,19 @@ update msg model =
             model ! []
 
         Types.SetInitialData (Ok ( user, season )) ->
-            { model
-                | header = Just user
-                , pageState = Types.Loaded
-                , season = Editable.ReadOnly season
-            }
-                ! []
+            let
+                header =
+                    model.header
+
+                headerModel =
+                    { header | user = Just user }
+            in
+                { model
+                    | header = headerModel
+                    , pageState = Types.Loaded
+                    , season = Editable.ReadOnly season
+                }
+                    ! []
 
         Types.EditSeason ->
             { model | season = Editable.edit model.season } ! []
@@ -116,46 +122,12 @@ update msg model =
                 newModel ! []
 
         Types.SeasonUpdated (Ok season) ->
-            let
-                messages =
-                    model.messages
-                        ++ [ { message = "Season updated"
-                             , timer = messageTimer
-                             }
-                           ]
-            in
-                { model | messages = messages } ! []
-
-        Types.UpdateFlashMessages _ ->
-            let
-                messages =
-                    List.map tickMessage model.messages
-                        |> List.filter isMessageActive
-            in
-                { model | messages = messages } ! []
-
-
-messageTimer : Int
-messageTimer =
-    3
-
-
-tickMessage : FlashMessage -> FlashMessage
-tickMessage message =
-    { message | timer = message.timer - 1 }
-
-
-isMessageActive : FlashMessage -> Bool
-isMessageActive message =
-    message.timer > 0
+            model ! [ addNotification "Season successfully saved" ]
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    if (List.isEmpty model.messages) then
-        Sub.none
-    else
-        Time.every Time.second Types.UpdateFlashMessages
+    Sub.map Types.HeaderMsg (Header.State.subscriptions model.header)
 
 
 getSeason : Model -> Season
@@ -179,3 +151,10 @@ validator =
         [ Validate.ifBlank getTitle ( Types.Title, "Title is required" )
         , Validate.ifBlank getStart ( Types.Start, "Start date is required" )
         ]
+
+
+addNotification : String -> Cmd Msg
+addNotification message =
+    Task.perform
+        (\msg -> Types.HeaderMsg (Header.Types.AddNotification msg))
+        (Task.succeed message)

@@ -28,10 +28,24 @@ update msg model =
                 )
 
         Types.SetUser (Err _) ->
-            { model | header = Nothing } ! []
+            let
+                header =
+                    model.header
+
+                headerModel =
+                    { header | user = Nothing }
+            in
+                { model | header = headerModel } ! []
 
         Types.SetUser (Ok user) ->
-            { model | header = Just user } ! []
+            let
+                header =
+                    model.header
+
+                headerModel =
+                    { header | user = Just user }
+            in
+                { model | header = headerModel } ! []
 
 
 subscriptions : Model -> Sub Msg
