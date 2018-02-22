@@ -12,6 +12,7 @@ import Seasons.Show.Types as Types
 import Common.Commands exposing (send)
 import Common.Navigation exposing (findId)
 import Common.Views.Forms exposing (Error)
+import Date exposing (Date)
 import Editable
 import Header.State
 import Header.Types
@@ -25,7 +26,7 @@ initialModel idStr =
         season =
             { id = findId idStr
             , title = ""
-            , start = ""
+            , start = Nothing
             , players = []
             }
     in
@@ -89,9 +90,13 @@ update msg model =
 
         Types.SetStart start ->
             let
+                newStart =
+                    Date.fromString start
+                        |> Result.toMaybe
+
                 updatedSeason =
                     Editable.map
-                        (\season -> { season | start = start })
+                        (\season -> { season | start = newStart })
                         model.season
             in
                 { model | season = updatedSeason } ! []
@@ -140,7 +145,7 @@ getTitle =
     getSeason >> .title
 
 
-getStart : Model -> String
+getStart : Model -> Maybe Date
 getStart =
     getSeason >> .start
 
@@ -149,7 +154,7 @@ validator : Validator (Error FormField) Model
 validator =
     Validate.all
         [ Validate.ifBlank getTitle ( Types.Title, "Title is required" )
-        , Validate.ifBlank getStart ( Types.Start, "Start date is required" )
+        , Validate.ifNothing getStart ( Types.Start, "Start date is required" )
         ]
 
 

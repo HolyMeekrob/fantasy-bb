@@ -8,6 +8,7 @@ import Seasons.Show.Types as Types
         , Player
         , Season
         )
+import Common.Date exposing (dateToString)
 import Common.Views exposing (empty, layout, loading)
 import Common.Views.Forms exposing (form)
 import Common.Views.Text exposing (playerName)
@@ -80,7 +81,10 @@ viewSeason season =
                 [ text "Start" ]
             , dd
                 []
-                [ text season.start ]
+                [ Maybe.map dateToString season.start
+                    |> Maybe.withDefault ""
+                    |> text
+                ]
             ]
         ]
 
@@ -110,11 +114,10 @@ editSeason model =
                   , type_ = "date"
                   , label = "Start date"
                   , placeholder = "Season start date"
-                  , value = season.start
-
-                  -- model.start
-                  --     |> Maybe.map dateToString
-                  --     |> Maybe.withDefault ""
+                  , value =
+                        season.start
+                            |> Maybe.map dateToString
+                            |> Maybe.withDefault ""
                   , onInput = Types.SetStart
                   , isRequired = True
                   , errors = errors Types.Start model

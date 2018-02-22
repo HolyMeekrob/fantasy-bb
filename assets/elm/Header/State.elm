@@ -49,7 +49,7 @@ messageTimer =
 
 addMessage : String -> List Notification
 addMessage message =
-    List.repeat 3 { message = message, timer = messageTimer }
+    List.singleton { message = message, timer = messageTimer }
 
 
 tickMessage : Notification -> Notification

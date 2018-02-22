@@ -1,9 +1,10 @@
 module Seasons.Show.Rest exposing (initialize, updateSeason)
 
 import Seasons.Show.Types as Types exposing (Player, Msg, Season)
+import Common.Date exposing (date, dateToString)
 import Common.Rest exposing (put, userRequest)
 import Http exposing (Request, toTask)
-import Json.Decode exposing (Decoder, int, list, nullable, string, succeed)
+import Json.Decode exposing (Decoder, int, list, nullable, string)
 import Json.Decode.Pipeline exposing (decode, optional, required)
 import Json.Encode as Encode
 import Task
@@ -33,10 +34,14 @@ updateSeason season =
         url =
             "/ajax/seasons/" ++ toString season.id
 
+        date =
+            Maybe.map dateToString season.start
+                |> Maybe.withDefault ""
+
         data =
             Encode.object
                 [ ( "title", Encode.string season.title )
-                , ( "start", Encode.string season.start )
+                , ( "start", Encode.string date )
                 ]
                 |> Http.jsonBody
     in
@@ -49,7 +54,7 @@ seasonDecoder =
     decode Season
         |> required "id" int
         |> required "title" string
-        |> required "start" string
+        |> required "start" (nullable date)
         |> optional "players" (list playerDecoder) []
 
 

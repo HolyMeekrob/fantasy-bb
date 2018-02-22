@@ -2,6 +2,7 @@ module Seasons.Show.Types exposing (..)
 
 import Common.Types exposing (User)
 import Common.Views.Forms exposing (Error)
+import Date exposing (Date)
 import Editable exposing (Editable)
 import Header.Types
 import Http
@@ -26,7 +27,7 @@ type alias Player =
 type alias Season =
     { id : Int
     , title : String
-    , start : String
+    , start : Maybe Date
     , players : List Player
     }
 
