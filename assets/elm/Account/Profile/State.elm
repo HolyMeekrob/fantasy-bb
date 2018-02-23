@@ -39,9 +39,8 @@ update msg model =
                 ( headerModel, headerCmd ) =
                     Header.State.update headerMsg model.header
             in
-                ( { model | header = headerModel }
-                , Cmd.map Types.HeaderMsg headerCmd
-                )
+                { model | header = headerModel }
+                    ! [ Cmd.map Types.HeaderMsg headerCmd ]
 
         Types.FetchUser ->
             { model | pageState = Types.Loading }
@@ -58,13 +57,12 @@ update msg model =
                 headerModel =
                     { header | user = Just newUser }
             in
-                ( { model
+                { model
                     | user = Editable.ReadOnly newUser
                     , header = headerModel
                     , pageState = Types.Loaded
-                  }
-                , Cmd.none
-                )
+                }
+                    ! []
 
         Types.EditProfile ->
             { model | user = Editable.edit model.user } ! []

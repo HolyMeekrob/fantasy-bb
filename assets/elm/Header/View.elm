@@ -2,7 +2,7 @@ module Header.View exposing (headerView, view)
 
 import Common.Types exposing (User)
 import Common.Views exposing (empty)
-import Header.Types as Types exposing (Model, Msg, Notification)
+import Header.Types as Types exposing (Model, Msg)
 import Html exposing (Html, a, button, div, img, li, nav, span, text, ul)
 import Html.Attributes exposing (alt, attribute, class, classList, href, src)
 import Html.Events exposing (onClick)
@@ -126,7 +126,7 @@ greeting user =
         String.join "" [ "Welcome", firstName, "!" ]
 
 
-notifications : List Notification -> Html Msg
+notifications : List String -> Html Msg
 notifications messages =
     div
         [ class "notification-area" ]
@@ -136,8 +136,8 @@ notifications messages =
         ]
 
 
-notification : Notification -> Html Msg
+notification : String -> Html Msg
 notification message =
     li
         [ class "notification" ]
-        [ text message.message ]
+        [ text message ]

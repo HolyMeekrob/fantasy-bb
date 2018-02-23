@@ -50,7 +50,8 @@ update msg model =
                 ( headerModel, headerCmd ) =
                     Header.State.update headerMsg model.header
             in
-                { model | header = headerModel } ! []
+                { model | header = headerModel }
+                    ! [ Cmd.map Types.HeaderMsg headerCmd ]
 
         Types.FetchInitialData ->
             model ! [ initialize <| .id (Editable.value model.season) ]

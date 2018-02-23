@@ -1,8 +1,10 @@
 module Header.State exposing (..)
 
 import Header.Rest exposing (logOut)
-import Header.Types as Types exposing (Model, Msg, Notification)
+import Header.Types as Types exposing (Model, Msg)
 import Common.Navigation exposing (navigate)
+import Process
+import Task
 import Time
 
 
@@ -28,43 +30,31 @@ update msg model =
         Types.AddNotification message ->
             let
                 notifications =
-                    model.notifications ++ (addMessage message)
+                    model.notifications ++ List.singleton message
             in
-                { model | notifications = notifications } ! []
+                { model | notifications = notifications } ! [ scheduleNotification ]
 
-        Types.UpdateNotifications _ ->
+        Types.ClearOldestNotification ->
             let
                 notifications =
-                    model.notifications
-                        |> List.map tickMessage
-                        |> List.filter isMessageActive
+                    List.drop 1 model.notifications
             in
                 { model | notifications = notifications } ! []
-
-
-messageTimer : Int
-messageTimer =
-    3
-
-
-addMessage : String -> List Notification
-addMessage message =
-    List.singleton { message = message, timer = messageTimer }
-
-
-tickMessage : Notification -> Notification
-tickMessage message =
-    { message | timer = message.timer - 1 }
-
-
-isMessageActive : Notification -> Bool
-isMessageActive message =
-    message.timer > 0
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    if (List.isEmpty model.notifications) then
-        Sub.none
-    else
-        Time.every Time.second Types.UpdateNotifications
+    Sub.none
+
+
+messageTimer : Float
+messageTimer =
+    3
+
+
+scheduleNotification : Cmd Msg
+scheduleNotification =
+    Process.sleep
+        (Time.second * messageTimer)
+        |> Task.map (always Types.ClearOldestNotification)
+        |> Task.perform identity
