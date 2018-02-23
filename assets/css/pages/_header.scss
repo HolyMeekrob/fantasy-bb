@@ -1,5 +1,6 @@
 $nav-z-index: 2;
 $notification-z-index: 1;
+$transition-duration: .15s;
 
 .header-top {
 	display: flex;
@@ -38,6 +39,7 @@ nav {
 	a {
 		text-decoration: none;
 		color: $highlight;
+		transition: color $transition-duration linear 0s;
 	}
 
 	a:hover {
@@ -59,13 +61,15 @@ nav {
 	}
 	
 	.sub-nav {
-		display: none;
+		height: 0;
+		overflow: hidden;
 		width: inherit;
 		position: absolute;
 		padding: 0 1em;
 		font-size: .7em;
 		background-color: inherit;
 		z-index: inherit;
+		transition: height $transition-duration ease-in-out 0s;
 
 		.nav-item {
 			margin: 0.5em 0;
@@ -82,7 +86,7 @@ nav {
 
 	.nav-item:hover {
 		.sub-nav {
-			display: block;
+			height: 2em;
 		}
 	}
 }
