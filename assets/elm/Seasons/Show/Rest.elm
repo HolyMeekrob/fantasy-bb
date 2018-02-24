@@ -34,14 +34,14 @@ updateSeason season =
         url =
             "/ajax/seasons/" ++ toString season.id
 
-        date =
+        start =
             Maybe.map dateToString season.start
                 |> Maybe.withDefault ""
 
         data =
             Encode.object
                 [ ( "title", Encode.string season.title )
-                , ( "start", Encode.string date )
+                , ( "start", Encode.string start )
                 ]
                 |> Http.jsonBody
     in

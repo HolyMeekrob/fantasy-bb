@@ -2,6 +2,7 @@ module Players.Show.Types exposing (..)
 
 import Common.Types exposing (User)
 import Common.Views.Forms exposing (Error)
+import Date exposing (Date)
 import Editable exposing (Editable)
 import Header.Types
 import Http
@@ -21,7 +22,7 @@ type alias Player =
     , lastName : String
     , nickname : Maybe String
     , hometown : Maybe String
-    , birthday : Maybe String
+    , birthday : Maybe Date
     }
 
 
@@ -37,6 +38,9 @@ type PageState
 type FormField
     = FirstName
     | LastName
+    | Nickname
+    | Hometown
+    | Birthday
     | Summary
 
 
@@ -48,5 +52,8 @@ type Msg
     | CancelEdit
     | SetFirstName String
     | SetLastName String
+    | SetNickname String
+    | SetHometown String
+    | SetBirthday String
     | SubmitForm
     | PlayerUpdated (Result Http.Error Player)

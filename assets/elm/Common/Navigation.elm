@@ -1,9 +1,10 @@
 port module Common.Navigation exposing (findId, navigate)
 
-
 import Regex exposing (regex)
 
+
 port navigate : String -> Cmd msg
+
 
 findId : String -> Int
 findId url =

@@ -10,8 +10,10 @@ import Players.Show.Types as Types
         , Player
         )
 import Common.Commands exposing (send)
+import Common.String exposing (toMaybe)
 import Common.Views.Forms exposing (Error)
 import Common.Navigation exposing (findId)
+import Date
 import Editable
 import Task
 import Header.State
@@ -94,6 +96,26 @@ update msg model =
             updatePlayerField
                 (\player -> { player | lastName = name })
                 model
+
+        Types.SetNickname name ->
+            updatePlayerField
+                (\player -> { player | nickname = toMaybe name })
+                model
+
+        Types.SetHometown hometown ->
+            updatePlayerField
+                (\player -> { player | hometown = toMaybe hometown })
+                model
+
+        Types.SetBirthday birthday ->
+            let
+                newBirthday =
+                    Date.fromString birthday
+                        |> Result.toMaybe
+            in
+                updatePlayerField
+                    (\player -> { player | birthday = newBirthday })
+                    model
 
         Types.SubmitForm ->
             let

@@ -1,6 +1,7 @@
 module Players.Show.View exposing (view)
 
 import Players.Show.Types as Types exposing (FormField, Player, Model, Msg)
+import Common.Date exposing (dateToString)
 import Common.Views exposing (empty, layout, loading)
 import Common.Views.Forms exposing (form)
 import Common.Views.Text exposing (playerName)
@@ -57,7 +58,8 @@ viewPlayer player =
             Maybe.withDefault "" player.hometown
 
         birthday =
-            Maybe.withDefault "" player.birthday
+            Maybe.map dateToString player.birthday
+                |> Maybe.withDefault ""
     in
         div
             []
@@ -113,6 +115,35 @@ editPlayer model =
                   , onInput = Types.SetLastName
                   , isRequired = True
                   , errors = errors Types.LastName model
+                  }
+                , { id = "player-nickname"
+                  , type_ = "text"
+                  , label = "Nickname"
+                  , placeholder = "Nickname"
+                  , value = Maybe.withDefault "" player.nickname
+                  , onInput = Types.SetNickname
+                  , isRequired = False
+                  , errors = errors Types.Nickname model
+                  }
+                , { id = "player-hometown"
+                  , type_ = "text"
+                  , label = "Hometown"
+                  , placeholder = "Hometown"
+                  , value = Maybe.withDefault "" player.hometown
+                  , onInput = Types.SetHometown
+                  , isRequired = False
+                  , errors = errors Types.Hometown model
+                  }
+                , { id = "player-birthday"
+                  , type_ = "date"
+                  , label = "Birthday"
+                  , placeholder = "Birthday"
+                  , value =
+                        Maybe.map dateToString player.birthday
+                            |> Maybe.withDefault ""
+                  , onInput = Types.SetBirthday
+                  , isRequired = False
+                  , errors = errors Types.Birthday model
                   }
                 ]
             ]

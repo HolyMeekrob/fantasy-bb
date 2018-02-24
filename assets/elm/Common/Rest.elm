@@ -1,9 +1,10 @@
-module Common.Rest exposing (fetch, userRequest, put)
+module Common.Rest exposing (encodeMaybe, fetch, userRequest, put)
 
 import Common.Types exposing (User)
 import Http exposing (Body, Request, expectJson, request)
 import Json.Decode exposing (Decoder, bool, string)
 import Json.Decode.Pipeline exposing (decode, optional, required)
+import Json.Encode as Encode
 
 
 put : String -> Body -> Decoder a -> Request a
@@ -38,3 +39,10 @@ userRequest =
 fetch : Request a -> (Result Http.Error a -> msg) -> Cmd msg
 fetch request create =
     Http.send create request
+
+
+encodeMaybe : (a -> Encode.Value) -> Maybe a -> Encode.Value
+encodeMaybe encoder val =
+    Maybe.withDefault
+        Encode.null
+        (Maybe.map encoder val)
