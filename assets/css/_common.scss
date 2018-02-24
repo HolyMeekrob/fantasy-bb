@@ -27,10 +27,6 @@
 		display: inline-block;
 	}
 
-	.form-label::after {
-		content: ":"
-	}
-
 	.form-buttons {
 		display: flex;
 		flex-wrap: wrap;

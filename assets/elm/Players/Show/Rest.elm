@@ -1,10 +1,11 @@
-module Players.Show.Rest exposing (initialize)
+module Players.Show.Rest exposing (initialize, updatePlayer)
 
 import Players.Show.Types as Types exposing (Player, Msg)
-import Common.Rest exposing (userRequest)
+import Common.Rest exposing (put, userRequest)
 import Http exposing (Request, toTask)
 import Json.Decode exposing (Decoder, int, list, nullable, string)
 import Json.Decode.Pipeline exposing (decode, optional, required)
+import Json.Encode as Encode
 import Task
 
 
@@ -35,3 +36,25 @@ playerDecoder =
         |> optional "nickname" (nullable string) Nothing
         |> optional "hometown" (nullable string) Nothing
         |> optional "birthday" (nullable string) Nothing
+
+
+updatePlayer : Player -> Cmd Msg
+updatePlayer player =
+    let
+        url =
+            "/ajax/players/" ++ toString player.id
+
+        data =
+            encodePlayer player
+    in
+        put url data playerDecoder
+            |> Http.send Types.PlayerUpdated
+
+
+encodePlayer : Player -> Http.Body
+encodePlayer player =
+    Encode.object
+        [ ( "firstName", Encode.string player.firstName )
+        , ( "lastName", Encode.string player.lastName )
+        ]
+        |> Http.jsonBody

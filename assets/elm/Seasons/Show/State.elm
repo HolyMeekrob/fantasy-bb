@@ -78,42 +78,38 @@ update msg model =
             { model | season = Editable.edit model.season } ! []
 
         Types.CancelEdit ->
-            { model | season = Editable.cancel model.season } ! []
+            { model
+                | errors = []
+                , season = Editable.cancel model.season
+            }
+                ! []
 
         Types.SetTitle title ->
-            let
-                updatedSeason =
-                    Editable.map
-                        (\season -> { season | title = title })
-                        model.season
-            in
-                { model | season = updatedSeason } ! []
+            updateSeasonField
+                (\season -> { season | title = title })
+                model
 
         Types.SetStart start ->
             let
                 newStart =
                     Date.fromString start
                         |> Result.toMaybe
-
-                updatedSeason =
-                    Editable.map
-                        (\season -> { season | start = newStart })
-                        model.season
             in
-                { model | season = updatedSeason } ! []
+                updateSeasonField
+                    (\season -> { season | start = newStart })
+                    model
 
         Types.SubmitForm ->
             let
                 validationErrors =
-                    Validate.validate validator model
+                    validate validator model
             in
                 if (List.isEmpty validationErrors) then
-                    let
-                        newSeason =
-                            Editable.save model.season
-                    in
-                        { model | season = newSeason }
-                            ! [ updateSeason (Editable.value newSeason) ]
+                    { model
+                        | pageState = Types.Loading
+                        , errors = []
+                    }
+                        ! [ updateSeason (Editable.value model.season) ]
                 else
                     { model | errors = validationErrors } ! []
 
@@ -121,19 +117,33 @@ update msg model =
             let
                 newModel =
                     { model
-                        | errors =
-                            [ ( Types.Summary, "Error creating season" ) ]
+                        | pageState = Types.Loaded
+                        , errors =
+                            [ ( Types.Summary, "Error updating season" ) ]
                     }
             in
                 newModel ! []
 
-        Types.SeasonUpdated (Ok season) ->
-            model ! [ addNotification "Season successfully saved" ]
+        Types.SeasonUpdated (Ok _) ->
+            { model
+                | pageState = Types.Loaded
+                , season = Editable.save model.season
+            }
+                ! [ addNotification "Season successfully saved" ]
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.map Types.HeaderMsg (Header.State.subscriptions model.header)
+
+
+updateSeasonField : (Season -> Season) -> Model -> ( Model, Cmd Msg )
+updateSeasonField func model =
+    let
+        updatedSeason =
+            Editable.map func model.season
+    in
+        { model | season = updatedSeason } ! []
 
 
 getSeason : Model -> Season

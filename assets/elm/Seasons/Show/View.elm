@@ -50,12 +50,10 @@ primaryView model =
 
 season : Model -> Html Msg
 season model =
-    case model.season of
-        Editable.ReadOnly value ->
-            viewSeason value
-
-        Editable.Editable _ _ ->
-            editSeason model
+    if (Editable.isReadOnly model.season) then
+        viewSeason (Editable.value model.season)
+    else
+        editSeason model
 
 
 viewSeason : Season -> Html Msg
