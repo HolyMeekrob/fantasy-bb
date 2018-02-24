@@ -1,8 +1,9 @@
 module Header.State exposing (..)
 
 import Header.Rest exposing (logOut)
-import Header.Types as Types exposing (Model, Msg)
+import Header.Types as Types exposing (Model, Msg, Notification)
 import Common.Navigation exposing (navigate)
+import List.Extra exposing (find, setAt)
 import Process
 import Task
 import Time
@@ -30,16 +31,29 @@ update msg model =
         Types.AddNotification message ->
             let
                 notifications =
-                    model.notifications ++ List.singleton message
+                    model.notifications ++ createNotification message
             in
-                { model | notifications = notifications } ! [ scheduleNotification ]
+                { model | notifications = notifications }
+                    ! [ scheduleNotificationRemoval ]
 
-        Types.ClearOldestNotification ->
+        Types.CloseOldestNotification ->
             let
-                notifications =
-                    List.drop 1 model.notifications
+                oldest =
+                    List.indexedMap (,) model.notifications
+                        |> find (\( i, n ) -> n.closed == False)
+
+                updatedNotifications =
+                    case oldest of
+                        Nothing ->
+                            model.notifications
+
+                        Just ( index, n ) ->
+                            setAt
+                                index
+                                { n | closed = True }
+                                model.notifications
             in
-                { model | notifications = notifications } ! []
+                { model | notifications = updatedNotifications } ! []
 
 
 subscriptions : Model -> Sub Msg
@@ -47,14 +61,19 @@ subscriptions model =
     Sub.none
 
 
+createNotification : String -> List Notification
+createNotification message =
+    List.singleton { message = message, closed = False }
+
+
 messageTimer : Float
 messageTimer =
     3
 
 
-scheduleNotification : Cmd Msg
-scheduleNotification =
+scheduleNotificationRemoval : Cmd Msg
+scheduleNotificationRemoval =
     Process.sleep
         (Time.second * messageTimer)
-        |> Task.map (always Types.ClearOldestNotification)
+        |> Task.map (always Types.CloseOldestNotification)
         |> Task.perform identity

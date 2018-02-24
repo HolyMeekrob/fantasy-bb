@@ -126,18 +126,22 @@ greeting user =
         String.join "" [ "Welcome", firstName, "!" ]
 
 
-notifications : List String -> Html Msg
-notifications messages =
+notifications : List Types.Notification -> Html Msg
+notifications notifications =
     div
         [ class "notification-area" ]
         [ ul
             [ class "notification-list" ]
-            (List.map notification messages)
+            (List.map notification notifications)
         ]
 
 
-notification : String -> Html Msg
-notification message =
+notification : Types.Notification -> Html Msg
+notification notification =
     li
-        [ class "notification" ]
-        [ text message ]
+        [ Html.Attributes.classList
+            [ ( "notification", True )
+            , ( "closed-notification", notification.closed )
+            ]
+        ]
+        [ text notification.message ]
