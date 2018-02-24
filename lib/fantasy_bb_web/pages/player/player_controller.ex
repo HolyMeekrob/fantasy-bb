@@ -18,4 +18,22 @@ defmodule FantasyBbWeb.PlayerController do
         render(conn, "player.json", player)
     end
   end
+
+  def update(conn, %{"id" => id} = params) do
+    input = %{
+      first_name: Map.get(params, "firstName"),
+      last_name: Map.get(params, "lastName"),
+      nickname: Map.get(params, "nickname"),
+      hometown: Map.get(params, "hometown"),
+      birthday: Map.get(params, "birthday")
+    }
+
+    case Player.update(id, input) do
+      {:ok, player} ->
+        render(conn, "player.json", player)
+
+      {:error, _} ->
+        send_resp(conn, :internal_server_error, "Error updating player")
+    end
+  end
 end

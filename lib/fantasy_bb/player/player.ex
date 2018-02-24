@@ -9,4 +9,9 @@ defmodule FantasyBb.Player do
   def get!(id) do
     Repo.get!(Player, id)
   end
+
+  def update(id, changes) do
+    Player.changeset(get(id), changes)
+    |> Repo.update()
+  end
 end

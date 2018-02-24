@@ -8,10 +8,10 @@ defmodule FantasyBbWeb.SeasonController do
     render(conn, "create.html")
   end
 
-  def create(conn, %{"title" => title, "start" => start}) do
-    input = %FantasyBb.Schema.Season{
-      title: title,
-      start: Date.from_iso8601!(start)
+  def create(conn, params) do
+    input = %{
+      title: Map.get(params, "title"),
+      start: Map.get(params, "start")
     }
 
     case Season.create(input) do
@@ -42,8 +42,11 @@ defmodule FantasyBbWeb.SeasonController do
     end
   end
 
-  def update(conn, %{"id" => id, "title" => title, "start" => start}) do
-    input = %{title: title, start: Date.from_iso8601!(start)}
+  def update(conn, %{"id" => id} = params) do
+    input = %{
+      title: Map.get(params, "title"),
+      start: Map.get(params, "start")
+    }
 
     case Season.update(id, input) do
       {:ok, season} ->
