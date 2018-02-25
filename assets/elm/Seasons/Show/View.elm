@@ -30,7 +30,7 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , titleWithEdit "View Season" Types.EditSeason
+        , titleWithEdit "View Season" Types.EditSeason (not <| isEditing model)
         , season model
         , houseguests model.season
         ]
@@ -38,10 +38,10 @@ primaryView model =
 
 season : Model -> Html Msg
 season model =
-    if (Editable.isReadOnly model.season) then
-        viewSeason (Editable.value model.season)
-    else
+    if (isEditing model) then
         editSeason model
+    else
+        viewSeason (Editable.value model.season)
 
 
 viewSeason : Season -> Html Msg
@@ -163,3 +163,8 @@ errors field model =
     in
         List.filter fieldMatches model.errors
             |> List.map Tuple.second
+
+
+isEditing : Model -> Bool
+isEditing model =
+    Editable.isEditable model.season

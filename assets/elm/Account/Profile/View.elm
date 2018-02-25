@@ -32,7 +32,7 @@ view model =
 
 profile : Model -> Html Msg
 profile model =
-    if (Editable.isEditable model.user) then
+    if (isEditing model) then
         editProfile model
     else
         viewProfile model
@@ -47,7 +47,10 @@ viewProfile model =
         section
             [ class "profile" ]
             [ loadingOverlay model
-            , titleWithEdit "User Profile" Types.EditProfile
+            , titleWithEdit
+                "User Profile"
+                Types.EditProfile
+                (not <| isEditing model)
             , dl
                 [ class "profile-list" ]
                 (List.concat
@@ -144,3 +147,8 @@ editItem term description onInputFunc =
 fullName : User -> String
 fullName user =
     user.firstName ++ " " ++ user.lastName
+
+
+isEditing : Model -> Bool
+isEditing model =
+    Editable.isEditable model.user

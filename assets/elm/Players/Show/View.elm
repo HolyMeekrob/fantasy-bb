@@ -22,17 +22,17 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , titleWithEdit "View Player" Types.EditPlayer
+        , titleWithEdit "View Player" Types.EditPlayer (not <| isEditing model)
         , player model
         ]
 
 
 player : Model -> Html Msg
 player model =
-    if (Editable.isReadOnly model.player) then
-        viewPlayer (Editable.value model.player)
-    else
+    if (isEditing model) then
         editPlayer model
+    else
+        viewPlayer (Editable.value model.player)
 
 
 viewPlayer : Player -> Html Msg
@@ -153,3 +153,8 @@ errors field model =
     in
         List.filter fieldMatches model.errors
             |> List.map Tuple.second
+
+
+isEditing : Model -> Bool
+isEditing model =
+    Editable.isEditable model.player

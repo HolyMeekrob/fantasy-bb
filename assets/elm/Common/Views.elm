@@ -45,9 +45,16 @@ title titleText =
     titleHelper titleText Nothing
 
 
-titleWithEdit : String -> msg -> Html msg
-titleWithEdit titleText onClickFunc =
-    titleHelper titleText (Just onClickFunc)
+titleWithEdit : String -> msg -> Bool -> Html msg
+titleWithEdit titleText onClickFunc showEdit =
+    let
+        func =
+            if (showEdit) then
+                Just onClickFunc
+            else
+                Nothing
+    in
+        titleHelper titleText func
 
 
 titleHelper : String -> Maybe msg -> Html msg
