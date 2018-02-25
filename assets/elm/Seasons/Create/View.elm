@@ -21,9 +21,12 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , h1
+        , div
             [ class "page-title" ]
-            [ text "Create Season" ]
+            [ h1
+                []
+                [ text "Create Season" ]
+            ]
         , div
             []
             [ form

@@ -2,6 +2,10 @@
 	font-size: 1rem;
 }
 
+%center-text {
+	text-align: center;
+}
+
 %rounded {
 	border-radius: 0.2em;
 }
@@ -13,6 +17,15 @@
 .page-title {
 	text-align: center;
 	margin-bottom: 0;
+
+	h1 {
+		display: inline-block;
+	}
+
+	.icon {
+		vertical-align: super;
+		margin-left: 1em;
+	}
 }
 
 .simple-form {

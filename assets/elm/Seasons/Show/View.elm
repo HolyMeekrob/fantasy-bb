@@ -32,16 +32,16 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , h1
-            [ class "page-title"
-            , onClick Types.EditSeason
-            ]
-            [ text "View Season "
+        , div
+            [ class "page-title" ]
+            [ h1
+                []
+                [ text "View Season" ]
             , iconWithOptions
                 edit
                 FA.Solid
-                [ FA.Size FA.ExtraSmall ]
-                [ class "clickable" ]
+                [ FA.Size FA.Small ]
+                [ class "clickable icon", onClick Types.EditSeason ]
             ]
         , season model
         , houseguests model.season

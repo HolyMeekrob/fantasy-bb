@@ -25,16 +25,16 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , h1
-            [ class "page-title"
-            , onClick Types.EditPlayer
-            ]
-            [ text "View Player"
+        , div
+            [ class "page-title" ]
+            [ h1
+                []
+                [ text "View Player" ]
             , iconWithOptions
                 edit
                 FA.Solid
-                [ FA.Size FA.ExtraSmall ]
-                [ class "clickable" ]
+                [ FA.Size FA.Small ]
+                [ class "clickable icon", onClick Types.EditPlayer ]
             ]
         , player model
         ]

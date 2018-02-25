@@ -6,7 +6,20 @@ import Common.Views exposing (empty, layout, loading)
 import Editable
 import FontAwesome as FA exposing (edit, iconWithOptions)
 import Header.View exposing (headerView)
-import Html exposing (Html, a, button, dd, dl, dt, h1, section, text, textarea)
+import Html
+    exposing
+        ( Html
+        , a
+        , button
+        , dd
+        , div
+        , dl
+        , dt
+        , h1
+        , section
+        , text
+        , textarea
+        )
 import Html.Attributes exposing (class, href, value)
 import Html.Events exposing (onClick, onInput)
 
@@ -35,16 +48,16 @@ viewProfile model =
         section
             [ class "profile" ]
             [ loadingOverlay model
-            , h1
-                [ class "page-title"
-                , onClick Types.EditProfile
-                ]
-                [ text "User Profile "
+            , div
+                [ class "page-title" ]
+                [ h1
+                    []
+                    [ text "User Profile" ]
                 , iconWithOptions
                     edit
                     FA.Solid
-                    [ FA.Size FA.ExtraSmall ]
-                    [ class "clickable" ]
+                    [ FA.Size FA.Small ]
+                    [ class "clickable icon", onClick Types.EditProfile ]
                 ]
             , dl
                 [ class "profile-list" ]
@@ -79,9 +92,12 @@ editProfile model =
         section
             [ class "profile" ]
             [ loadingOverlay model
-            , h1
-                []
-                [ text "User Profile " ]
+            , div
+                [ class "page-title" ]
+                [ h1
+                    []
+                    [ text "User Profile " ]
+                ]
             , dl
                 [ class "profile-list" ]
                 (List.concat
