@@ -62,29 +62,29 @@ viewSeason season =
         []
         [ dl
             []
-            [ dt
-                []
-                [ text "Id" ]
-            , dd
-                []
-                [ text (toString season.id) ]
-            , dt
-                []
-                [ text "Title" ]
-            , dd
-                []
-                [ text season.title ]
-            , dt
-                []
-                [ text "Start" ]
-            , dd
-                []
-                [ Maybe.map dateToString season.start
-                    |> Maybe.withDefault ""
-                    |> text
+          <|
+            List.concat
+                [ showAttribute "Title" season.title
+                , showAttribute
+                    "Start"
+                    (Maybe.map
+                        dateToString
+                        season.start
+                        |> Maybe.withDefault ""
+                    )
                 ]
-            ]
         ]
+
+
+showAttribute : String -> String -> List (Html Msg)
+showAttribute title description =
+    [ dt
+        []
+        [ text title ]
+    , dd
+        []
+        [ text description ]
+    ]
 
 
 editSeason : Model -> Html Msg

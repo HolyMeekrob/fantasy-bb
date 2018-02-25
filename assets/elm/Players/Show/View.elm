@@ -65,13 +65,12 @@ viewPlayer player =
             []
             [ dl
                 []
-                (List.concat
-                    [ showAttribute "Id" (toString player.id)
-                    , showAttribute "Name" name
+              <|
+                List.concat
+                    [ showAttribute "Name" name
                     , showAttribute "Hometown" hometown
                     , showAttribute "Birthday" birthday
                     ]
-                )
             ]
 
 
