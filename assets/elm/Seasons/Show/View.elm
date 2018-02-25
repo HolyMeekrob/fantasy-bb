@@ -9,15 +9,13 @@ import Seasons.Show.Types as Types
         , Season
         )
 import Common.Date exposing (dateToString)
-import Common.Views exposing (empty, layout, loading)
+import Common.Views exposing (empty, layout, loading, titleWithEdit)
 import Common.Views.Forms exposing (form)
 import Common.Views.Text exposing (playerName)
 import Editable exposing (Editable)
-import FontAwesome as FA exposing (edit, iconWithOptions)
 import Header.View exposing (headerView)
 import Html exposing (Html, a, dd, div, dl, dt, h1, li, section, text, ul)
 import Html.Attributes exposing (class, href)
-import Html.Events exposing (onClick)
 
 
 view : Model -> Html Msg
@@ -32,17 +30,7 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , div
-            [ class "page-title" ]
-            [ h1
-                []
-                [ text "View Season" ]
-            , iconWithOptions
-                edit
-                FA.Solid
-                [ FA.Size FA.Small ]
-                [ class "clickable icon", onClick Types.EditSeason ]
-            ]
+        , titleWithEdit "View Season" Types.EditSeason
         , season model
         , houseguests model.season
         ]

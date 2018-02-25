@@ -2,15 +2,12 @@ module Players.Show.View exposing (view)
 
 import Players.Show.Types as Types exposing (FormField, Player, Model, Msg)
 import Common.Date exposing (dateToString)
-import Common.Views exposing (empty, layout, loading)
+import Common.Views exposing (empty, layout, loading, titleWithEdit)
 import Common.Views.Forms exposing (form)
 import Common.Views.Text exposing (playerName)
 import Editable
-import FontAwesome as FA exposing (edit, iconWithOptions)
 import Header.View exposing (headerView)
 import Html exposing (Html, div, dd, dl, dt, h1, section, text)
-import Html.Attributes exposing (class)
-import Html.Events exposing (onClick)
 
 
 view : Model -> Html Msg
@@ -25,17 +22,7 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , div
-            [ class "page-title" ]
-            [ h1
-                []
-                [ text "View Player" ]
-            , iconWithOptions
-                edit
-                FA.Solid
-                [ FA.Size FA.Small ]
-                [ class "clickable icon", onClick Types.EditPlayer ]
-            ]
+        , titleWithEdit "View Player" Types.EditPlayer
         , player model
         ]
 

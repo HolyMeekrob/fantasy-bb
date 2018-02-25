@@ -2,9 +2,8 @@ module Account.Profile.View exposing (view)
 
 import Account.Profile.Types as Types exposing (Model, Msg)
 import Common.Types exposing (User)
-import Common.Views exposing (empty, layout, loading)
+import Common.Views exposing (empty, layout, loading, titleWithEdit)
 import Editable
-import FontAwesome as FA exposing (edit, iconWithOptions)
 import Header.View exposing (headerView)
 import Html
     exposing
@@ -48,17 +47,7 @@ viewProfile model =
         section
             [ class "profile" ]
             [ loadingOverlay model
-            , div
-                [ class "page-title" ]
-                [ h1
-                    []
-                    [ text "User Profile" ]
-                , iconWithOptions
-                    edit
-                    FA.Solid
-                    [ FA.Size FA.Small ]
-                    [ class "clickable icon", onClick Types.EditProfile ]
-                ]
+            , titleWithEdit "User Profile" Types.EditProfile
             , dl
                 [ class "profile-list" ]
                 (List.concat
