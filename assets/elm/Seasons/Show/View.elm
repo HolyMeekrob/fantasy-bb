@@ -30,7 +30,10 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , titleWithEdit "View Season" Types.EditSeason (not <| isEditing model)
+        , titleWithEdit
+            "View Season"
+            Types.EditSeason
+            (model.userCanEdit && (not <| isEditing model))
         , season model
         , houseguests model.season
         ]

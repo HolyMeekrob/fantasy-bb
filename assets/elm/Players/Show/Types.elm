@@ -13,6 +13,7 @@ type alias Model =
     , pageState : PageState
     , player : Editable Player
     , errors : List (Error FormField)
+    , userCanEdit : Bool
     }
 
 

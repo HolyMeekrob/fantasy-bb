@@ -22,7 +22,10 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , titleWithEdit "View Player" Types.EditPlayer (not <| isEditing model)
+        , titleWithEdit
+            "View Player"
+            Types.EditPlayer
+            (model.userCanEdit && (not <| isEditing model))
         , player model
         ]
 

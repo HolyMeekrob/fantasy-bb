@@ -34,6 +34,7 @@ initialModel idStr =
         , pageState = Types.Loading
         , season = Editable.ReadOnly season
         , errors = []
+        , userCanEdit = False
         }
 
 
@@ -71,6 +72,7 @@ update msg model =
                     | header = headerModel
                     , pageState = Types.Loaded
                     , season = Editable.ReadOnly season
+                    , userCanEdit = user.isAdmin
                 }
                     ! []
 

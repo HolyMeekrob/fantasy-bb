@@ -86,14 +86,9 @@ update msg model =
         Types.UpdateBio newBio ->
             let
                 updatedUser =
-                    case model.user of
-                        Editable.Editable saved modified ->
-                            Editable.Editable
-                                saved
-                                { modified | bio = newBio }
-
-                        Editable.ReadOnly _ ->
-                            model.user
+                    Editable.map
+                        (\user -> { user | bio = newBio })
+                        model.user
             in
                 { model | user = updatedUser } ! []
 

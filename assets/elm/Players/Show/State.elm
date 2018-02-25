@@ -37,6 +37,7 @@ initialModel idStr =
         , pageState = Types.Loading
         , player = Editable.ReadOnly player
         , errors = []
+        , userCanEdit = False
         }
 
 
@@ -72,8 +73,9 @@ update msg model =
             in
                 { model
                     | header = headerModel
-                    , player = Editable.ReadOnly player
                     , pageState = Types.Loaded
+                    , player = Editable.ReadOnly player
+                    , userCanEdit = user.isAdmin
                 }
                     ! []
 
