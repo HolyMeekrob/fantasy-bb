@@ -53,7 +53,6 @@ defmodule FantasyBbWeb.SeasonController do
 
   def update(conn, %{"id" => id} = params) do
     with :ok <- Season.authorize(:update, conn.assigns.current_user),
-         #  {:ok, start} <- Map.get(params, "start") |> Date.from_iso8601(),
          input = %{
            title: Map.get(params, "title"),
            start: Map.get(params, "start")

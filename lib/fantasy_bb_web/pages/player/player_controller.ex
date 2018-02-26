@@ -20,17 +20,23 @@ defmodule FantasyBbWeb.PlayerController do
   end
 
   def update(conn, %{"id" => id} = params) do
-    input = %{
-      first_name: Map.get(params, "firstName"),
-      last_name: Map.get(params, "lastName"),
-      nickname: Map.get(params, "nickname"),
-      hometown: Map.get(params, "hometown"),
-      birthday: Map.get(params, "birthday")
-    }
-
-    case Player.update(id, input) do
-      {:ok, player} ->
-        render(conn, "player.json", player)
+    with :ok <- Player.authorize(:update, conn.assigns.current_user),
+         input = %{
+           first_name: Map.get(params, "firstName"),
+           last_name: Map.get(params, "lastName"),
+           nickname: Map.get(params, "nickname"),
+           hometown: Map.get(params, "hometown"),
+           birthday: Map.get(params, "birthday")
+         },
+         {:ok, player} <- Player.update(id, input) do
+      render(conn, "player.json", player)
+    else
+      {:error, :unauthorized} ->
+        send_resp(
+          conn,
+          :unauthorized,
+          "User is not authorized to update players"
+        )
 
       {:error, _} ->
         send_resp(conn, :internal_server_error, "Error updating player")
