@@ -1,8 +1,11 @@
 defmodule FantasyBb.Season do
   alias FantasyBb.Repo
   alias FantasyBb.Schema.Season
+  alias FantasyBb.Season.Authorization
 
   import Ecto.Query, only: [from: 1, from: 2]
+
+  defdelegate authorize(action, user), to: Authorization
 
   def get(id) do
     Repo.get(Season, id)

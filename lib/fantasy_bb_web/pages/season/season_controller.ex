@@ -4,19 +4,28 @@ defmodule FantasyBbWeb.SeasonController do
   alias FantasyBb.Repo
   alias FantasyBb.Season
 
+  import FantasyBb.Schema.Season
+
   def create_view(conn, _params) do
     render(conn, "create.html")
   end
 
   def create(conn, params) do
-    input = %{
-      title: Map.get(params, "title"),
-      start: Map.get(params, "start")
-    }
-
-    case Season.create(input) do
-      {:ok, season} ->
-        render(conn, "season.json", season)
+    with :ok <- Season.authorize(:create, conn.assigns.current_user),
+         {:ok, start} <- Map.get(params, "start") |> Date.from_iso8601(),
+         input = %FantasyBb.Schema.Season{
+           title: Map.get(params, "title"),
+           start: start
+         },
+         {:ok, season} <- Season.create(input) do
+      render(conn, "season.json", season)
+    else
+      {:error, :unauthorized} ->
+        send_resp(
+          conn,
+          :unauthorized,
+          "User is not authorized to create seasons"
+        )
 
       {:error, _} ->
         send_resp(conn, :internal_server_error, "Error creating season")
