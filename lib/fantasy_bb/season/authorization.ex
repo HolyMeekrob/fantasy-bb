@@ -1,7 +1,7 @@
 defmodule FantasyBb.Season.Authorization do
   import FantasyBb.Account, only: [is_admin: 1]
 
-  def authorize(:create, user) do
+  def authorize(action, user) when action in [:create, :update] do
     if is_admin(user) do
       :ok
     else

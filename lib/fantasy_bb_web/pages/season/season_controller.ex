@@ -52,14 +52,21 @@ defmodule FantasyBbWeb.SeasonController do
   end
 
   def update(conn, %{"id" => id} = params) do
-    input = %{
-      title: Map.get(params, "title"),
-      start: Map.get(params, "start")
-    }
-
-    case Season.update(id, input) do
-      {:ok, season} ->
-        render(conn, "season.json", season)
+    with :ok <- Season.authorize(:update, conn.assigns.current_user),
+         #  {:ok, start} <- Map.get(params, "start") |> Date.from_iso8601(),
+         input = %{
+           title: Map.get(params, "title"),
+           start: Map.get(params, "start")
+         },
+         {:ok, season} <- Season.update(id, input) do
+      render(conn, "season.json", season)
+    else
+      {:error, :unauthorized} ->
+        send_resp(
+          conn,
+          :unauthorized,
+          "User is not authorized to update seasons"
+        )
 
       {:error, _} ->
         send_resp(conn, :internal_server_error, "Error updating season")
