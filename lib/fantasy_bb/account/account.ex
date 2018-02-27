@@ -1,6 +1,10 @@
 defmodule FantasyBb.Account do
   alias FantasyBb.Repo
   alias FantasyBb.Schema.User
+  alias FantasyBb.Account.Authorization
+
+  defdelegate is_admin(user), to: Authorization
+  defdelegate authorize(action, user, params), to: Authorization
 
   def upsert_user(user_attrs) do
     upsert_user(user_attrs, &Repo.insert_or_update/1)
@@ -29,9 +33,5 @@ defmodule FantasyBb.Account do
 
   def get_user_by_email(email) do
     Repo.get_by(User, email: email)
-  end
-
-  def is_admin(user) do
-    true
   end
 end

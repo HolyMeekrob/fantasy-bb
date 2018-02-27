@@ -75,7 +75,7 @@ update msg model =
                 | user = Editable.save model.user
                 , pageState = Types.Loading
             }
-                ! [ saveProfile <| .bio (Editable.value model.user) ]
+                ! [ saveProfile (Editable.value model.user) ]
 
         Types.ViewProfile (Ok _) ->
             { model | pageState = Types.Loaded } ! []
