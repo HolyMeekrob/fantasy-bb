@@ -86,6 +86,7 @@ defmodule FantasyBbWeb.Router do
   scope "/admin", FantasyBbWeb do
     pipe_through([:browser, :authenticated])
 
+    get("/player/create", PlayerController, :create_view)
     get("/season/create", SeasonController, :create_view)
   end
 

@@ -3,6 +3,10 @@ defmodule FantasyBbWeb.PlayerController do
 
   alias FantasyBb.Player
 
+  def create_view(conn, _params) do
+    render(conn, "create.html")
+  end
+
   def show(conn, %{"id" => _}) do
     render(conn, "show.html")
   end
