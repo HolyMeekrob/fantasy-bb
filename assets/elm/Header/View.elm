@@ -58,9 +58,8 @@ navigation user =
                 [ text "Admin"
                 , div
                     [ class "sub-nav" ]
-                    [ navLink
-                        "/admin/season/create"
-                        "Create season"
+                    [ navLink "/admin/season/create" "Create season"
+                    , navLink "/admin/player/create" "Create player"
                     ]
                 ]
             ]
