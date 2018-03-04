@@ -1,11 +1,11 @@
 module Seasons.Create.Rest exposing (createSeason)
 
 import Common.Date exposing (dateToString)
-import Seasons.Create.Types as Types exposing (Model, Msg, Season)
 import Http exposing (jsonBody)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
+import Seasons.Create.Types as Types exposing (Model, Msg, Season)
 
 
 createSeason : Model -> Cmd Msg

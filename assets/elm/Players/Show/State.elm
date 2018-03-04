@@ -18,7 +18,7 @@ import Editable
 import Task
 import Header.State
 import Header.Types
-import Validate exposing (Validator, validate)
+import Validate exposing (Validator)
 
 
 initialModel : String -> Model
@@ -122,7 +122,7 @@ update msg model =
         Types.SubmitForm ->
             let
                 validationErrors =
-                    validate validator model
+                    Validate.validate validator model
             in
                 if (List.isEmpty validationErrors) then
                     { model

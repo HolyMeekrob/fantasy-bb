@@ -8,7 +8,7 @@ import Common.Rest exposing (fetch, userRequest)
 import Common.Views.Forms exposing (Error)
 import Header.State
 import Date exposing (Date)
-import Validate exposing (Validator, validate)
+import Validate exposing (Validator)
 
 
 initialModel : Model
