@@ -5,6 +5,11 @@ defmodule FantasyBb.Player do
 
   defdelegate authorize(action, user), to: Authorization
 
+  def create(player) do
+    Player.changeset(player)
+    |> Repo.insert()
+  end
+
   def get(id) do
     Repo.get(Player, id)
   end

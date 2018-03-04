@@ -65,6 +65,7 @@ defmodule FantasyBbWeb.Router do
   scope "/ajax/players", FantasyBbWeb do
     pipe_through(:ajax)
 
+    post("/", PlayerController, :create)
     get("/:id", PlayerController, :get)
     put("/:id", PlayerController, :update)
   end

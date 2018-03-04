@@ -7,6 +7,51 @@ defmodule FantasyBbWeb.PlayerController do
     render(conn, "create.html")
   end
 
+  def create(conn, params) do
+    withDefault = fn val, default ->
+      if is_nil(val) do
+        default
+      else
+        val
+      end
+    end
+
+    birthday =
+      with {:ok, dateVal} <- Map.fetch(params, "birthday"),
+           dateStr <- withDefault.(dateVal, ""),
+           {:ok, date} <- Date.from_iso8601(dateStr) do
+        date
+      else
+        :error ->
+          nil
+
+        _ ->
+          Map.fetch!(params, "birthday")
+      end
+
+    with :ok <- Player.authorize(:create, conn.assigns.current_user),
+         input = %FantasyBb.Schema.Player{
+           first_name: Map.get(params, "firstName"),
+           last_name: Map.get(params, "lastName"),
+           nickname: Map.get(params, "nickname"),
+           hometown: Map.get(params, "hometown"),
+           birthday: birthday
+         },
+         {:ok, player} <- Player.create(input) do
+      render(conn, "player.json", player)
+    else
+      {:error, :unauthorized} ->
+        send_resp(
+          conn,
+          :unauthorized,
+          "User is not authorized to create players"
+        )
+
+      {:error, _} ->
+        send_resp(conn, :internal_server_error, "Error creating player")
+    end
+  end
+
   def show(conn, %{"id" => _}) do
     render(conn, "show.html")
   end
