@@ -76,7 +76,7 @@ update msg model =
                 { model
                     | header = headerModel
                     , pageState = Types.Loaded
-                    , season = Editable.ReadOnly season
+                    , season = Editable.ReadOnly (sortSeason season)
                     , userCanEdit = user.isAdmin
                 }
                     ! []
@@ -94,7 +94,10 @@ update msg model =
         Types.SetPlayers (Ok players) ->
             { model
                 | pageState = Types.Loaded
-                , allPlayers = playersDiff players (getHouseguests model)
+                , allPlayers =
+                    getHouseguests model
+                        |> playersDiff players
+                        |> sortPlayers
                 , season = Editable.edit model.season
             }
                 ! []
@@ -135,7 +138,9 @@ update msg model =
                             updateSeasonField
                                 (\season ->
                                     { season
-                                        | houseguests = selectedPlayer :: season.houseguests
+                                        | houseguests =
+                                            sortPlayers
+                                                (selectedPlayer :: season.houseguests)
                                     }
                                 )
                                 model
@@ -162,7 +167,12 @@ update msg model =
                         )
                         model
             in
-                { updatedModel | allPlayers = player :: model.allPlayers } ! []
+                { updatedModel
+                    | allPlayers =
+                        sortPlayers
+                            (player :: model.allPlayers)
+                }
+                    ! []
 
         Types.SubmitForm ->
             let
@@ -250,3 +260,18 @@ addNotification message =
     Task.perform
         (\msg -> Types.HeaderMsg (Header.Types.AddNotification msg))
         (Task.succeed message)
+
+
+playerSort : Player -> String
+playerSort player =
+    player.lastName ++ player.firstName
+
+
+sortPlayers : List Player -> List Player
+sortPlayers =
+    List.sortBy playerSort
+
+
+sortSeason : Season -> Season
+sortSeason season =
+    { season | houseguests = sortPlayers season.houseguests }
