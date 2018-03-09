@@ -24,6 +24,11 @@ type alias Player =
     }
 
 
+type alias CreatedPlayer =
+    { id : Int
+    }
+
+
 type PageState
     = Loading
     | Loaded
@@ -48,4 +53,4 @@ type Msg
     | SetHometown String
     | SetBirthday String
     | SubmitForm
-    | PlayerCreated (Result Http.Error Int)
+    | PlayerCreated (Result Http.Error CreatedPlayer)

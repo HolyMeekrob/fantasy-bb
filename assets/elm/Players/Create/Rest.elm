@@ -3,9 +3,10 @@ module Players.Create.Rest exposing (createPlayer)
 import Common.Date exposing (date, dateToString, encodeDate)
 import Common.Rest exposing (encodeMaybe)
 import Http exposing (jsonBody)
-import Json.Decode as Decode exposing (int)
+import Json.Decode as Decode exposing (Decoder, int)
+import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
-import Players.Create.Types as Types exposing (Model, Msg, Player)
+import Players.Create.Types as Types exposing (CreatedPlayer, Model, Msg)
 
 
 createPlayer : Model -> Cmd Msg
@@ -27,5 +28,11 @@ createPlayer model =
                 ]
                 |> jsonBody
     in
-        Http.post url data int
+        Http.post url data newPlayerDecoder
             |> Http.send Types.PlayerCreated
+
+
+newPlayerDecoder : Decoder CreatedPlayer
+newPlayerDecoder =
+    decode CreatedPlayer
+        |> required "id" int

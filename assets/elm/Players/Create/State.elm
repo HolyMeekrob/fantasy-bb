@@ -109,10 +109,10 @@ update msg model =
             in
                 newModel ! []
 
-        Types.PlayerCreated (Ok id) ->
+        Types.PlayerCreated (Ok newPlayer) ->
             let
                 url =
-                    "/players/" ++ (toString id)
+                    "/players/" ++ (toString newPlayer.id)
             in
                 model ! [ navigate url ]
 
