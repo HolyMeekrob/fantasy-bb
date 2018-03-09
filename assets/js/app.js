@@ -9,6 +9,7 @@ import "phoenix_html"
 
 import Home from '../elm/Home/Home';
 import Account_Profile from '../elm/Account/Profile/Profile';
+import Leagues_Create from '../elm/Leagues/Create/Create';
 import Players_Create from '../elm/Players/Create/Create';
 import Players_Show from '../elm/Players/Show/Show'
 import Seasons_Create from '../elm/Seasons/Create/Create'
@@ -17,6 +18,7 @@ import Seasons_Show from '../elm/Seasons/Show/Show'
 const elmModules = {
 	Home: Home.Home,
 	Account_Profile: Account_Profile.Account.Profile,
+	Leagues_Create: Leagues_Create.Leagues.Create,
 	Players_Create: Players_Create.Players.Create,
 	Players_Show: Players_Show.Players.Show,
 	Seasons_Create: Seasons_Create.Seasons.Create,

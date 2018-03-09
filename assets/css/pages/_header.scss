@@ -59,6 +59,10 @@ nav {
 		background-color: inherit;
 		z-index: inherit;
 	}
+
+	.top-nav > .nav-item {
+		margin-right: 2em;
+	}
 	
 	.sub-nav {
 		height: 0;

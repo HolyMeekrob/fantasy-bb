@@ -62,6 +62,13 @@ navigation user =
                     , navLink "/admin/player/create" "Create player"
                     ]
                 ]
+            , div
+                [ class "nav-item has-sub" ]
+                [ text "Leagues"
+                , div
+                    [ class "sub-nav" ]
+                    [ navLink "/leagues/create" "Create league" ]
+                ]
             ]
         ]
 
