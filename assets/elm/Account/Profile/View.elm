@@ -15,11 +15,13 @@ import Html
         , dl
         , dt
         , h1
+        , li
         , section
         , text
         , textarea
+        , ul
         )
-import Html.Attributes exposing (class, href, value)
+import Html.Attributes exposing (class, classList, href, value)
 import Html.Events exposing (onClick, onInput)
 
 
@@ -90,6 +92,13 @@ editProfile model =
                     []
                     [ text "User Profile " ]
                 ]
+            , ul
+                [ classList
+                    [ ( "error", True )
+                    , ( "not-displayed", List.isEmpty model.errors )
+                    ]
+                ]
+                (List.map showError model.errors)
             , dl
                 [ class "profile-list" ]
                 (List.concat
@@ -99,11 +108,11 @@ editProfile model =
                     ]
                 )
             , button
+                [ onClick Types.SaveProfile ]
+                [ text "Save " ]
+            , button
                 [ onClick Types.CancelEdit ]
                 [ text "Cancel" ]
-            , button
-                [ onClick Types.SaveEdit ]
-                [ text "Save " ]
             ]
 
 
@@ -115,6 +124,13 @@ loadingOverlay model =
 
         _ ->
             empty
+
+
+showError : String -> Html Msg
+showError error =
+    li
+        []
+        [ text error ]
 
 
 descriptionItem : String -> String -> List (Html Msg)

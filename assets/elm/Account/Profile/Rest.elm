@@ -22,4 +22,4 @@ saveProfile user =
                 |> Http.jsonBody
     in
         put url data (succeed True)
-            |> Http.send Types.ViewProfile
+            |> Http.send Types.ProfileSaved

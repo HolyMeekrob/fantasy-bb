@@ -10,6 +10,10 @@
 	border-radius: 0.2em;
 }
 
+.error {
+	color: $error;
+}
+
 .not-displayed {
 	display: none;
 }

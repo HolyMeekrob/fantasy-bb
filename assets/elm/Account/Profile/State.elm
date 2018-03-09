@@ -2,10 +2,12 @@ module Account.Profile.State exposing (init, subscriptions, update)
 
 import Account.Profile.Rest as Rest exposing (saveProfile)
 import Account.Profile.Types as Types exposing (Model, Msg)
-import Editable
-import Header.State
 import Common.Commands exposing (send)
 import Common.Rest exposing (fetch, userRequest)
+import Editable
+import Header.State
+import Header.Types
+import Task
 
 
 initialModel : Model
@@ -23,6 +25,7 @@ initialModel =
         { user = Editable.ReadOnly user
         , header = Header.State.initialModel
         , pageState = Types.Loading
+        , errors = []
         }
 
 
@@ -68,20 +71,26 @@ update msg model =
             { model | user = Editable.edit model.user } ! []
 
         Types.CancelEdit ->
-            { model | user = Editable.cancel model.user } ! []
+            { model | user = Editable.cancel model.user, errors = [] } ! []
 
-        Types.SaveEdit ->
-            { model
-                | user = Editable.save model.user
-                , pageState = Types.Loading
-            }
+        Types.SaveProfile ->
+            { model | pageState = Types.Loading }
                 ! [ saveProfile (Editable.value model.user) ]
 
-        Types.ViewProfile (Ok _) ->
-            { model | pageState = Types.Loaded } ! []
+        Types.ProfileSaved (Err _) ->
+            { model
+                | pageState = Types.Loaded
+                , errors = [ "Error saving profile" ]
+            }
+                ! []
 
-        Types.ViewProfile (Err _) ->
-            { model | pageState = Types.Loaded } ! []
+        Types.ProfileSaved (Ok _) ->
+            { model
+                | pageState = Types.Loaded
+                , user = Editable.save model.user
+                , errors = []
+            }
+                ! [ addNotification "Profile saved" ]
 
         Types.UpdateBio newBio ->
             let
@@ -96,3 +105,10 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
+
+
+addNotification : String -> Cmd Msg
+addNotification message =
+    Task.perform
+        (\msg -> Types.HeaderMsg (Header.Types.AddNotification msg))
+        (Task.succeed message)

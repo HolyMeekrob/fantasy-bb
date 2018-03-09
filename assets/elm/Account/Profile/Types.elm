@@ -10,6 +10,7 @@ type alias Model =
     { header : Header.Types.Model
     , user : Editable User
     , pageState : PageState
+    , errors : List String
     }
 
 
@@ -24,6 +25,6 @@ type Msg
     | SetUser (Result Http.Error User)
     | EditProfile
     | CancelEdit
-    | SaveEdit
-    | ViewProfile (Result Http.Error Bool)
+    | SaveProfile
+    | ProfileSaved (Result Http.Error Bool)
     | UpdateBio String

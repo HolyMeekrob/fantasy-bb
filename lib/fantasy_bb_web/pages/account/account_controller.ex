@@ -23,7 +23,7 @@ defmodule FantasyBbWeb.AccountController do
          {:ok, user} <- Account.upsert_user(input) do
       conn
       |> put_session(:current_user, user)
-      |> send_resp(:ok, "")
+      |> render("user.json", user)
     else
       {:error, :unauthorized} ->
         send_resp(conn, :unauthorized, "Users can only update their own profiles")
