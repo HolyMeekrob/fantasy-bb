@@ -31,7 +31,7 @@ type alias Season =
     { id : Int
     , title : String
     , start : Maybe Date
-    , players : List Player
+    , houseguests : List Player
     }
 
 
@@ -55,7 +55,7 @@ type Msg
     | FetchInitialData
     | SetInitialData (Result Http.Error ( User, Season ))
     | EditSeason
-    | SetHouseguests (Result Http.Error (List Player))
+    | SetPlayers (Result Http.Error (List Player))
     | CancelEdit
     | SetTitle String
     | SetStart String

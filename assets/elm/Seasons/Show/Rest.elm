@@ -1,4 +1,4 @@
-module Seasons.Show.Rest exposing (getPossibleHouseguests, initialize, updateSeason)
+module Seasons.Show.Rest exposing (getAllPlayers, initialize, updateSeason)
 
 import Seasons.Show.Types as Types exposing (Player, Msg, Season)
 import Common.Date exposing (date, dateToString)
@@ -28,14 +28,14 @@ initialize id =
         |> Task.attempt Types.SetInitialData
 
 
-getPossibleHouseguests : Cmd Msg
-getPossibleHouseguests =
+getAllPlayers : Cmd Msg
+getAllPlayers =
     let
         url =
             "/ajax/players"
     in
         Http.get url (list playerDecoder)
-            |> Http.send Types.SetHouseguests
+            |> Http.send Types.SetPlayers
 
 
 updateSeason : Season -> Cmd Msg
@@ -48,16 +48,16 @@ updateSeason season =
             Maybe.map dateToString season.start
                 |> Maybe.withDefault ""
 
-        players =
+        houseguests =
             List.map
                 (\player -> Encode.int player.id)
-                season.players
+                season.houseguests
 
         data =
             Encode.object
                 [ ( "title", Encode.string season.title )
                 , ( "start", Encode.string start )
-                , ( "players", Encode.list players )
+                , ( "players", Encode.list houseguests )
                 ]
                 |> Http.jsonBody
     in

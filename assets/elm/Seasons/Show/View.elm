@@ -82,7 +82,7 @@ viewContent model =
         div
             []
             [ viewSeason season
-            , viewHouseguests season.players
+            , viewHouseguests season.houseguests
             ]
 
 
@@ -202,10 +202,10 @@ editHouseguests model =
         , div
             []
             [ select
-                [ onInput (updateSelectedHouseguest model) ]
+                [ onInput (updateSelectedPlayer model) ]
               <|
-                (defaultHouseguest model)
-                    :: (List.map (houseguestOption model) model.allPlayers)
+                (defaultPlayer model)
+                    :: (List.map (playerOption model) model.allPlayers)
             , button
                 [ onClick Types.AddHouseguest
                 , type_ "button"
@@ -218,28 +218,28 @@ editHouseguests model =
             List.map
                 editHouseguest
             <|
-                (getSeason >> .players)
+                (getSeason >> .houseguests)
                     model
         ]
 
 
 editHouseguest : Player -> Html Msg
-editHouseguest player =
+editHouseguest houseguest =
     div
         []
-        [ text (getName player)
+        [ text (getName houseguest)
         , iconWithOptions
             timesCircle
             FA.Solid
             []
             [ class "clickable"
-            , onClick (Types.RemoveHouseguest player)
+            , onClick (Types.RemoveHouseguest houseguest)
             ]
         ]
 
 
-defaultHouseguest : Model -> Html Msg
-defaultHouseguest model =
+defaultPlayer : Model -> Html Msg
+defaultPlayer model =
     option
         [ value "N/A"
         , selected (model.selectedPlayer == Nothing)
@@ -247,8 +247,8 @@ defaultHouseguest model =
         [ text "Select a player" ]
 
 
-houseguestOption : Model -> Player -> Html Msg
-houseguestOption model player =
+playerOption : Model -> Player -> Html Msg
+playerOption model player =
     let
         isSelected =
             case model.selectedPlayer of
@@ -302,8 +302,8 @@ getPlayer model id =
         model.allPlayers
 
 
-updateSelectedHouseguest : Model -> String -> Msg
-updateSelectedHouseguest model val =
+updateSelectedPlayer : Model -> String -> Msg
+updateSelectedPlayer model val =
     String.toInt val
         |> Result.toMaybe
         |> Maybe.andThen (getPlayer model)

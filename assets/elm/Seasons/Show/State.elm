@@ -8,7 +8,7 @@ import Editable
 import Header.State
 import Header.Types
 import List.Extra exposing (elemIndex)
-import Seasons.Show.Rest exposing (getPossibleHouseguests, initialize, updateSeason)
+import Seasons.Show.Rest exposing (getAllPlayers, initialize, updateSeason)
 import Seasons.Show.Types as Types
     exposing
         ( Flags
@@ -30,7 +30,7 @@ initialModel idStr =
             { id = findId idStr
             , title = ""
             , start = Nothing
-            , players = []
+            , houseguests = []
             }
     in
         { header = Header.State.initialModel
@@ -82,19 +82,19 @@ update msg model =
                     ! []
 
         Types.EditSeason ->
-            { model | pageState = Types.Loading } ! [ getPossibleHouseguests ]
+            { model | pageState = Types.Loading } ! [ getAllPlayers ]
 
-        Types.SetHouseguests (Err _) ->
+        Types.SetPlayers (Err _) ->
             { model
                 | pageState = Types.Loaded
                 , season = Editable.edit model.season
             }
                 ! []
 
-        Types.SetHouseguests (Ok houseguests) ->
+        Types.SetPlayers (Ok players) ->
             { model
                 | pageState = Types.Loaded
-                , allPlayers = playersDiff houseguests (getPlayers model)
+                , allPlayers = playersDiff players (getHouseguests model)
                 , season = Editable.edit model.season
             }
                 ! []
@@ -133,7 +133,11 @@ update msg model =
                     let
                         ( updatedModel, _ ) =
                             updateSeasonField
-                                (\season -> { season | players = selectedPlayer :: season.players })
+                                (\season ->
+                                    { season
+                                        | houseguests = selectedPlayer :: season.houseguests
+                                    }
+                                )
                                 model
 
                         updatedPlayers =
@@ -149,11 +153,13 @@ update msg model =
                 remainingHouseguests =
                     List.filter
                         (\houseguest -> houseguest.id /= player.id)
-                        (getPlayers model)
+                        (getHouseguests model)
 
                 ( updatedModel, _ ) =
                     updateSeasonField
-                        (\season -> { season | players = remainingHouseguests })
+                        (\season ->
+                            { season | houseguests = remainingHouseguests }
+                        )
                         model
             in
                 { updatedModel | allPlayers = player :: model.allPlayers } ! []
@@ -226,9 +232,9 @@ getStart =
     getSeason >> .start
 
 
-getPlayers : Model -> List Player
-getPlayers =
-    getSeason >> .players
+getHouseguests : Model -> List Player
+getHouseguests =
+    getSeason >> .houseguests
 
 
 validator : Validator (Error FormField) Model
