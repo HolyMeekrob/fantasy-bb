@@ -38,7 +38,9 @@ defmodule FantasyBbWeb.PlayerController do
            birthday: birthday
          },
          {:ok, player} <- Player.create(input) do
-      render(conn, "player.json", player)
+      conn
+      |> put_status(:created)
+      |> render("player.json", player)
     else
       {:error, :unauthorized} ->
         send_resp(

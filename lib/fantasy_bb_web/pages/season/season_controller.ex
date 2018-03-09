@@ -17,7 +17,9 @@ defmodule FantasyBbWeb.SeasonController do
            start: start
          },
          {:ok, season} <- Season.create(input) do
-      render(conn, "season.json", season)
+      conn
+      |> put_status(:created)
+      |> render("season.json", season)
     else
       {:error, :unauthorized} ->
         send_resp(
