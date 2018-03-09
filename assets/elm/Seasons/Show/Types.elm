@@ -14,6 +14,8 @@ type alias Model =
     , season : Editable Season
     , errors : List (Error FormField)
     , userCanEdit : Bool
+    , allPlayers : List Player
+    , selectedPlayer : Maybe Player
     }
 
 
@@ -53,8 +55,17 @@ type Msg
     | FetchInitialData
     | SetInitialData (Result Http.Error ( User, Season ))
     | EditSeason
+    | SetHouseguests (Result Http.Error (List Player))
     | CancelEdit
     | SetTitle String
     | SetStart String
+    | SetSelectedPlayer (Maybe Player)
+    | AddHouseguest
+    | RemoveHouseguest Player
     | SubmitForm
     | SeasonUpdated (Result Http.Error Season)
+
+
+getSeason : Model -> Season
+getSeason model =
+    Editable.value model.season

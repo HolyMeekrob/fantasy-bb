@@ -3,8 +3,7 @@ defmodule FantasyBbWeb.SeasonController do
 
   alias FantasyBb.Repo
   alias FantasyBb.Season
-
-  import FantasyBb.Schema.Season
+  alias FantasyBb.Player
 
   def create_view(conn, _params) do
     render(conn, "create.html")
@@ -52,10 +51,17 @@ defmodule FantasyBbWeb.SeasonController do
   end
 
   def update(conn, %{"id" => id} = params) do
+    players =
+      Map.get(params, "players", [])
+      |> Player.get()
+
+    IO.inspect(players)
+
     with :ok <- Season.authorize(:update, conn.assigns.current_user),
          input = %{
            title: Map.get(params, "title"),
-           start: Map.get(params, "start")
+           start: Map.get(params, "start"),
+           players: players
          },
          {:ok, season} <- Season.update(id, input) do
       render(conn, "season.json", season)
@@ -67,8 +73,8 @@ defmodule FantasyBbWeb.SeasonController do
           "User is not authorized to update seasons"
         )
 
-      {:error, _} ->
-        send_resp(conn, :internal_server_error, "Error updating season")
+      {:error, msg} ->
+        send_resp(conn, :internal_server_error, "Error updating season: " <> msg)
     end
   end
 end

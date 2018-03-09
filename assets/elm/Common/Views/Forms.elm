@@ -1,4 +1,13 @@
-module Common.Views.Forms exposing (Error, Input, form)
+module Common.Views.Forms
+    exposing
+        ( Error
+        , Input
+        , form
+        , formButtons
+        , formClass
+        , formErrors
+        , inputField
+        )
 
 import Html exposing (Html, button, div, label, li, text, ul)
 import Html.Attributes exposing (class, for, id, placeholder, type_, value)
@@ -33,15 +42,13 @@ form :
     -> Html msg
 form ( submitText, onSubmit ) otherButtons summaryErrors inputs =
     Html.form
-        [ class "simple-form"
+        [ class formClass
         , Html.Events.onSubmit onSubmit
         ]
     <|
-        div
-            [ class "validation-summary" ]
-            [ formErrors summaryErrors ]
+        formErrors summaryErrors
             :: List.concatMap inputField inputs
-            ++ List.singleton (buttons submitText otherButtons)
+            ++ List.singleton (formButtons submitText otherButtons)
 
 
 inputField : Input msg -> List (Html msg)
@@ -77,9 +84,12 @@ inputLabel input =
 
 formErrors : List String -> Html msg
 formErrors errors =
-    ul
-        [ class "validation-errors" ]
-        (List.map errorLineItem errors)
+    div
+        [ class "validation-summary" ]
+        [ ul
+            [ class "validation-errors" ]
+            (List.map errorLineItem errors)
+        ]
 
 
 errorLineItem : String -> Html msg
@@ -89,8 +99,8 @@ errorLineItem errorText =
         [ text errorText ]
 
 
-buttons : String -> List (Button msg) -> Html msg
-buttons submitText otherButtons =
+formButtons : String -> List (Button msg) -> Html msg
+formButtons submitText otherButtons =
     let
         submitButton =
             button [] [ text submitText ]
@@ -107,3 +117,8 @@ formButton ( buttonText, action ) =
     button
         [ type_ "button", onClick action ]
         [ text buttonText ]
+
+
+formClass : String
+formClass =
+    "simple-form"

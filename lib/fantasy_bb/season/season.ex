@@ -8,7 +8,11 @@ defmodule FantasyBb.Season do
   defdelegate authorize(action, user), to: Authorization
 
   def get(id) do
-    Repo.get(Season, id)
+    get(Season, id)
+  end
+
+  defp get(query, id) do
+    Repo.get(query, id)
   end
 
   def create(season) do
@@ -17,7 +21,12 @@ defmodule FantasyBb.Season do
   end
 
   def update(id, changes) do
-    Season.changeset(get(id), changes)
+    season =
+      query()
+      |> with_players()
+      |> get(id)
+
+    Season.changeset(season, changes)
     |> Repo.update()
   end
 

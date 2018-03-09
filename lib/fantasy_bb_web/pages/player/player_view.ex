@@ -15,4 +15,8 @@ defmodule FantasyBbWeb.PlayerView do
       hometown: player.hometown
     }
   end
+
+  def render("players.json", %{players: players}) do
+    render_many(players, __MODULE__, "player.json")
+  end
 end

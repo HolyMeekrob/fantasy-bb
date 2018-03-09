@@ -1,5 +1,39 @@
 module Seasons.Show.View exposing (view)
 
+import Common.Date exposing (dateToString)
+import Common.Views exposing (empty, layout, loading, titleWithEdit)
+import Common.Views.Forms
+    exposing
+        ( formButtons
+        , formClass
+        , formErrors
+        , inputField
+        )
+import Common.Views.Text exposing (playerName)
+import Editable exposing (Editable)
+import FontAwesome as FA exposing (timesCircle, iconWithOptions)
+import Header.View exposing (headerView)
+import Html
+    exposing
+        ( Html
+        , a
+        , button
+        , dd
+        , div
+        , dl
+        , dt
+        , form
+        , h1
+        , li
+        , option
+        , section
+        , select
+        , text
+        , ul
+        )
+import Html.Attributes exposing (class, href, selected, type_, value)
+import Html.Events exposing (onClick, onInput, onSubmit)
+import List.Extra exposing (find)
 import Seasons.Show.Types as Types
     exposing
         ( FormField
@@ -7,15 +41,8 @@ import Seasons.Show.Types as Types
         , Msg
         , Player
         , Season
+        , getSeason
         )
-import Common.Date exposing (dateToString)
-import Common.Views exposing (empty, layout, loading, titleWithEdit)
-import Common.Views.Forms exposing (form)
-import Common.Views.Text exposing (playerName)
-import Editable exposing (Editable)
-import Header.View exposing (headerView)
-import Html exposing (Html, a, dd, div, dl, dt, h1, li, section, text, ul)
-import Html.Attributes exposing (class, href)
 
 
 view : Model -> Html Msg
@@ -34,17 +61,29 @@ primaryView model =
             "View Season"
             Types.EditSeason
             (model.userCanEdit && (not <| isEditing model))
-        , season model
-        , houseguests model.season
+        , content model
         ]
 
 
-season : Model -> Html Msg
-season model =
+content : Model -> Html Msg
+content model =
     if (isEditing model) then
         editSeason model
     else
-        viewSeason (Editable.value model.season)
+        viewContent model
+
+
+viewContent : Model -> Html Msg
+viewContent model =
+    let
+        season =
+            getSeason model
+    in
+        div
+            []
+            [ viewSeason season
+            , viewHouseguests season.players
+            ]
 
 
 viewSeason : Season -> Html Msg
@@ -82,60 +121,67 @@ editSeason : Model -> Html Msg
 editSeason model =
     let
         season =
-            Editable.value model.season
+            getSeason model
+
+        titleField =
+            { id = "season-title"
+            , type_ = "text"
+            , label = "Title"
+            , placeholder = "Season title"
+            , value = season.title
+            , onInput = Types.SetTitle
+            , isRequired = True
+            , errors = errors Types.Title model
+            }
+
+        startField =
+            { id = "season-start"
+            , type_ = "date"
+            , label = "Start date"
+            , placeholder = "Season start date"
+            , value =
+                season.start
+                    |> Maybe.map dateToString
+                    |> Maybe.withDefault ""
+            , onInput = Types.SetStart
+            , isRequired = True
+            , errors = errors Types.Start model
+            }
+
+        cancelButton =
+            ( "Cancel", Types.CancelEdit )
     in
         div
             []
             [ form
-                ( "Save", Types.SubmitForm )
-                [ ( "Cancel", Types.CancelEdit ) ]
-                (errors Types.Summary model)
-                [ { id = "season-title"
-                  , type_ = "text"
-                  , label = "Title"
-                  , placeholder = "Season title"
-                  , value = season.title
-                  , onInput = Types.SetTitle
-                  , isRequired = True
-                  , errors = errors Types.Title model
-                  }
-                , { id = "season-start"
-                  , type_ = "date"
-                  , label = "Start date"
-                  , placeholder = "Season start date"
-                  , value =
-                        season.start
-                            |> Maybe.map dateToString
-                            |> Maybe.withDefault ""
-                  , onInput = Types.SetStart
-                  , isRequired = True
-                  , errors = errors Types.Start model
-                  }
+                [ class formClass
+                , onSubmit Types.SubmitForm
                 ]
+              <|
+                formErrors (errors Types.Summary model)
+                    :: inputField titleField
+                    ++ inputField startField
+                    ++ List.singleton (editHouseguests model)
+                    ++ List.singleton (formButtons "Save" [ cancelButton ])
             ]
 
 
-houseguests : Editable Season -> Html Msg
-houseguests season =
-    case season of
-        Editable.Editable _ _ ->
-            empty
-
-        Editable.ReadOnly seasonVal ->
-            div
-                []
-                [ text "Houseguests"
-                , ul
-                    []
-                    (List.map viewHouseguest seasonVal.players)
-                ]
+viewHouseguests : List Player -> Html Msg
+viewHouseguests players =
+    div
+        []
+        [ text "Houseguests"
+        , ul
+            []
+            (List.map viewHouseguest players)
+        ]
 
 
 viewHouseguest : Player -> Html Msg
 viewHouseguest player =
     let
         name =
-            playerName player.firstName player.lastName player.nickname
+            getName player
 
         url =
             "/players/" ++ toString player.id
@@ -146,6 +192,77 @@ viewHouseguest player =
                 [ href url ]
                 [ text name ]
             ]
+
+
+editHouseguests : Model -> Html Msg
+editHouseguests model =
+    div
+        []
+        [ text "Houseguests"
+        , div
+            []
+            [ select
+                [ onInput (updateSelectedHouseguest model) ]
+              <|
+                (defaultHouseguest model)
+                    :: (List.map (houseguestOption model) model.allPlayers)
+            , button
+                [ onClick Types.AddHouseguest
+                , type_ "button"
+                ]
+                [ text "Add" ]
+            ]
+        , div
+            []
+          <|
+            List.map
+                editHouseguest
+            <|
+                (getSeason >> .players)
+                    model
+        ]
+
+
+editHouseguest : Player -> Html Msg
+editHouseguest player =
+    div
+        []
+        [ text (getName player)
+        , iconWithOptions
+            timesCircle
+            FA.Solid
+            []
+            [ class "clickable"
+            , onClick (Types.RemoveHouseguest player)
+            ]
+        ]
+
+
+defaultHouseguest : Model -> Html Msg
+defaultHouseguest model =
+    option
+        [ value "N/A"
+        , selected (model.selectedPlayer == Nothing)
+        ]
+        [ text "Select a player" ]
+
+
+houseguestOption : Model -> Player -> Html Msg
+houseguestOption model player =
+    let
+        isSelected =
+            case model.selectedPlayer of
+                Nothing ->
+                    player.id == -1
+
+                Just selectedPlayer ->
+                    player.id == selectedPlayer.id
+    in
+        option
+            [ value (toString player.id)
+            , selected isSelected
+            ]
+            [ text (getName player) ]
 
 
 loadingOverlay : Model -> Html Msg
@@ -171,3 +288,23 @@ errors field model =
 isEditing : Model -> Bool
 isEditing model =
     Editable.isEditable model.season
+
+
+getName : Player -> String
+getName player =
+    playerName player.firstName player.lastName player.nickname
+
+
+getPlayer : Model -> Int -> Maybe Player
+getPlayer model id =
+    find
+        (\player -> player.id == id)
+        model.allPlayers
+
+
+updateSelectedHouseguest : Model -> String -> Msg
+updateSelectedHouseguest model val =
+    String.toInt val
+        |> Result.toMaybe
+        |> Maybe.andThen (getPlayer model)
+        |> Types.SetSelectedPlayer

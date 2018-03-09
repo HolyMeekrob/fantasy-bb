@@ -68,6 +68,10 @@ defmodule FantasyBbWeb.PlayerController do
     end
   end
 
+  def index(conn, _) do
+    render(conn, "players.json", players: Player.get())
+  end
+
   def update(conn, %{"id" => id} = params) do
     with :ok <- Player.authorize(:update, conn.assigns.current_user),
          input = %{
