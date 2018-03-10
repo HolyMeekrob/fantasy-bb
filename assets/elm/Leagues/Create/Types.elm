@@ -14,6 +14,10 @@ type alias Model =
     }
 
 
+type alias League =
+    { id : Int }
+
+
 type PageState
     = Loading
     | Loaded
@@ -21,9 +25,13 @@ type PageState
 
 type FormField
     = Name
+    | Summary
 
 
 type Msg
     = HeaderMsg Header.Types.Msg
     | FetchUser
     | SetUser (Result Http.Error User)
+    | SetName String
+    | SubmitForm
+    | LeagueCreated (Result Http.Error League)
