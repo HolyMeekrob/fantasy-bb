@@ -62,6 +62,12 @@ defmodule FantasyBbWeb.Router do
     get("/create", LeagueController, :create_view)
   end
 
+  scope "/ajax", FantasyBbWeb do
+    pipe_through(:ajax)
+
+    post("/", LeagueController, :create)
+  end
+
   scope "/players", FantasyBbWeb do
     pipe_through([:browser, :authenticated])
 
@@ -87,6 +93,7 @@ defmodule FantasyBbWeb.Router do
     pipe_through(:ajax)
 
     post("/", SeasonController, :create)
+    get("/upcoming", SeasonController, :get_upcoming)
     get("/:id", SeasonController, :get)
     put("/:id", SeasonController, :update)
   end

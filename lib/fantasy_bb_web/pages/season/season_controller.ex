@@ -52,12 +52,15 @@ defmodule FantasyBbWeb.SeasonController do
     end
   end
 
+  def get_upcoming(conn, params) do
+    seasons = Season.get_upcoming()
+    render(conn, "seasons.json", seasons: seasons)
+  end
+
   def update(conn, %{"id" => id} = params) do
     players =
       Map.get(params, "players", [])
       |> Player.get()
-
-    IO.inspect(players)
 
     with :ok <- Season.authorize(:update, conn.assigns.current_user),
          input = %{

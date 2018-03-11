@@ -1,12 +1,12 @@
 module Players.Show.Rest exposing (initialize, updatePlayer)
 
-import Players.Show.Types as Types exposing (Player, Msg)
 import Common.Date exposing (date, dateToString, encodeDate)
 import Common.Rest exposing (encodeMaybe, put, userRequest)
 import Http exposing (Request, toTask)
 import Json.Decode exposing (Decoder, int, list, nullable, string)
 import Json.Decode.Pipeline exposing (decode, optional, required)
 import Json.Encode as Encode
+import Players.Show.Types as Types exposing (Player, Msg)
 import Task
 
 

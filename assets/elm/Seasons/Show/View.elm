@@ -253,7 +253,7 @@ playerOption model player =
         isSelected =
             case model.selectedPlayer of
                 Nothing ->
-                    player.id == -1
+                    False
 
                 Just selectedPlayer ->
                     player.id == selectedPlayer.id

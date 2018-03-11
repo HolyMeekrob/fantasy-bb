@@ -1,12 +1,10 @@
 module Leagues.Create.State exposing (init, subscriptions, update)
 
-import Common.Commands exposing (send)
 import Common.Navigation exposing (navigate)
-import Common.Rest exposing (fetch, userRequest)
 import Common.Views.Forms exposing (Error)
 import Header.State
-import Leagues.Create.Types as Types exposing (Model, Msg)
-import Leagues.Create.Rest exposing (createLeague)
+import Leagues.Create.Types as Types exposing (Model, Msg, Season)
+import Leagues.Create.Rest exposing (createLeague, initialize)
 import Validate exposing (Validator)
 
 
@@ -15,13 +13,15 @@ initialModel =
     { header = Header.State.initialModel
     , pageState = Types.Loading
     , name = ""
+    , season = Nothing
+    , possibleSeasons = []
     , errors = []
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( initialModel, send Types.FetchUser )
+    ( initialModel, initialize )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -35,24 +35,40 @@ update msg model =
                 { model | header = headerModel }
                     ! [ Cmd.map Types.HeaderMsg headerCmd ]
 
-        Types.FetchUser ->
-            model ! [ fetch userRequest Types.SetUser ]
-
-        Types.SetUser (Err _) ->
-            initialModel ! []
-
-        Types.SetUser (Ok newUser) ->
+        Types.SetInitialData (Err _) ->
             let
-                header =
-                    model.header
-
-                headerModel =
-                    { header | user = Just newUser }
+                errorMessage =
+                    "Error initializing page"
             in
-                { model | header = headerModel, pageState = Types.Loaded } ! []
+                { model | pageState = Types.Error errorMessage } ! []
+
+        Types.SetInitialData (Ok ( user, seasons )) ->
+            if (List.isEmpty seasons) then
+                { model
+                    | pageState = Types.Error "There are no upcoming seasons"
+                }
+                    ! []
+            else
+                let
+                    header =
+                        model.header
+
+                    headerModel =
+                        { header | user = Just user }
+                in
+                    { model
+                        | header = headerModel
+                        , pageState = Types.Loaded
+                        , season = initialSeason seasons
+                        , possibleSeasons = seasons
+                    }
+                        ! []
 
         Types.SetName name ->
             { model | name = name } ! []
+
+        Types.SetSelectedSeason season ->
+            { model | season = season } ! []
 
         Types.SubmitForm ->
             let
@@ -76,6 +92,14 @@ update msg model =
                 model ! [ navigate url ]
 
 
+initialSeason : List Season -> Maybe Season
+initialSeason seasons =
+    if (List.length seasons > 1) then
+        Nothing
+    else
+        List.head (seasons)
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
@@ -84,7 +108,6 @@ subscriptions model =
 validator : Validator (Error Types.FormField) Model
 validator =
     Validate.all
-        [ Validate.ifBlank
-            .name
-            ( Types.Name, "Name is required" )
+        [ Validate.ifBlank .name ( Types.Name, "Name is required" )
+        , Validate.ifNothing .season ( Types.Summary, "Season is required" )
         ]

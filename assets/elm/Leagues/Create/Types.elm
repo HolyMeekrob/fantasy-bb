@@ -10,6 +10,8 @@ type alias Model =
     { header : Header.Types.Model
     , pageState : PageState
     , name : String
+    , season : Maybe Season
+    , possibleSeasons : List Season
     , errors : List (Error FormField)
     }
 
@@ -18,9 +20,16 @@ type alias League =
     { id : Int }
 
 
+type alias Season =
+    { id : Int
+    , title : String
+    }
+
+
 type PageState
     = Loading
     | Loaded
+    | Error String
 
 
 type FormField
@@ -30,8 +39,8 @@ type FormField
 
 type Msg
     = HeaderMsg Header.Types.Msg
-    | FetchUser
-    | SetUser (Result Http.Error User)
+    | SetInitialData (Result Http.Error ( User, List Season ))
     | SetName String
+    | SetSelectedSeason (Maybe Season)
     | SubmitForm
     | LeagueCreated (Result Http.Error League)

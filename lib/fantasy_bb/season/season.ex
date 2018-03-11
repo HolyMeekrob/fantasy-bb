@@ -41,4 +41,14 @@ defmodule FantasyBb.Season do
       preload: [players: player]
     )
   end
+
+  def get_upcoming() do
+    today = Date.utc_today()
+
+    from(
+      season in query(),
+      where: season.start > ^today
+    )
+    |> Repo.all()
+  end
 end
