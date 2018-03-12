@@ -11,15 +11,19 @@
 # and so on) as they will fail if something goes wrong.
 
 alias FantasyBb.Repo
+alias FantasyBb.Schema.DraftPick
 alias FantasyBb.Schema.Event
 alias FantasyBb.Schema.EventType
 alias FantasyBb.Schema.EvictionCeremony
 alias FantasyBb.Schema.EvictionVote
 alias FantasyBb.Schema.Houseguest
 alias FantasyBb.Schema.JuryVote
+alias FantasyBb.Schema.League
 alias FantasyBb.Schema.Player
 alias FantasyBb.Schema.Scorable
 alias FantasyBb.Schema.Season
+alias FantasyBb.Schema.Team
+alias FantasyBb.Schema.User
 alias FantasyBb.Schema.Week
 
 defmodule Seeds do
@@ -37,7 +41,7 @@ defmodule Seeds do
   end
 
   def create_event_type(name) do
-    IO.puts("Creating ruleset: #{name}")
+    IO.puts("Creating event type: #{name}")
 
     event_type = EventType.changeset(%EventType{}, %{name: name})
 
@@ -141,6 +145,50 @@ defmodule Seeds do
       })
 
     Repo.insert!(vote)
+  end
+
+  def create_user(first_name, last_name, email) do
+    user =
+      User.changeset(%User{}, %{
+        first_name: first_name,
+        last_name: last_name,
+        email: email
+      })
+
+    Repo.insert!(user)
+  end
+
+  def create_league(season_id, commissioner_id, name) do
+    league =
+      League.changeset(%League{}, %{
+        season_id: season_id,
+        commissioner_id: commissioner_id,
+        name: name
+      })
+
+    Repo.insert!(league)
+  end
+
+  def create_team(league_id, owner_id, name) do
+    team =
+      Team.changeset(%Team{}, %{
+        league_id: league_id,
+        user_id: owner_id,
+        name: name
+      })
+
+    Repo.insert!(team)
+  end
+
+  def draft(team_id, houseguest_id, order) do
+    draft_pick =
+      DraftPick.changeset(%DraftPick{}, %{
+        team_id: team_id,
+        houseguest_id: houseguest_id,
+        draft_order: order
+      })
+
+    Repo.insert!(draft_pick)
   end
 end
 
@@ -894,5 +942,46 @@ Seeds.create_jury_vote(season.id, matt.id, paul.id)
 Seeds.create_jury_vote(season.id, mark.id, josh.id)
 Seeds.create_jury_vote(season.id, elena.id, josh.id)
 Seeds.create_jury_vote(season.id, cody.id, josh.id)
+
+# Create users
+IO.puts("Seeding users")
+andy = Seeds.create_user("Andy", "Steinberg", "holy.meekrob@gmail.com")
+erin = Seeds.create_user("Erin", "Steinberg", "erinsdavidson@gmail.com")
+weston = Seeds.create_user("Weston", "Fox", "bitb1448@gmail.com")
+jess = Seeds.create_user("Jessica", "Fox", "jessfalcao@gmail.com")
+
+# Create existing league
+IO.puts("Seeding league")
+league = Seeds.create_league(season.id, andy.id, "Stupid Paul")
+
+# Create teams
+IO.puts("Seeding teams")
+andy_team = Seeds.create_team(league.id, andy.id, "Andy's team")
+erin_team = Seeds.create_team(league.id, erin.id, "Erin's team")
+weston_team = Seeds.create_team(league.id, weston.id, "Weston's team")
+jessica_team = Seeds.create_team(league.id, jess.id, "Jessica's team")
+
+# Record draft
+IO.puts("Seeding league draft")
+Seeds.draft(jessica_team.id, matt.id, 1)
+Seeds.draft(andy_team.id, mark.id, 2)
+Seeds.draft(erin_team.id, christmas.id, 3)
+Seeds.draft(weston.id, cody.id, 4)
+Seeds.draft(weston.id, jessica.id, 5)
+Seeds.draft(erin_team.id, cameron.id, 6)
+Seeds.draft(andy_team.id, josh.id, 7)
+Seeds.draft(jessica_team.id, jason.id, 8)
+Seeds.draft(jessica_team.id, ramses.id, 9)
+Seeds.draft(andy_team.id, dom.id, 10)
+Seeds.draft(erin_team.id, alex.id, 11)
+Seeds.draft(weston_team.id, megan.id, 12)
+Seeds.draft(weston_team.id, elena.id, 13)
+Seeds.draft(erin_team.id, raven.id, 14)
+Seeds.draft(andy_team.id, kevin.id, 15)
+Seeds.draft(jessica_team.id, jillian.id, 16)
+
+# How to handle Paul?
+# For now, just add a draft pick
+Seeds.draft(erin_team.id, paul.id, 17)
 
 IO.puts("Done!")
