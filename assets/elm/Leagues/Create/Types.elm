@@ -16,10 +16,6 @@ type alias Model =
     }
 
 
-type alias League =
-    { id : Int }
-
-
 type alias Season =
     { id : Int
     , title : String
@@ -43,4 +39,4 @@ type Msg
     | SetName String
     | SetSelectedSeason (Maybe Season)
     | SubmitForm
-    | LeagueCreated (Result Http.Error League)
+    | LeagueCreated (Result Http.Error Int)

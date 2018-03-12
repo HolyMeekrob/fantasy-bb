@@ -9,12 +9,12 @@ defmodule FantasyBbWeb.LeagueController do
 
   def create(conn, params) do
     with input = %FantasyBb.Schema.League{
-           name: Map.get(params, "name")
+           name: Map.get(params, "name"),
+           season_id: Map.get(params, "seasonId"),
+           commissioner_id: Map.get(conn.assigns.current_user, :id)
          },
          {:ok, league} <- League.create(input) do
-      conn
-      |> put_status(:created)
-      |> render("league.json", league)
+      send_resp(conn, :created, to_string(league.id))
     else
       {:error, _} ->
         send_resp(conn, :internal_server_error, "Error creating league")

@@ -25,7 +25,7 @@ defmodule FantasyBb.Schema.League do
     |> cast(params, [:name, :season_id, :commissioner_id])
     |> validate_required([:name, :season_id, :commissioner_id])
     |> assoc_constraint(:season)
-    |> assoc_constraint(:commisioner)
+    |> assoc_constraint(:commissioner)
     |> foreign_key_constraint(:commissioner_id)
   end
 end

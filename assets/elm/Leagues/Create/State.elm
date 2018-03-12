@@ -84,10 +84,10 @@ update msg model =
             { model | errors = [ ( Types.Summary, "Error creating league" ) ] }
                 ! []
 
-        Types.LeagueCreated (Ok newLeague) ->
+        Types.LeagueCreated (Ok id) ->
             let
                 url =
-                    "/leagues/" ++ (toString newLeague.id)
+                    "/leagues/" ++ (toString id)
             in
                 model ! [ navigate url ]
 
