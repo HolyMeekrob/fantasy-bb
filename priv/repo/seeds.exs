@@ -209,7 +209,8 @@ IO.puts("Seeding database")
 IO.puts("Creating scorables")
 
 scorables = %{
-  win_hoh: Seeds.create_scorable("Win Head of Household", "Win a standard Head of Household.", 10),
+  win_hoh:
+    Seeds.create_scorable("Win Head of Household", "Win a standard Head of Household.", 10),
   win_hoh_de:
     Seeds.create_scorable(
       "Win Head of Household (double eviction)",
@@ -255,7 +256,8 @@ scorables = %{
       "Placed on the block by some means other than nomination.",
       -5
     ),
-  veto_self: Seeds.create_scorable("Veto self", "Take oneself off the block using Power of Veto."),
+  veto_self:
+    Seeds.create_scorable("Veto self", "Take oneself off the block using Power of Veto."),
   veto_self_de:
     Seeds.create_scorable(
       "Veto self (double eviction)",

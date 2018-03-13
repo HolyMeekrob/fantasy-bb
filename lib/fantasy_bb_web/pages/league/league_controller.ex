@@ -7,6 +7,10 @@ defmodule FantasyBbWeb.LeagueController do
     render(conn, "create.html")
   end
 
+  def index(conn, _params) do
+    render(conn, "index.html")
+  end
+
   def create(conn, params) do
     with input = %FantasyBb.Schema.League{
            name: Map.get(params, "name"),

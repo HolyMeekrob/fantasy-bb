@@ -49,6 +49,24 @@ navigation user =
         [ div
             [ class "top-nav" ]
             [ div
+                [ class "nav-item" ]
+                [ text "Teams" ]
+            , div
+                [ class "nav-item has-sub" ]
+                [ a
+                    [ href "/leagues" ]
+                    [ text "Leagues" ]
+                , div
+                    [ class "sub-nav" ]
+                    [ navLink "/leagues/create" "Create league" ]
+                ]
+            , div
+                [ class "nav-item" ]
+                [ text "Seasons" ]
+            , div
+                [ class "nav-item" ]
+                [ text "Users" ]
+            , div
                 [ classList
                     [ ( "nav-item", True )
                     , ( "has-sub", True )
@@ -61,13 +79,6 @@ navigation user =
                     [ navLink "/admin/season/create" "Create season"
                     , navLink "/admin/player/create" "Create player"
                     ]
-                ]
-            , div
-                [ class "nav-item has-sub" ]
-                [ text "Leagues"
-                , div
-                    [ class "sub-nav" ]
-                    [ navLink "/leagues/create" "Create league" ]
                 ]
             ]
         ]

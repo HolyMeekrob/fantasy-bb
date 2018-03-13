@@ -59,6 +59,7 @@ defmodule FantasyBbWeb.Router do
   scope "/leagues", FantasyBbWeb do
     pipe_through([:browser, :authenticated])
 
+    get("/", LeagueController, :index)
     get("/create", LeagueController, :create_view)
   end
 
