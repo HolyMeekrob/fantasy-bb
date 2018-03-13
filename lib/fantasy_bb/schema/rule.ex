@@ -11,7 +11,7 @@ defmodule FantasyBb.Schema.Rule do
 
   schema "rule" do
     belongs_to(:league, FantasyBb.Schema.League)
-    belongs_to(:event_type, FantasyBb.Schema.EventType)
+    belongs_to(:scorable, FantasyBb.Schema.Scorable)
     field(:point_value, :integer)
 
     timestamps()
@@ -19,10 +19,10 @@ defmodule FantasyBb.Schema.Rule do
 
   def changeset(rule, params \\ %{}) do
     rule
-    |> cast(params, [:league_id, :event_type_id, :point_value])
-    |> validate_required([:league_id, :event_type_id, :point_value])
-    |> unique_constraint(:league_id, name: :rule_league_id_event_type_id_index)
+    |> cast(params, [:league_id, :scorable_id, :point_value])
+    |> validate_required([:league_id, :scorable_id, :point_value])
+    |> unique_constraint(:league_id, name: :rule_league_id_scorable_id_index)
     |> assoc_constraint(:league)
-    |> assoc_constraint(:event_type)
+    |> assoc_constraint(:scorable)
   end
 end

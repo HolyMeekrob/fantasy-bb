@@ -20,6 +20,7 @@ alias FantasyBb.Schema.Houseguest
 alias FantasyBb.Schema.JuryVote
 alias FantasyBb.Schema.League
 alias FantasyBb.Schema.Player
+alias FantasyBb.Schema.Rule
 alias FantasyBb.Schema.Scorable
 alias FantasyBb.Schema.Season
 alias FantasyBb.Schema.Team
@@ -169,6 +170,17 @@ defmodule Seeds do
     Repo.insert!(league)
   end
 
+  def create_rule(league_id, scorable_id, point_value) do
+    rule =
+      Rule.changeset(%Rule{}, %{
+        league_id: league_id,
+        scorable_id: scorable_id,
+        point_value: point_value
+      })
+
+    Repo.insert!(rule)
+  end
+
   def create_team(league_id, owner_id, name) do
     team =
       Team.changeset(%Team{}, %{
@@ -195,193 +207,200 @@ end
 IO.puts("Seeding database")
 
 IO.puts("Creating scorables")
-Seeds.create_scorable("Win Head of Household", "Win a standard Head of Household.", 10)
 
-Seeds.create_scorable(
-  "Win Head of Household (double eviction)",
-  "Win Head of Household during a double eviction event.",
-  15
-)
-
-Seeds.create_scorable(
-  "Win Final Head of Household prelim (Round 1)",
-  "Win the first round of the final Head of Household competition."
-)
-
-Seeds.create_scorable(
-  "Win Final Head of Household prelim (Round 2)",
-  "Win the second round of the final head of Household competition."
-)
-
-Seeds.create_scorable("Win Final Head of Household", "Win the final Head of Household.", 10)
-Seeds.create_scorable("Win Power of Veto", "Win a standard Power of Veto.", 5)
-
-Seeds.create_scorable(
-  "Win Power of Veto (double eviction)",
-  "Win Power of Veto during a double eviction event.",
-  8
-)
-
-Seeds.create_scorable("Win Final Power of Veto", "Win the final Power of Veto.", 5)
-
-Seeds.create_scorable(
-  "Nominated for eviction",
-  "Nominated for eviction by the Head of Household (not a replacement nominee).",
-  -5
-)
-
-Seeds.create_scorable(
-  "Nominated for eviction (double eviction)",
-  "Nominated for eviction by the Head of Household during a double eviction event (not a replacement nominee).",
-  -5
-)
-
-Seeds.create_scorable(
-  "Placed on the block",
-  "Placed on the block by some means other than nomination.",
-  -5
-)
-
-Seeds.create_scorable("Veto self", "Take oneself off the block using Power of Veto.")
-
-Seeds.create_scorable(
-  "Veto self (double eviction)",
-  "Take oneself off the block using Power of Veto during a double eviction event."
-)
-
-Seeds.create_scorable(
-  "Veto another",
-  "Take another houseguest off the block using Power of Veto. The Power of Veto winner was not on the block themself."
-)
-
-Seeds.create_scorable(
-  "Veto another (double eviction)",
-  "Take another houseguest off the block using Power of Veto during a double eviction event. The Power of Veto winner was not on the block themself."
-)
-
-Seeds.create_scorable(
-  "Veto another whilst on the block",
-  "Take another houseguest off the block using Power of Veto. The Power of Veto winner was on the block themself."
-)
-
-Seeds.create_scorable(
-  "Veto another whilst on the block (double eviction)",
-  "Take another houseguest off the block using Power of Veto during a double eviction event. The Power of Veto winner was on the block themself."
-)
-
-Seeds.create_scorable(
-  "Abstain from veto",
-  "Power of Veto holder does not take anyone off the block. The Power of Veto winner was not on the block themself."
-)
-
-Seeds.create_scorable(
-  "Abstain from veto (double eviction)",
-  "Power of Veto holder does not take anyone off the block during a double eviction event. The Power of Veto winner was not on the block themself."
-)
-
-Seeds.create_scorable(
-  "Abstain from veto whilst on the block",
-  "Power of Veto holder does not take anyone off the block. The Power of Veto winner was on the block themself."
-)
-
-Seeds.create_scorable(
-  "Abstain from veto whilst on the block (double eviction)",
-  "Power of Veto holder does not take anyone off the block during a double eviction event. The Power of Veto winner was on the block themself."
-)
-
-Seeds.create_scorable("Taken off the block", "Houseguest has Power of Veto used on them.", 10)
-
-Seeds.create_scorable(
-  "Taken off the block (double eviction",
-  "Houseguest has Power of Veto used on them during a double veiction event.",
-  10
-)
-
-Seeds.create_scorable(
-  "Nominated for eviction as a replacement",
-  "Nominated for eviction by the Head of Household as a replacement for a vetoed houseguest.",
-  -5
-)
-
-Seeds.create_scorable(
-  "Nominated for eviction as a replacement (double eviction)",
-  "Nominated for eviction by the Head of Household as a replacement for a vetoed houseguest during a double eviction event.",
-  -5
-)
-
-Seeds.create_scorable("Dodge eviction", "Dodge eviction whilst on the block.", 2)
-
-Seeds.create_scorable(
-  "Dodge eviction (double eviction)",
-  "Dodge eviction whilst on the block during a double eviction event.",
-  2
-)
-
-Seeds.create_scorable(
-  "Vote for evicted houseguest",
-  "Vote for the houseguest that ended up being evicted."
-)
-
-Seeds.create_scorable(
-  "Vote for non-evicted houseguest",
-  "Vote for a houseguest that did not end up being evicted."
-)
-
-Seeds.create_scorable(
-  "Sole vote against the house",
-  "Provide the only vote for a non-evicted houseguest when all other votes were for the evicted houseguest.",
-  5
-)
-
-Seeds.create_scorable("Return to the house", "Return to the house after being evicted.", 20)
-Seeds.create_scorable("Win America's choice", "Win an America's choice vote.", 2)
-Seeds.create_scorable("Survive the week", "Remain in the house at the conclusion of the week.", 2)
-
-Seeds.create_scorable(
-  "Win miscellaneous competition",
-  "Win a competition that does not fall under any other category."
-)
-
-Seeds.create_scorable(
-  "Win Big Brother",
-  "Win the Big Brother game at the conclusion of the season.",
-  45
-)
-
-Seeds.create_scorable(
-  "Second place finish",
-  "Come in second place at the conclusion of the season.",
-  30
-)
-
-Seeds.create_scorable(
-  "Third place finish",
-  "Be the final jury member at the conclusion of the season.",
-  20
-)
-
-Seeds.create_scorable(
-  "Win America's favorite player",
-  "Win the vote for America's favorite player at the conclusion of the season."
-)
-
-Seeds.create_scorable("Self-evicted", "Evict oneself from the house.")
-
-Seeds.create_scorable(
-  "Removed from the house",
-  "Removed by Big Brother production for any reason."
-)
-
-Seeds.create_scorable("Evicted", "Voted out of the house by fellow houseguests.")
-
-Seeds.create_scorable(
-  "Evicted (double eviction)",
-  "Voted out of the house by fellow houseguests during a double eviction event."
-)
-
-Seeds.create_scorable("Make jury", "Become a jury member upon eviction.", 10)
-Seeds.create_scorable("Vote for winner", "Cast one's jury vote for the Big Brother winner.")
-Seeds.create_scorable("Vote for loser", "Cast one's jury vote for the Big Brother loser.")
+scorables = %{
+  win_hoh: Seeds.create_scorable("Win Head of Household", "Win a standard Head of Household.", 10),
+  win_hoh_de:
+    Seeds.create_scorable(
+      "Win Head of Household (double eviction)",
+      "Win Head of Household during a double eviction event.",
+      15
+    ),
+  win_hoh_final_round_one:
+    Seeds.create_scorable(
+      "Win Final Head of Household prelim (Round 1)",
+      "Win the first round of the final Head of Household competition."
+    ),
+  win_hoh_final_round_two:
+    Seeds.create_scorable(
+      "Win Final Head of Household prelim (Round 2)",
+      "Win the second round of the final head of Household competition."
+    ),
+  win_hoh_final:
+    Seeds.create_scorable("Win Final Head of Household", "Win the final Head of Household.", 10),
+  win_pov: Seeds.create_scorable("Win Power of Veto", "Win a standard Power of Veto.", 5),
+  win_pov_de:
+    Seeds.create_scorable(
+      "Win Power of Veto (double eviction)",
+      "Win Power of Veto during a double eviction event.",
+      8
+    ),
+  win_pov_final:
+    Seeds.create_scorable("Win Final Power of Veto", "Win the final Power of Veto.", 5),
+  nominated:
+    Seeds.create_scorable(
+      "Nominated for eviction",
+      "Nominated for eviction by the Head of Household (not a replacement nominee).",
+      -5
+    ),
+  nominated_de:
+    Seeds.create_scorable(
+      "Nominated for eviction (double eviction)",
+      "Nominated for eviction by the Head of Household during a double eviction event (not a replacement nominee).",
+      -5
+    ),
+  otb:
+    Seeds.create_scorable(
+      "Placed on the block",
+      "Placed on the block by some means other than nomination.",
+      -5
+    ),
+  veto_self: Seeds.create_scorable("Veto self", "Take oneself off the block using Power of Veto."),
+  veto_self_de:
+    Seeds.create_scorable(
+      "Veto self (double eviction)",
+      "Take oneself off the block using Power of Veto during a double eviction event."
+    ),
+  veto_another:
+    Seeds.create_scorable(
+      "Veto another",
+      "Take another houseguest off the block using Power of Veto. The Power of Veto winner was not on the block themself."
+    ),
+  veto_another_de:
+    Seeds.create_scorable(
+      "Veto another (double eviction)",
+      "Take another houseguest off the block using Power of Veto during a double eviction event. The Power of Veto winner was not on the block themself."
+    ),
+  veto_another_otb:
+    Seeds.create_scorable(
+      "Veto another whilst on the block",
+      "Take another houseguest off the block using Power of Veto. The Power of Veto winner was on the block themself."
+    ),
+  veto_another_otb_de:
+    Seeds.create_scorable(
+      "Veto another whilst on the block (double eviction)",
+      "Take another houseguest off the block using Power of Veto during a double eviction event. The Power of Veto winner was on the block themself."
+    ),
+  veto_none:
+    Seeds.create_scorable(
+      "Abstain from veto",
+      "Power of Veto holder does not take anyone off the block. The Power of Veto winner was not on the block themself."
+    ),
+  veto_none_de:
+    Seeds.create_scorable(
+      "Abstain from veto (double eviction)",
+      "Power of Veto holder does not take anyone off the block during a double eviction event. The Power of Veto winner was not on the block themself."
+    ),
+  veto_none_otb:
+    Seeds.create_scorable(
+      "Abstain from veto whilst on the block",
+      "Power of Veto holder does not take anyone off the block. The Power of Veto winner was on the block themself."
+    ),
+  veto_none_otb_de:
+    Seeds.create_scorable(
+      "Abstain from veto whilst on the block (double eviction)",
+      "Power of Veto holder does not take anyone off the block during a double eviction event. The Power of Veto winner was on the block themself."
+    ),
+  taken_off:
+    Seeds.create_scorable("Taken off the block", "Houseguest has Power of Veto used on them.", 10),
+  taken_off_de:
+    Seeds.create_scorable(
+      "Taken off the block (double eviction)",
+      "Houseguest has Power of Veto used on them during a double veiction event.",
+      10
+    ),
+  nominated_as_replacement:
+    Seeds.create_scorable(
+      "Nominated for eviction as a replacement",
+      "Nominated for eviction by the Head of Household as a replacement for a vetoed houseguest.",
+      -5
+    ),
+  nominated_as_replacement_de:
+    Seeds.create_scorable(
+      "Nominated for eviction as a replacement (double eviction)",
+      "Nominated for eviction by the Head of Household as a replacement for a vetoed houseguest during a double eviction event.",
+      -5
+    ),
+  dodge_eviction:
+    Seeds.create_scorable("Dodge eviction", "Dodge eviction whilst on the block.", 2),
+  dodge_eviction_de:
+    Seeds.create_scorable(
+      "Dodge eviction (double eviction)",
+      "Dodge eviction whilst on the block during a double eviction event.",
+      2
+    ),
+  vote_for_evictee:
+    Seeds.create_scorable(
+      "Vote for evicted houseguest",
+      "Vote for the houseguest that ended up being evicted."
+    ),
+  vote_for_other:
+    Seeds.create_scorable(
+      "Vote for non-evicted houseguest",
+      "Vote for a houseguest that did not end up being evicted."
+    ),
+  sole_vote_against_the_house:
+    Seeds.create_scorable(
+      "Sole vote against the house",
+      "Provide the only vote for a non-evicted houseguest when all other votes were for the evicted houseguest.",
+      5
+    ),
+  reenter:
+    Seeds.create_scorable("Return to the house", "Return to the house after being evicted.", 20),
+  americas_choice:
+    Seeds.create_scorable("Win America's choice", "Win an America's choice vote.", 2),
+  survive_the_week:
+    Seeds.create_scorable(
+      "Survive the week",
+      "Remain in the house at the conclusion of the week.",
+      2
+    ),
+  win_comp:
+    Seeds.create_scorable(
+      "Win miscellaneous competition",
+      "Win a competition that does not fall under any other category."
+    ),
+  win_bb:
+    Seeds.create_scorable(
+      "Win Big Brother",
+      "Win the Big Brother game at the conclusion of the season.",
+      45
+    ),
+  place_bb:
+    Seeds.create_scorable(
+      "Second place finish",
+      "Come in second place at the conclusion of the season.",
+      30
+    ),
+  show_bb:
+    Seeds.create_scorable(
+      "Third place finish",
+      "Be the final jury member at the conclusion of the season.",
+      20
+    ),
+  win_afp:
+    Seeds.create_scorable(
+      "Win America's favorite player",
+      "Win the vote for America's favorite player at the conclusion of the season."
+    ),
+  evict_self: Seeds.create_scorable("Self-evicted", "Evict oneself from the house."),
+  removed:
+    Seeds.create_scorable(
+      "Removed from the house",
+      "Removed by Big Brother production for any reason."
+    ),
+  evicted: Seeds.create_scorable("Evicted", "Voted out of the house by fellow houseguests."),
+  evicted_de:
+    Seeds.create_scorable(
+      "Evicted (double eviction)",
+      "Voted out of the house by fellow houseguests during a double eviction event."
+    ),
+  make_jury: Seeds.create_scorable("Make jury", "Become a jury member upon eviction.", 10),
+  vote_for_winner:
+    Seeds.create_scorable("Vote for winner", "Cast one's jury vote for the Big Brother winner."),
+  vote_for_loser:
+    Seeds.create_scorable("Vote for loser", "Cast one's jury vote for the Big Brother loser.")
+}
 
 IO.puts("Creating event types")
 hoh = Seeds.create_event_type("HeadOfHousehold")
@@ -953,6 +972,31 @@ jess = Seeds.create_user("Jessica", "Fox", "jessfalcao@gmail.com")
 # Create existing league
 IO.puts("Seeding league")
 league = Seeds.create_league(season.id, andy.id, "Stupid Paul")
+Seeds.create_rule(league.id, scorables.survive_the_week.id, 2)
+Seeds.create_rule(league.id, scorables.win_hoh.id, 10)
+Seeds.create_rule(league.id, scorables.win_hoh_de.id, 15)
+Seeds.create_rule(league.id, scorables.win_hoh_final.id, 10)
+Seeds.create_rule(league.id, scorables.nominated.id, -5)
+Seeds.create_rule(league.id, scorables.nominated_de.id, -5)
+Seeds.create_rule(league.id, scorables.nominated_as_replacement.id, -5)
+Seeds.create_rule(league.id, scorables.nominated_as_replacement_de.id, -5)
+Seeds.create_rule(league.id, scorables.otb.id, -5)
+Seeds.create_rule(league.id, scorables.win_pov.id, 5)
+Seeds.create_rule(league.id, scorables.win_pov_de.id, 8)
+Seeds.create_rule(league.id, scorables.win_pov_final.id, 5)
+Seeds.create_rule(league.id, scorables.veto_self.id, 10)
+Seeds.create_rule(league.id, scorables.veto_self_de.id, 10)
+Seeds.create_rule(league.id, scorables.taken_off.id, 10)
+Seeds.create_rule(league.id, scorables.taken_off_de.id, 10)
+Seeds.create_rule(league.id, scorables.dodge_eviction.id, 2)
+Seeds.create_rule(league.id, scorables.dodge_eviction_de.id, 2)
+Seeds.create_rule(league.id, scorables.reenter.id, 20)
+Seeds.create_rule(league.id, scorables.americas_choice.id, 2)
+Seeds.create_rule(league.id, scorables.sole_vote_against_the_house.id, 5)
+Seeds.create_rule(league.id, scorables.win_bb.id, 45)
+Seeds.create_rule(league.id, scorables.place_bb.id, 30)
+Seeds.create_rule(league.id, scorables.show_bb.id, 20)
+Seeds.create_rule(league.id, scorables.make_jury.id, 10)
 
 # Create teams
 IO.puts("Seeding teams")
