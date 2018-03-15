@@ -24,4 +24,20 @@ defmodule FantasyBbWeb.LeagueController do
         send_resp(conn, :internal_server_error, "Error creating league")
     end
   end
+
+  def by_user_id(conn, %{user_id: user_id}) do
+    leagues =
+      League.query()
+      |> League.for_user(user_id)
+      |> League.with_commissioner()
+      |> League.with_teams()
+      |> League.get_all()
+
+    render(conn, "user_leagues.json", %{leagues: leagues})
+  end
+
+  def for_current_user(conn, params) do
+    user_id = Map.get(conn.assigns.current_user, :id)
+    by_user_id(conn, Map.put(params, :user_id, user_id))
+  end
 end

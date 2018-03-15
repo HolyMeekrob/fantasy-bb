@@ -9,6 +9,7 @@ initialModel : Model
 initialModel =
     { header = Header.State.initialModel
     , pageState = Types.Loading
+    , leagues = []
     }
 
 
@@ -31,7 +32,7 @@ update msg model =
         Types.SetInitialData (Err _) ->
             model ! []
 
-        Types.SetInitialData (Ok user) ->
+        Types.SetInitialData (Ok ( user, leagues )) ->
             let
                 header =
                     model.header
@@ -39,7 +40,12 @@ update msg model =
                 headerModel =
                     { header | user = Just user }
             in
-                { model | header = headerModel, pageState = Types.Loaded } ! []
+                { model
+                    | header = headerModel
+                    , leagues = leagues
+                    , pageState = Types.Loaded
+                }
+                    ! []
 
 
 subscriptions : Model -> Sub Msg

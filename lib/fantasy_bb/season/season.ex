@@ -47,7 +47,7 @@ defmodule FantasyBb.Season do
 
     from(
       season in query(),
-      where: season.start < ^today
+      where: season.start > ^today
     )
     |> Repo.all()
   end

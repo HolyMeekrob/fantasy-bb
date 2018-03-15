@@ -2,8 +2,8 @@ module Leagues.View exposing (view)
 
 import Common.Views exposing (empty, layout, loading, title)
 import Header.View exposing (headerView)
-import Html exposing (Html, section)
-import Leagues.Types as Types exposing (Model, Msg)
+import Html exposing (Html, div, section, text)
+import Leagues.Types as Types exposing (League, Model, Msg)
 
 
 view : Model -> Html Msg
@@ -25,7 +25,16 @@ primaryView model =
 
 content : Model -> Html Msg
 content model =
-    empty
+    div
+        []
+        (List.map viewLeague model.leagues)
+
+
+viewLeague : League -> Html Msg
+viewLeague league =
+    div
+        []
+        [ text (toString league.id) ]
 
 
 loadingOverlay : Model -> Html Msg

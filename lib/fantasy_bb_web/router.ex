@@ -43,17 +43,30 @@ defmodule FantasyBbWeb.Router do
     delete("/logout", AuthController, :delete)
   end
 
+  scope "/ajax", FantasyBbWeb, as: :ajax do
+    pipe_through(:ajax)
+
+    get("/account/user", AccountController, :user)
+    put("/account/user", AccountController, :update_user)
+
+    get("/leagues/", LeagueController, :for_current_user)
+    post("/leagues/", LeagueController, :create)
+
+    get("/players/", PlayerController, :index)
+    post("/players/", PlayerController, :create)
+    get("/players/:id", PlayerController, :get)
+    put("/players/:id", PlayerController, :update)
+
+    post("/seasons/", SeasonController, :create)
+    get("/seasons/upcoming", SeasonController, :get_upcoming)
+    get("/seasons/:id", SeasonController, :get)
+    put("/seasons/:id", SeasonController, :update)
+  end
+
   scope "/account", FantasyBbWeb do
     pipe_through([:browser, :authenticated])
 
     get("/profile", AccountController, :profile)
-  end
-
-  scope "/ajax/account", FantasyBbWeb do
-    pipe_through(:ajax)
-
-    get("/user", AccountController, :user)
-    put("/user", AccountController, :update_user)
   end
 
   scope "/leagues", FantasyBbWeb do
@@ -63,25 +76,10 @@ defmodule FantasyBbWeb.Router do
     get("/create", LeagueController, :create_view)
   end
 
-  scope "/ajax/leagues", FantasyBbWeb do
-    pipe_through(:ajax)
-
-    post("/", LeagueController, :create)
-  end
-
   scope "/players", FantasyBbWeb do
     pipe_through([:browser, :authenticated])
 
     get("/:id", PlayerController, :show)
-  end
-
-  scope "/ajax/players", FantasyBbWeb do
-    pipe_through(:ajax)
-
-    get("/", PlayerController, :index)
-    post("/", PlayerController, :create)
-    get("/:id", PlayerController, :get)
-    put("/:id", PlayerController, :update)
   end
 
   scope "/seasons", FantasyBbWeb do
@@ -90,16 +88,7 @@ defmodule FantasyBbWeb.Router do
     get("/:id", SeasonController, :show)
   end
 
-  scope "/ajax/seasons", FantasyBbWeb do
-    pipe_through(:ajax)
-
-    post("/", SeasonController, :create)
-    get("/upcoming", SeasonController, :get_upcoming)
-    get("/:id", SeasonController, :get)
-    put("/:id", SeasonController, :update)
-  end
-
-  scope "/admin", FantasyBbWeb do
+  scope "/admin", FantasyBbWeb, as: :admin do
     pipe_through([:browser, :authenticated])
 
     get("/player/create", PlayerController, :create_view)

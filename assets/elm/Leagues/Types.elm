@@ -8,6 +8,12 @@ import Http
 type alias Model =
     { header : Header.Types.Model
     , pageState : PageState
+    , leagues : List League
+    }
+
+
+type alias League =
+    { id : Int
     }
 
 
@@ -18,4 +24,4 @@ type PageState
 
 type Msg
     = HeaderMsg Header.Types.Msg
-    | SetInitialData (Result Http.Error User)
+    | SetInitialData (Result Http.Error ( User, List League ))
