@@ -2,7 +2,7 @@ defmodule FantasyBbWeb.AuthController do
   use FantasyBbWeb, :controller
 
   alias FantasyBbWeb.OAuth.Google
-  alias FantasyBb.Account
+  alias FantasyBb.Data.Account
 
   @doc """
   Redirect to the OAuth2 provider based on the chosen strategy.

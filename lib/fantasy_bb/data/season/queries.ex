@@ -1,33 +1,15 @@
-defmodule FantasyBb.Season do
+defmodule FantasyBb.Data.Season.Queries do
   alias FantasyBb.Repo
   alias FantasyBb.Schema.Season
-  alias FantasyBb.Season.Authorization
 
   import Ecto.Query, only: [from: 1, from: 2]
-
-  defdelegate authorize(action, user), to: Authorization
 
   def get(id) do
     get(Season, id)
   end
 
-  defp get(query, id) do
+  def get(query, id) do
     Repo.get(query, id)
-  end
-
-  def create(season) do
-    Season.changeset(season)
-    |> Repo.insert()
-  end
-
-  def update(id, changes) do
-    season =
-      query()
-      |> with_players()
-      |> get(id)
-
-    Season.changeset(season, changes)
-    |> Repo.update()
   end
 
   def query() do

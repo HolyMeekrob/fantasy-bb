@@ -1,7 +1,7 @@
 defmodule FantasyBbWeb.AccountView do
   use FantasyBbWeb, :view
 
-  import FantasyBb.Account, only: [is_admin: 1]
+  import FantasyBb.Core.Account, only: [is_admin: 1]
 
   def render("user.json", user) do
     %{

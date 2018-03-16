@@ -1,16 +1,18 @@
 defmodule FantasyBbWeb.SeasonController do
   use FantasyBbWeb, :controller
 
+  alias FantasyBb.Data.Player
+  alias FantasyBb.Data.Season
   alias FantasyBb.Repo
-  alias FantasyBb.Season
-  alias FantasyBb.Player
+
+  import FantasyBbWeb.Season.Authorization, only: [authorize: 2]
 
   def create_view(conn, _params) do
     render(conn, "create.html")
   end
 
   def create(conn, params) do
-    with :ok <- Season.authorize(:create, conn.assigns.current_user),
+    with :ok <- authorize(:create, conn.assigns.current_user),
          {:ok, start} <- Map.get(params, "start") |> Date.from_iso8601(),
          input = %FantasyBb.Schema.Season{
            title: Map.get(params, "title"),
@@ -62,7 +64,7 @@ defmodule FantasyBbWeb.SeasonController do
       Map.get(params, "players", [])
       |> Player.get()
 
-    with :ok <- Season.authorize(:update, conn.assigns.current_user),
+    with :ok <- authorize(:update, conn.assigns.current_user),
          input = %{
            title: Map.get(params, "title"),
            start: Map.get(params, "start"),

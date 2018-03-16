@@ -1,7 +1,9 @@
 defmodule FantasyBbWeb.PlayerController do
   use FantasyBbWeb, :controller
 
-  alias FantasyBb.Player
+  alias FantasyBb.Data.Player
+
+  import FantasyBbWeb.Player.Authorization, only: [authorize: 2]
 
   def create_view(conn, _params) do
     render(conn, "create.html")
@@ -29,7 +31,7 @@ defmodule FantasyBbWeb.PlayerController do
           Map.fetch!(params, "birthday")
       end
 
-    with :ok <- Player.authorize(:create, conn.assigns.current_user),
+    with :ok <- authorize(:create, conn.assigns.current_user),
          input = %FantasyBb.Schema.Player{
            first_name: Map.get(params, "firstName"),
            last_name: Map.get(params, "lastName"),
@@ -75,7 +77,7 @@ defmodule FantasyBbWeb.PlayerController do
   end
 
   def update(conn, %{"id" => id} = params) do
-    with :ok <- Player.authorize(:update, conn.assigns.current_user),
+    with :ok <- authorize(:update, conn.assigns.current_user),
          input = %{
            first_name: Map.get(params, "firstName"),
            last_name: Map.get(params, "lastName"),
