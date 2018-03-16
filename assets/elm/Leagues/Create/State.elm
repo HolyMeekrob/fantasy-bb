@@ -43,26 +43,26 @@ update msg model =
                 { model | pageState = Types.Error errorMessage } ! []
 
         Types.SetInitialData (Ok ( user, seasons )) ->
-            if (List.isEmpty seasons) then
+            let
+                pageState =
+                    if (List.isEmpty seasons) then
+                        Types.Error "There are no upcoming seasons"
+                    else
+                        Types.Loaded
+
+                header =
+                    model.header
+
+                headerModel =
+                    { header | user = Just user }
+            in
                 { model
-                    | pageState = Types.Error "There are no upcoming seasons"
+                    | header = headerModel
+                    , pageState = pageState
+                    , season = initialSeason seasons
+                    , possibleSeasons = seasons
                 }
                     ! []
-            else
-                let
-                    header =
-                        model.header
-
-                    headerModel =
-                        { header | user = Just user }
-                in
-                    { model
-                        | header = headerModel
-                        , pageState = Types.Loaded
-                        , season = initialSeason seasons
-                        , possibleSeasons = seasons
-                    }
-                        ! []
 
         Types.SetName name ->
             { model | name = name } ! []
