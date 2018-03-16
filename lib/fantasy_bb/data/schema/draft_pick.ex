@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.DraftPick do
+defmodule FantasyBb.Data.Schema.DraftPick do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -9,8 +9,8 @@ defmodule FantasyBb.Schema.DraftPick do
     ]
 
   schema "draft_pick" do
-    belongs_to(:team, FantasyBb.Schema.Team)
-    belongs_to(:houseguest, FantasyBb.Schema.Houseguest)
+    belongs_to(:team, FantasyBb.Data.Schema.Team)
+    belongs_to(:houseguest, FantasyBb.Data.Schema.Houseguest)
     field(:draft_order, :integer)
 
     timestamps(updated_at: false)

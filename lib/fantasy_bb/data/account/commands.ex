@@ -1,6 +1,6 @@
 defmodule FantasyBb.Data.Account.Commands do
   alias FantasyBb.Repo
-  alias FantasyBb.Schema.User
+  alias FantasyBb.Data.Schema.User
 
   import FantasyBb.Data.Account.Queries, only: [get_user_by_email: 1]
 

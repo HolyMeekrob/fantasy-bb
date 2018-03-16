@@ -1,6 +1,6 @@
 defmodule FantasyBb.Data.Player.Queries do
   alias FantasyBb.Repo
-  alias FantasyBb.Schema.Player
+  alias FantasyBb.Data.Schema.Player
 
   import Ecto.Query, only: [from: 2]
 

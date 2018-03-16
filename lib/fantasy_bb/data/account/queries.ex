@@ -1,6 +1,6 @@
 defmodule FantasyBb.Data.Account.Queries do
   alias FantasyBb.Repo
-  alias FantasyBb.Schema.User
+  alias FantasyBb.Data.Schema.User
 
   def get_user(id) do
     Repo.get(User, id)

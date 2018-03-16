@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.Event do
+defmodule FantasyBb.Data.Schema.Event do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -9,9 +9,9 @@ defmodule FantasyBb.Schema.Event do
     ]
 
   schema "event" do
-    belongs_to(:event_type, FantasyBb.Schema.EventType)
-    belongs_to(:houseguest, FantasyBb.Schema.Houseguest)
-    belongs_to(:eviction_ceremony, FantasyBb.Schema.EvictionCeremony)
+    belongs_to(:event_type, FantasyBb.Data.Schema.EventType)
+    belongs_to(:houseguest, FantasyBb.Data.Schema.Houseguest)
+    belongs_to(:eviction_ceremony, FantasyBb.Data.Schema.EvictionCeremony)
     field(:additional_info, :string)
 
     timestamps(updated_at: false)

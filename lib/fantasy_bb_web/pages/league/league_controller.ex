@@ -12,7 +12,7 @@ defmodule FantasyBbWeb.LeagueController do
   end
 
   def create(conn, params) do
-    with input = %FantasyBb.Schema.League{
+    with input = %FantasyBb.Data.Schema.League{
            name: Map.get(params, "name"),
            season_id: Map.get(params, "seasonId"),
            commissioner_id: Map.get(conn.assigns.current_user, :id)

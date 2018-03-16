@@ -10,8 +10,8 @@ defmodule FantsyBb.Schema.TradePiece do
     ]
 
   schema "trade_piece" do
-    belongs_to(:trade, FantasyBb.Schema.Trade)
-    belongs_to(:houseguest, FantasyBb.Schema.Houseguest)
+    belongs_to(:trade, FantasyBb.Data.Schema.Trade)
+    belongs_to(:houseguest, FantasyBb.Data.Schema.Houseguest)
   end
 
   def changeset(trade_piece, params \\ %{}) do

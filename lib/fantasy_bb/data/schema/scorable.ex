@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.Scorable do
+defmodule FantasyBb.Data.Schema.Scorable do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -14,6 +14,8 @@ defmodule FantasyBb.Schema.Scorable do
     field(:default_point_value, :integer)
 
     timestamps()
+
+    has_many(:rules, FantasyBb.Data.Schema.Rule)
   end
 
   def changeset(scorable, params \\ %{}) do

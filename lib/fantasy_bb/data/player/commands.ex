@@ -1,6 +1,6 @@
 defmodule FantasyBb.Data.Player.Commands do
   alias FantasyBb.Repo
-  alias FantasyBb.Schema.Player
+  alias FantasyBb.Data.Schema.Player
 
   import FantasyBb.Data.Player.Queries, only: [get: 1]
 

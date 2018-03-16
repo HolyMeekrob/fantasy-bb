@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.Season do
+defmodule FantasyBb.Data.Schema.Season do
   use Ecto.Schema
   import Ecto.Changeset, only: [cast: 3, validate_required: 2, put_assoc: 3]
 
@@ -8,12 +8,12 @@ defmodule FantasyBb.Schema.Season do
 
     timestamps()
 
-    has_many(:leagues, FantasyBb.Schema.League)
+    has_many(:leagues, FantasyBb.Data.Schema.League)
 
     many_to_many(
       :players,
-      FantasyBb.Schema.Player,
-      join_through: FantasyBb.Schema.Houseguest,
+      FantasyBb.Data.Schema.Player,
+      join_through: FantasyBb.Data.Schema.Houseguest,
       on_replace: :delete
     )
   end

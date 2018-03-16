@@ -1,6 +1,6 @@
 defmodule FantasyBb.Data.Season.Commands do
   alias FantasyBb.Repo
-  alias FantasyBb.Schema.Season
+  alias FantasyBb.Data.Schema.Season
 
   import FantasyBb.Data.Season.Queries, only: [query: 0, with_players: 1, get: 2]
 

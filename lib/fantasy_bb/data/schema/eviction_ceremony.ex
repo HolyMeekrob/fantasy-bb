@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.EvictionCeremony do
+defmodule FantasyBb.Data.Schema.EvictionCeremony do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -10,13 +10,13 @@ defmodule FantasyBb.Schema.EvictionCeremony do
     ]
 
   schema "eviction_ceremony" do
-    belongs_to(:week, FantasyBb.Schema.Week)
+    belongs_to(:week, FantasyBb.Data.Schema.Week)
     field(:order, :integer)
 
     timestamps(updated_at: false)
 
-    has_many(:eviction_votes, FantasyBb.Schema.EvictionVote)
-    has_many(:events, FantasyBb.Schema.Event)
+    has_many(:eviction_votes, FantasyBb.Data.Schema.EvictionVote)
+    has_many(:events, FantasyBb.Data.Schema.Event)
   end
 
   def changeset(eviction_ceremony, params \\ %{}) do

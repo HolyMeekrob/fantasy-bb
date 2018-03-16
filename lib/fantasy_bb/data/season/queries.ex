@@ -1,6 +1,6 @@
 defmodule FantasyBb.Data.Season.Queries do
   alias FantasyBb.Repo
-  alias FantasyBb.Schema.Season
+  alias FantasyBb.Data.Schema.Season
 
   import Ecto.Query, only: [from: 1, from: 2]
 

@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.EventType do
+defmodule FantasyBb.Data.Schema.EventType do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -13,8 +13,7 @@ defmodule FantasyBb.Schema.EventType do
 
     timestamps()
 
-    has_many(:rules, FantasyBb.Schema.Rule)
-    has_many(:events, FantasyBb.Schema.Event)
+    has_many(:events, FantasyBb.Data.Schema.Event)
   end
 
   def changeset(event_type, params \\ %{}) do

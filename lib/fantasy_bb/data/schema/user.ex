@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.User do
+defmodule FantasyBb.Data.Schema.User do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -16,12 +16,12 @@ defmodule FantasyBb.Schema.User do
     field(:last_name, :string)
     field(:bio, :string)
     field(:avatar, :string)
-    belongs_to(:favorite_player, FantasyBb.Schema.Player)
+    belongs_to(:favorite_player, FantasyBb.Data.Schema.Player)
 
     timestamps()
 
-    has_many(:commissioned_leagues, FantasyBb.Schema.League, foreign_key: :commissioner_id)
-    has_many(:teams, FantasyBb.Schema.Team)
+    has_many(:commissioned_leagues, FantasyBb.Data.Schema.League, foreign_key: :commissioner_id)
+    has_many(:teams, FantasyBb.Data.Schema.Team)
   end
 
   def changeset(user, params \\ %{}) do

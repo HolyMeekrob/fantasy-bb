@@ -32,7 +32,7 @@ defmodule FantasyBbWeb.PlayerController do
       end
 
     with :ok <- authorize(:create, conn.assigns.current_user),
-         input = %FantasyBb.Schema.Player{
+         input = %FantasyBb.Data.Schema.Player{
            first_name: Map.get(params, "firstName"),
            last_name: Map.get(params, "lastName"),
            nickname: Map.get(params, "nickname"),

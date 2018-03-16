@@ -1,6 +1,6 @@
 defmodule FantasyBb.League do
   alias FantasyBb.Repo
-  alias FantasyBb.Schema.League
+  alias FantasyBb.Data.Schema.League
 
   import Ecto.Query, only: [from: 1, from: 2]
 

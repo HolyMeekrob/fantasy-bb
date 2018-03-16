@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.EvictionVote do
+defmodule FantasyBb.Data.Schema.EvictionVote do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -10,9 +10,9 @@ defmodule FantasyBb.Schema.EvictionVote do
     ]
 
   schema "eviction_vote" do
-    belongs_to(:eviction_ceremony, FantasyBb.Schema.EvictionCeremony)
-    belongs_to(:voter, FantasyBb.Schema.Houseguest)
-    belongs_to(:candidate, FantasyBb.Schema.Houseguest)
+    belongs_to(:eviction_ceremony, FantasyBb.Data.Schema.EvictionCeremony)
+    belongs_to(:voter, FantasyBb.Data.Schema.Houseguest)
+    belongs_to(:candidate, FantasyBb.Data.Schema.Houseguest)
 
     timestamps(updated_at: false)
   end

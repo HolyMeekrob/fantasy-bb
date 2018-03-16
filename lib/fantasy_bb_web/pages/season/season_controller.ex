@@ -14,7 +14,7 @@ defmodule FantasyBbWeb.SeasonController do
   def create(conn, params) do
     with :ok <- authorize(:create, conn.assigns.current_user),
          {:ok, start} <- Map.get(params, "start") |> Date.from_iso8601(),
-         input = %FantasyBb.Schema.Season{
+         input = %FantasyBb.Data.Schema.Season{
            title: Map.get(params, "title"),
            start: start
          },
@@ -54,7 +54,7 @@ defmodule FantasyBbWeb.SeasonController do
     end
   end
 
-  def get_upcoming(conn, params) do
+  def get_upcoming(conn, _params) do
     seasons = Season.get_upcoming()
     render(conn, "seasons.json", seasons: seasons)
   end

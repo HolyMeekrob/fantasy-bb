@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.Team do
+defmodule FantasyBb.Data.Schema.Team do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -10,15 +10,15 @@ defmodule FantasyBb.Schema.Team do
     ]
 
   schema "team" do
-    belongs_to(:league, FantasyBb.Schema.League)
-    belongs_to(:owner, FantasyBb.Schema.User, foreign_key: :user_id)
+    belongs_to(:league, FantasyBb.Data.Schema.League)
+    belongs_to(:owner, FantasyBb.Data.Schema.User, foreign_key: :user_id)
     field(:name, :string)
     field(:logo, :string)
 
     timestamps()
 
-    has_many(:draft_picks, FantasyBb.Schema.DraftPick)
-    has_many(:trades, FantasyBb.Schema.Trade, foreign_key: :initiated_by_team_id)
+    has_many(:draft_picks, FantasyBb.Data.Schema.DraftPick)
+    has_many(:trades, FantasyBb.Data.Schema.Trade, foreign_key: :initiated_by_team_id)
   end
 
   def changeset(team, params \\ %{}) do

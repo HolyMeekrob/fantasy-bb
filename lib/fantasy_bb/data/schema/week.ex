@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.Week do
+defmodule FantasyBb.Data.Schema.Week do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -10,12 +10,12 @@ defmodule FantasyBb.Schema.Week do
     ]
 
   schema "week" do
-    belongs_to(:season, FantasyBb.Schema.Season)
+    belongs_to(:season, FantasyBb.Data.Schema.Season)
     field(:week_number, :integer)
 
     timestamps(updated_at: false)
 
-    has_many(:eviction_ceremonies, FantasyBb.Schema.EvictionCeremony)
+    has_many(:eviction_ceremonies, FantasyBb.Data.Schema.EvictionCeremony)
   end
 
   def changeset(week, params \\ %{}) do

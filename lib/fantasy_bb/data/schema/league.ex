@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.League do
+defmodule FantasyBb.Data.Schema.League do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -11,13 +11,13 @@ defmodule FantasyBb.Schema.League do
 
   schema "league" do
     field(:name, :string)
-    belongs_to(:season, FantasyBb.Schema.Season)
-    belongs_to(:commissioner, FantasyBb.Schema.User)
+    belongs_to(:season, FantasyBb.Data.Schema.Season)
+    belongs_to(:commissioner, FantasyBb.Data.Schema.User)
 
     timestamps()
 
-    has_many(:teams, FantasyBb.Schema.Team)
-    has_many(:rules, FantasyBb.Schema.Rule)
+    has_many(:teams, FantasyBb.Data.Schema.Team)
+    has_many(:rules, FantasyBb.Data.Schema.Rule)
   end
 
   def changeset(league, params \\ %{}) do

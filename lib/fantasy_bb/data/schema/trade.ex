@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.Trade do
+defmodule FantasyBb.Data.Schema.Trade do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -10,15 +10,15 @@ defmodule FantasyBb.Schema.Trade do
     ]
 
   schema "trade" do
-    belongs_to(:initiated_by_team, FantasyBb.Schema.Team)
-    belongs_to(:parent, FantasyBb.Schema.Trade)
+    belongs_to(:initiated_by_team, FantasyBb.Data.Schema.Team)
+    belongs_to(:parent, FantasyBb.Data.Schema.Trade)
     field(:message, :string)
     field(:is_approved, :boolean)
 
     timestamps()
 
-    has_one(:child, FantasyBb.Schema.Trade, foreign_key: :parent_id)
-    many_to_many(:houseguests, FantasyBb.Schema.Houseguest, join_through: "trade_piece")
+    has_one(:child, FantasyBb.Data.Schema.Trade, foreign_key: :parent_id)
+    many_to_many(:houseguests, FantasyBb.Data.Schema.Houseguest, join_through: "trade_piece")
   end
 
   def changeset(trade, params \\ %{}) do

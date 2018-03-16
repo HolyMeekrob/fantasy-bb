@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.Rule do
+defmodule FantasyBb.Data.Schema.Rule do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -10,8 +10,8 @@ defmodule FantasyBb.Schema.Rule do
     ]
 
   schema "rule" do
-    belongs_to(:league, FantasyBb.Schema.League)
-    belongs_to(:scorable, FantasyBb.Schema.Scorable)
+    belongs_to(:league, FantasyBb.Data.Schema.League)
+    belongs_to(:scorable, FantasyBb.Data.Schema.Scorable)
     field(:point_value, :integer)
 
     timestamps()

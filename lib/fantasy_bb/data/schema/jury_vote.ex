@@ -1,4 +1,4 @@
-defmodule FantasyBb.Schema.JuryVote do
+defmodule FantasyBb.Data.Schema.JuryVote do
   use Ecto.Schema
 
   import Ecto.Changeset,
@@ -11,9 +11,9 @@ defmodule FantasyBb.Schema.JuryVote do
     ]
 
   schema "jury_vote" do
-    belongs_to(:season, FantasyBb.Schema.Season)
-    belongs_to(:voter, FantasyBb.Schema.Houseguest)
-    belongs_to(:candidate, FantasyBb.Schema.Houseguest)
+    belongs_to(:season, FantasyBb.Data.Schema.Season)
+    belongs_to(:voter, FantasyBb.Data.Schema.Houseguest)
+    belongs_to(:candidate, FantasyBb.Data.Schema.Houseguest)
 
     timestamps(updated_at: false)
   end

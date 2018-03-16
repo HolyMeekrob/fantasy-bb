@@ -11,21 +11,21 @@
 # and so on) as they will fail if something goes wrong.
 
 alias FantasyBb.Repo
-alias FantasyBb.Schema.DraftPick
-alias FantasyBb.Schema.Event
-alias FantasyBb.Schema.EventType
-alias FantasyBb.Schema.EvictionCeremony
-alias FantasyBb.Schema.EvictionVote
-alias FantasyBb.Schema.Houseguest
-alias FantasyBb.Schema.JuryVote
-alias FantasyBb.Schema.League
-alias FantasyBb.Schema.Player
-alias FantasyBb.Schema.Rule
-alias FantasyBb.Schema.Scorable
-alias FantasyBb.Schema.Season
-alias FantasyBb.Schema.Team
-alias FantasyBb.Schema.User
-alias FantasyBb.Schema.Week
+alias FantasyBb.Data.Schema.DraftPick
+alias FantasyBb.Data.Schema.Event
+alias FantasyBb.Data.Schema.EventType
+alias FantasyBb.Data.Schema.EvictionCeremony
+alias FantasyBb.Data.Schema.EvictionVote
+alias FantasyBb.Data.Schema.Houseguest
+alias FantasyBb.Data.Schema.JuryVote
+alias FantasyBb.Data.Schema.League
+alias FantasyBb.Data.Schema.Player
+alias FantasyBb.Data.Schema.Rule
+alias FantasyBb.Data.Schema.Scorable
+alias FantasyBb.Data.Schema.Season
+alias FantasyBb.Data.Schema.Team
+alias FantasyBb.Data.Schema.User
+alias FantasyBb.Data.Schema.Week
 
 defmodule Seeds do
   def create_scorable(name, description, default_point_value \\ 0) do
