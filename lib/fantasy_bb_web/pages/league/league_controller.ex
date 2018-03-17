@@ -1,7 +1,7 @@
 defmodule FantasyBbWeb.LeagueController do
   use FantasyBbWeb, :controller
 
-  alias FantasyBb.League
+  alias FantasyBb.Data.League
 
   def create_view(conn, _params) do
     render(conn, "create.html")

@@ -12,7 +12,12 @@ defmodule FantasyBb.Data.Schema.Player do
     timestamps()
 
     has_many(:users, FantasyBb.Data.Schema.User, foreign_key: :favorite_player_id)
-    many_to_many(:seasons, FantasyBb.Data.Schema.Season, join_through: FantasyBb.Data.Schema.Houseguest)
+
+    many_to_many(
+      :seasons,
+      FantasyBb.Data.Schema.Season,
+      join_through: FantasyBb.Data.Schema.Houseguest
+    )
   end
 
   def changeset(player, params \\ %{}) do

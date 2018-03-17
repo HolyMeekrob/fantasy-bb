@@ -1,13 +1,8 @@
-defmodule FantasyBb.League do
+defmodule FantasyBb.Data.League.Queries do
   alias FantasyBb.Repo
   alias FantasyBb.Data.Schema.League
 
   import Ecto.Query, only: [from: 1, from: 2]
-
-  def create(league) do
-    League.changeset(league)
-    |> Repo.insert()
-  end
 
   def query() do
     from(league in League)
