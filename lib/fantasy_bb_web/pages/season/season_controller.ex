@@ -1,9 +1,8 @@
 defmodule FantasyBbWeb.SeasonController do
   use FantasyBbWeb, :controller
 
-  alias FantasyBb.Data.Player
-  alias FantasyBb.Data.Season
-  alias FantasyBb.Repo
+  alias FantasyBb.Core.Player
+  alias FantasyBb.Core.Season
 
   import FantasyBbWeb.Season.Authorization, only: [authorize: 2]
 
@@ -14,7 +13,7 @@ defmodule FantasyBbWeb.SeasonController do
   def create(conn, params) do
     with :ok <- authorize(:create, conn.assigns.current_user),
          {:ok, start} <- Map.get(params, "start") |> Date.from_iso8601(),
-         input = %FantasyBb.Data.Schema.Season{
+         input = %{
            title: Map.get(params, "title"),
            start: start
          },
@@ -40,10 +39,7 @@ defmodule FantasyBbWeb.SeasonController do
   end
 
   def get(conn, %{"id" => id}) do
-    season =
-      Season.query()
-      |> Season.with_players()
-      |> Repo.get(id)
+    season = Season.get_season_players(id)
 
     case season do
       nil ->
@@ -55,14 +51,14 @@ defmodule FantasyBbWeb.SeasonController do
   end
 
   def get_upcoming(conn, _params) do
-    seasons = Season.get_upcoming()
+    seasons = Season.get_upcoming_seasons()
     render(conn, "seasons.json", seasons: seasons)
   end
 
   def update(conn, %{"id" => id} = params) do
     players =
       Map.get(params, "players", [])
-      |> Player.get()
+      |> Player.get_all()
 
     with :ok <- authorize(:update, conn.assigns.current_user),
          input = %{

@@ -1,0 +1,21 @@
+defmodule FantasyBb.Core.Season do
+  alias FantasyBb.Data.Season
+
+  def create(season) do
+    Season.create(season)
+  end
+
+  def update(id, season) do
+    Season.update(id, season)
+  end
+
+  def get_season_players(season_id) do
+    Season.query()
+    |> Season.with_players()
+    |> Season.get(season_id)
+  end
+
+  def get_upcoming_seasons() do
+    Season.get_upcoming()
+  end
+end

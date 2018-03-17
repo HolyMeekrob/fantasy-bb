@@ -4,6 +4,7 @@ defmodule FantasyBb.Data.Player do
 
   defdelegate get(), to: Queries
   defdelegate get(id), to: Queries
+  defdelegate get_all(ids), to: Queries
   defdelegate create(season), to: Commands
   defdelegate update(id, season), to: Commands
 end

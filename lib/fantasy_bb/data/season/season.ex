@@ -3,6 +3,7 @@ defmodule FantasyBb.Data.Season do
   alias FantasyBb.Data.Season.Queries
 
   defdelegate get(id), to: Queries
+  defdelegate get(query, id), to: Queries
   defdelegate get_upcoming(), to: Queries
   defdelegate query(), to: Queries
   defdelegate with_players(query), to: Queries

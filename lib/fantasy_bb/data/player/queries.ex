@@ -8,7 +8,7 @@ defmodule FantasyBb.Data.Player.Queries do
     Repo.all(Player)
   end
 
-  def get(ids) when is_list(ids) do
+  def get_all(ids) when is_list(ids) do
     from(
       player in Player,
       where: player.id in ^ids
