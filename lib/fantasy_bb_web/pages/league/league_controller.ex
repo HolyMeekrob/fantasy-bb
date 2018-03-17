@@ -1,7 +1,7 @@
 defmodule FantasyBbWeb.LeagueController do
   use FantasyBbWeb, :controller
 
-  alias FantasyBb.Data.League
+  alias FantasyBb.Core.League
 
   def create_view(conn, _params) do
     render(conn, "create.html")
@@ -12,7 +12,7 @@ defmodule FantasyBbWeb.LeagueController do
   end
 
   def create(conn, params) do
-    with input = %FantasyBb.Data.Schema.League{
+    with input = %{
            name: Map.get(params, "name"),
            season_id: Map.get(params, "seasonId"),
            commissioner_id: Map.get(conn.assigns.current_user, :id)
@@ -26,12 +26,7 @@ defmodule FantasyBbWeb.LeagueController do
   end
 
   def by_user_id(conn, %{user_id: user_id}) do
-    leagues =
-      League.query()
-      |> League.for_user(user_id)
-      |> League.with_commissioner()
-      |> League.with_teams()
-      |> League.get_all()
+    leagues = League.get_leagues_for_user(user_id)
 
     render(conn, "user_leagues.json", %{leagues: leagues})
   end
