@@ -5,8 +5,8 @@ defmodule FantasyBb.Core.Season do
     Season.create(season)
   end
 
-  def update(id, season) do
-    Season.update(id, season)
+  def update(id, changes) do
+    Season.update(id, changes)
   end
 
   def get_season_players(season_id) do

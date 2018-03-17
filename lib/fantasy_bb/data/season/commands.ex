@@ -4,11 +4,8 @@ defmodule FantasyBb.Data.Season.Commands do
 
   import FantasyBb.Data.Season.Queries, only: [query: 0, with_players: 1, get: 2]
 
-  def create(%{start: start, title: title} = season) do
-    Season.changeset(%Season{
-      start: start,
-      title: title
-    })
+  def create(season) do
+    Season.changeset(Map.merge(%Season{}, season))
     |> Repo.insert()
   end
 

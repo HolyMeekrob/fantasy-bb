@@ -5,7 +5,7 @@ defmodule FantasyBb.Data.Player.Commands do
   import FantasyBb.Data.Player.Queries, only: [get: 1]
 
   def create(player) do
-    Player.changeset(player)
+    Player.changeset(Map.merge(%Player{}, player))
     |> Repo.insert()
   end
 

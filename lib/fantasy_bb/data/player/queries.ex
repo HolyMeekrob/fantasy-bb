@@ -4,7 +4,11 @@ defmodule FantasyBb.Data.Player.Queries do
 
   import Ecto.Query, only: [from: 2]
 
-  def get() do
+  def get(id) do
+    Repo.get(Player, id)
+  end
+
+  def get_all() do
     Repo.all(Player)
   end
 
@@ -14,9 +18,5 @@ defmodule FantasyBb.Data.Player.Queries do
       where: player.id in ^ids
     )
     |> Repo.all()
-  end
-
-  def get(id) do
-    Repo.get(Player, id)
   end
 end
