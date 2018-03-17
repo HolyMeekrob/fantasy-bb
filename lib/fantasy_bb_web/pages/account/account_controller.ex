@@ -1,7 +1,7 @@
 defmodule FantasyBbWeb.AccountController do
   use FantasyBbWeb, :controller
 
-  alias FantasyBb.Data.Account
+  alias FantasyBb.Core.Account
   import FantasyBbWeb.Account.Authorization, only: [authorize: 3]
 
   def profile(conn, _params) do
@@ -17,11 +17,7 @@ defmodule FantasyBbWeb.AccountController do
     updated_user = fix_keys(params)
 
     with :ok <- authorize(:update_user, existing_user, updated_user),
-         input =
-           existing_user
-           |> Map.take([:first_name, :last_name, :email, :bio, :avatar])
-           |> Map.merge(updated_user),
-         {:ok, user} <- Account.upsert_user(input) do
+         {:ok, user} <- Account.upsert_user(updated_user) do
       conn
       |> put_session(:current_user, user)
       |> render("user.json", user)
