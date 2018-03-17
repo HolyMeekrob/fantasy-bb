@@ -9,6 +9,7 @@ defmodule FantasyBb.Data.Schema.Season do
     timestamps()
 
     has_many(:leagues, FantasyBb.Data.Schema.League)
+    has_many(:jury_votes, FantasyBb.Data.Schema.JuryVote)
 
     many_to_many(
       :players,

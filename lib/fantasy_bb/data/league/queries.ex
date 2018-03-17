@@ -32,7 +32,15 @@ defmodule FantasyBb.Data.League.Queries do
     )
   end
 
-  def get_all(query) do
+  def with_season(query) do
+    from(
+      league in query,
+      inner_join: season in assoc(league, :season),
+      preload: [season: season]
+    )
+  end
+
+  def get_all(query \\ League) do
     Repo.all(query)
   end
 end

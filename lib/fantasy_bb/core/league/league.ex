@@ -10,6 +10,7 @@ defmodule FantasyBb.Core.League do
     |> League.for_user(user_id)
     |> League.with_commissioner()
     |> League.with_teams()
+    |> League.with_season()
     |> League.get_all()
   end
 end

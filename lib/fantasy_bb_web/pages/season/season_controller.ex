@@ -58,7 +58,7 @@ defmodule FantasyBbWeb.SeasonController do
   def update(conn, %{"id" => id} = params) do
     players =
       Map.get(params, "players", [])
-      |> Player.get_all()
+      |> Player.get()
 
     with :ok <- authorize(:update, conn.assigns.current_user),
          input = %{

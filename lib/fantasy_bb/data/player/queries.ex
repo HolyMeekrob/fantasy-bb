@@ -2,21 +2,24 @@ defmodule FantasyBb.Data.Player.Queries do
   alias FantasyBb.Repo
   alias FantasyBb.Data.Schema.Player
 
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query, only: [from: 1, from: 2]
 
   def get(id) do
     Repo.get(Player, id)
   end
 
-  def get_all() do
-    Repo.all(Player)
+  def get_all(query \\ Player) do
+    Repo.all(query)
   end
 
-  def get_all(ids) when is_list(ids) do
+  def query() do
+    from(player in Player)
+  end
+
+  def where_in(query, ids) do
     from(
-      player in Player,
+      player in query,
       where: player.id in ^ids
     )
-    |> Repo.all()
   end
 end

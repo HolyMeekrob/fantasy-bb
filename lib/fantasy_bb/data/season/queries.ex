@@ -12,23 +12,35 @@ defmodule FantasyBb.Data.Season.Queries do
     Repo.get(query, id)
   end
 
+  def get_all(query \\ Season) do
+    Repo.all(query)
+  end
+
   def query() do
     from(season in Season)
+  end
+
+  def with_jury_votes(query) do
+    from(
+      season in query,
+      left_join: jury_votes in assoc(season, :jury_votes),
+      preload: [jury_votes: jury_votes]
+    )
   end
 
   def with_players(query) do
     from(
       season in query,
-      left_join: player in assoc(season, :players),
-      preload: [players: player]
+      left_join: players in assoc(season, :players),
+      preload: [players: players]
     )
   end
 
-  def get_upcoming() do
+  def get_upcoming(query \\ Season) do
     today = Date.utc_today()
 
     from(
-      season in query(),
+      season in query,
       where: season.start > ^today
     )
     |> Repo.all()
