@@ -3,6 +3,7 @@ defmodule FantasyBbWeb.PlayerController do
 
   alias FantasyBb.Core.Player
 
+  import FantasyBb.Core.Utils.Nil, only: [with_default: 2]
   import FantasyBbWeb.Player.Authorization, only: [authorize: 2]
 
   def create_view(conn, _params) do
@@ -10,17 +11,9 @@ defmodule FantasyBbWeb.PlayerController do
   end
 
   def create(conn, params) do
-    withDefault = fn val, default ->
-      if is_nil(val) do
-        default
-      else
-        val
-      end
-    end
-
     birthday =
       with {:ok, dateVal} <- Map.fetch(params, "birthday"),
-           dateStr <- withDefault.(dateVal, ""),
+           dateStr <- with_default(dateVal, ""),
            {:ok, date} <- Date.from_iso8601(dateStr) do
         date
       else

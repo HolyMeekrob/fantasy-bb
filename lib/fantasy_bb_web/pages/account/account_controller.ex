@@ -2,6 +2,8 @@ defmodule FantasyBbWeb.AccountController do
   use FantasyBbWeb, :controller
 
   alias FantasyBb.Core.Account
+
+  import FantasyBb.Core.Utils.Map, only: [string_keys_to_atoms: 1]
   import FantasyBbWeb.Account.Authorization, only: [authorize: 3]
 
   def profile(conn, _params) do
@@ -14,7 +16,7 @@ defmodule FantasyBbWeb.AccountController do
 
   def update_user(conn, params) do
     existing_user = conn.assigns.current_user
-    updated_user = fix_keys(params)
+    updated_user = string_keys_to_atoms(params)
 
     with :ok <- authorize(:update_user, existing_user, updated_user),
          {:ok, user} <- Account.upsert_user(updated_user) do
@@ -28,20 +30,5 @@ defmodule FantasyBbWeb.AccountController do
       {:error, _} ->
         send_resp(conn, :internal_server_error, "Error updating user profile")
     end
-  end
-
-  defp fix_keys(obj) do
-    Enum.reduce(obj, Map.new(), &key_to_atom/2)
-  end
-
-  defp key_to_atom({key, val}, obj) do
-    new_key =
-      if is_binary(key) do
-        String.to_atom(key)
-      else
-        key
-      end
-
-    Map.put(obj, new_key, val)
   end
 end
