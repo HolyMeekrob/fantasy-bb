@@ -49,7 +49,7 @@ defmodule FantasyBbWeb.Router do
     get("/account/user", AccountController, :user)
     put("/account/user", AccountController, :update_user)
 
-    get("/leagues/", LeagueController, :for_current_user)
+    get("/leagues/mine", LeagueController, :for_current_user)
     post("/leagues/", LeagueController, :create)
 
     get("/players/", PlayerController, :index)

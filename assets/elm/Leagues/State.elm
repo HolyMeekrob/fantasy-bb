@@ -32,7 +32,7 @@ update msg model =
         Types.SetInitialData (Err _) ->
             model ! []
 
-        Types.SetInitialData (Ok ( user, leagues )) ->
+        Types.SetInitialData (Ok ( user, leagueSummary )) ->
             let
                 header =
                     model.header
@@ -42,7 +42,10 @@ update msg model =
             in
                 { model
                     | header = headerModel
-                    , leagues = leagues
+                    , leagues =
+                        leagueSummary.upcoming
+                            ++ leagueSummary.current
+                            ++ leagueSummary.complete
                     , pageState = Types.Loaded
                 }
                     ! []

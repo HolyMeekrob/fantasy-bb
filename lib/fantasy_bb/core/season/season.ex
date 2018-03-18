@@ -21,24 +21,23 @@ defmodule FantasyBb.Core.Season do
   end
 
   def started?(season) do
-    season.start <= Date.utc_today()
+    Date.compare(season.start, Date.utc_today()) == :lt
   end
 
   def completed?(season) do
-    Enum.empty?(season.jury_votes)
+    season
+    |> Season.load_jury_votes()
+    |> Map.fetch!(:jury_votes)
+    |> Enum.empty?()
+    |> Kernel.not()
   end
 
-  def get_status(id) do
-    season =
-      Season.query()
-      |> Season.with_jury_votes()
-      |> Season.get(id)
-
+  def status(season) do
     case {started?(season), completed?(season)} do
       {false, _} ->
         :upcoming
 
-      {_, true} ->
+      {_, false} ->
         :current
 
       {_, _} ->

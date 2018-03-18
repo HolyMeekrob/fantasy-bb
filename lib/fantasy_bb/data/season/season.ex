@@ -2,6 +2,7 @@ defmodule FantasyBb.Data.Season do
   alias FantasyBb.Data.Season.Commands
   alias FantasyBb.Data.Season.Queries
   alias FantasyBb.Data.Schema.Season
+  alias FantasyBb.Repo
 
   defdelegate get(id), to: Queries
   defdelegate get(query, id), to: Queries
@@ -12,4 +13,8 @@ defmodule FantasyBb.Data.Season do
   defdelegate with_players(query), to: Queries
   defdelegate create(season), to: Commands
   defdelegate update(id, changes), to: Commands
+
+  def load_jury_votes(season) do
+    Repo.preload(season, :jury_votes)
+  end
 end

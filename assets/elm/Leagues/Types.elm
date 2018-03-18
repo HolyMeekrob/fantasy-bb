@@ -12,6 +12,13 @@ type alias Model =
     }
 
 
+type alias LeagueSummary =
+    { upcoming : List League
+    , current : List League
+    , complete : List League
+    }
+
+
 type alias League =
     { id : Int
     }
@@ -24,4 +31,4 @@ type PageState
 
 type Msg
     = HeaderMsg Header.Types.Msg
-    | SetInitialData (Result Http.Error ( User, List League ))
+    | SetInitialData (Result Http.Error ( User, LeagueSummary ))
