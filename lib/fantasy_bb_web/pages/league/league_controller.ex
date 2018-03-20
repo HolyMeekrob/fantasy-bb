@@ -28,7 +28,7 @@ defmodule FantasyBbWeb.LeagueController do
   def by_user_id(conn, %{user_id: user_id}) do
     leagues = League.get_leagues_for_user(user_id)
 
-    render(conn, "user_leagues.json", %{leagues: leagues})
+    render(conn, "user_leagues.json", %{leagues: leagues, user_id: user_id})
   end
 
   def for_current_user(conn, params) do

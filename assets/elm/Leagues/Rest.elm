@@ -1,7 +1,7 @@
 module Leagues.Rest exposing (initialize)
 
 import Common.Rest exposing (userRequest)
-import Json.Decode exposing (Decoder, int, list)
+import Json.Decode exposing (Decoder, int, list, string)
 import Json.Decode.Pipeline exposing (decode, optional, required)
 import Http exposing (Request, toTask)
 import Leagues.Types as Types exposing (League, LeagueSummary, Msg)
@@ -38,3 +38,4 @@ leagueDecoder : Decoder League
 leagueDecoder =
     decode League
         |> required "id" int
+        |> required "name" string

@@ -34,7 +34,7 @@ viewLeague : League -> Html Msg
 viewLeague league =
     div
         []
-        [ text (toString league.id) ]
+        [ text league.name ]
 
 
 loadingOverlay : Model -> Html Msg
