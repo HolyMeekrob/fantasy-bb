@@ -10,6 +10,8 @@ defmodule FantasyBb.Data.Schema.Season do
 
     has_many(:leagues, FantasyBb.Data.Schema.League)
     has_many(:jury_votes, FantasyBb.Data.Schema.JuryVote)
+    has_many(:houseguests, FantasyBb.Data.Schema.Houseguest)
+    has_many(:weeks, FantasyBb.Data.Schema.Week)
 
     many_to_many(
       :players,

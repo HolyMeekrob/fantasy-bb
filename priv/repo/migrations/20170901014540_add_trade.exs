@@ -6,6 +6,7 @@ defmodule FantasyBb.Repo.Migrations.AddTrade do
       add(:initiated_by_team_id, references(:team), null: false)
       add(:parent_id, references(:trade))
       add(:message, :text)
+      add(:week_id, references(:week, type: :serial), null: false)
       add(:is_approved, :boolean)
 
       timestamps()
