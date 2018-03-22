@@ -26,8 +26,7 @@ defmodule FantasyBb.Core.Season do
 
   def completed?(season) do
     season
-    |> Season.load_jury_votes()
-    |> Map.fetch!(:jury_votes)
+    |> Season.get_jury_votes()
     |> Enum.empty?()
     |> Kernel.not()
   end

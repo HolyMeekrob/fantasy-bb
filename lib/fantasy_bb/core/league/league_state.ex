@@ -1,27 +1,24 @@
 defmodule FantasyBb.Core.League.LeagueState do
   alias FantasyBb.Core.Team
+  alias FantasyBb.Data.Event
+  alias FantasyBb.Data.EvictionVote
+  alias FantasyBb.Data.League
+  alias FantasyBb.Data.Season
+  alias FantasyBb.Data.Trade
 
-  @enforce_keys [:id]
-  defstruct [:id, events: [], rules: [], teams: []]
+  @enforce_keys [:id, :name]
+  defstruct [:id, :name, events: [], rules: [], teams: []]
 
   def init(%FantasyBb.Data.Schema.League{} = league) do
-    events =
-      league.season.houseguests
-      |> Enum.flat_map(&Map.fetch!(&1, :events))
+    season = League.get_season(league)
+    teams = Enum.map(league.teams, &Team.initial_state/1)
+    rules = League.get_rules(league)
 
-    trades =
-      league.teams
-      |> Enum.flat_map(&Map.fetch!(&1, :trades))
-      |> Enum.filter(&Map.fetch!(&1, :is_approved))
+    events = Event.for_scoring(season.id)
+    trades = Trade.for_scoring(season.id)
+    eviction_votes = EvictionVote.for_scoring(season.id)
 
-    eviction_votes =
-      league.season.weeks
-      |> Enum.flat_map(&Map.fetch!(&1, :eviction_ceremonies))
-      |> Enum.flat_map(&Map.fetch!(&1, :eviction_votes))
-
-    jury_votes = league.season.jury_votes
-
-    teams = Enum.map(league.teams, &Team.initial_state/2)
+    jury_votes = Season.get_jury_votes(season)
 
     all_events =
       Enum.concat([events, trades, eviction_votes])
@@ -30,18 +27,20 @@ defmodule FantasyBb.Core.League.LeagueState do
 
     %FantasyBb.Core.League.LeagueState{
       id: league.id,
+      name: league.name,
       events: all_events,
-      teams: teams
+      teams: teams,
+      rules: rules
     }
   end
 
   defp event_sort_value(%FantasyBb.Data.Schema.Event{} = event) do
-    {
+    [
       event.eviction_ceremony.week.week_number,
       event.eviction_ceremony.order,
       1,
       event.inserted_at
-    }
+    ]
   end
 
   defp event_sort_value(%FantasyBb.Data.Schema.Trade{} = trade) do
@@ -66,13 +65,13 @@ defmodule FantasyBb.Core.League.LeagueState do
     is_less_than = fn val -> val === :lt end
 
     Enum.zip(event_a, event_b)
-    |> Enum.map(&compare/2)
+    |> Enum.map(&compare/1)
     |> Enum.drop_while(&(&1 === :eq))
     |> Enum.at(0, :lt)
     |> is_less_than.()
   end
 
-  defp compare(a, b) when is_integer(a) and is_integer(b) do
+  defp compare({a, b}) when is_integer(a) and is_integer(b) do
     cond do
       a < b ->
         :lt
@@ -85,7 +84,7 @@ defmodule FantasyBb.Core.League.LeagueState do
     end
   end
 
-  defp compare(%Date{} = a, %Date{} = b) do
-    Date.compare(a, b)
+  defp compare({%NaiveDateTime{} = a, %NaiveDateTime{} = b}) do
+    NaiveDateTime.compare(a, b)
   end
 end

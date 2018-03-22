@@ -1,17 +1,20 @@
 defmodule FantasyBb.Core.Team.TeamState do
-  @enforce_keys [:id]
-  defstruct [:id, houseguests: [], points: 0]
+  alias FantasyBb.Data.DraftPick
+  alias FantasyBb.Data.Team
 
-  def init(%FantasyBb.Data.Schema.Team{} = team, draft_picks) do
-    get_team_id = fn draft_pick -> draft_pick.team.id end
+  @enforce_keys [:id, :user_id, :name]
+  defstruct [:id, :user_id, :name, houseguests: [], points: 0]
 
+  def init(%FantasyBb.Data.Schema.Team{} = team) do
     houseguests =
-      draft_picks
-      |> Enum.filter(&(get_team_id.(&1) == team.id))
-      |> Enum.map(&Map.fetch!(&1, :houseguest))
+      team
+      |> Team.get_draft_picks()
+      |> Enum.map(&DraftPick.get_houseguest/1)
 
     %FantasyBb.Core.Team.TeamState{
       id: team.id,
+      name: team.name,
+      user_id: team.user_id,
       houseguests: houseguests
     }
   end
