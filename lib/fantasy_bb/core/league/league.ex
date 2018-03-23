@@ -13,7 +13,18 @@ defmodule FantasyBb.Core.League do
       |> League.get_all()
 
     # TODO: Calculate scores
-    Enum.map(leagues, &initial_state/1)
+    leagues
+    |> Enum.map(&initial_state/1)
+    |> Enum.map(&process/1)
+  end
+
+  defp process({season, %LeagueState{} = league_state}) do
+    {season,
+     Enum.reduce(
+       league_state.events,
+       league_state,
+       &LeagueState.process/2
+     )}
   end
 
   defp initial_state(league) do

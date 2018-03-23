@@ -14,5 +14,6 @@ defmodule FantasyBb.Data.Season do
   defdelegate create(season), to: Commands
   defdelegate update(id, changes), to: Commands
 
+  defdelegate get_houseguests(season), to: Accessors
   defdelegate get_jury_votes(season), to: Accessors
 end

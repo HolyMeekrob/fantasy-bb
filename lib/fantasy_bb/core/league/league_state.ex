@@ -6,8 +6,8 @@ defmodule FantasyBb.Core.League.LeagueState do
   alias FantasyBb.Data.Season
   alias FantasyBb.Data.Trade
 
-  @enforce_keys [:id, :name]
-  defstruct [:id, :name, events: [], rules: [], teams: []]
+  @enforce_keys [:id, :name, :season]
+  defstruct [:id, :name, :season, events: [], rules: [], teams: []]
 
   def init(%FantasyBb.Data.Schema.League{} = league) do
     season = League.get_season(league)
@@ -28,6 +28,7 @@ defmodule FantasyBb.Core.League.LeagueState do
     %FantasyBb.Core.League.LeagueState{
       id: league.id,
       name: league.name,
+      season: FantasyBb.Core.Season.initial_state(season),
       events: all_events,
       teams: teams,
       rules: rules
@@ -86,5 +87,33 @@ defmodule FantasyBb.Core.League.LeagueState do
 
   defp compare({%NaiveDateTime{} = a, %NaiveDateTime{} = b}) do
     NaiveDateTime.compare(a, b)
+  end
+
+  def process(
+        %FantasyBb.Data.Schema.Event{} = event,
+        %FantasyBb.Core.League.LeagueState{} = league_state
+      ) do
+    league_state
+  end
+
+  def process(
+        %FantasyBb.Data.Schema.Trade{} = trade,
+        %FantasyBb.Core.League.LeagueState{} = league_state
+      ) do
+    league_state
+  end
+
+  def process(
+        %FantasyBb.Data.Schema.EvictionVote{} = vote,
+        %FantasyBb.Core.League.LeagueState{} = league_state
+      ) do
+    league_state
+  end
+
+  def process(
+        %FantasyBb.Data.Schema.JuryVote{} = vote,
+        %FantasyBb.Core.League.LeagueState{} = league_state
+      ) do
+    league_state
   end
 end
