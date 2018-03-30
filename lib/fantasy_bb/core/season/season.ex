@@ -1,5 +1,4 @@
 defmodule FantasyBb.Core.Season do
-  alias FantasyBb.Core.Season.SeasonState
   alias FantasyBb.Data.Season
 
   def create(season) do
@@ -43,9 +42,5 @@ defmodule FantasyBb.Core.Season do
       {_, _} ->
         :complete
     end
-  end
-
-  def initial_state(season) do
-    SeasonState.init(season)
   end
 end
