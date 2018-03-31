@@ -15,7 +15,11 @@ defmodule FantasyBb.Core.Scoring.League do
     season = League.get_season(league)
     teams = Enum.map(league.teams, &Team.create/1)
 
-    rules = Rule.create_all(FantasyBb.Data.Scorable.get_all(), League.get_rules(league))
+    rules =
+      league
+      |> League.get_rules()
+      |> Enum.filter(&(Map.fetch!(&1, :point_value) !== 0))
+      |> Enum.map(&Rule.create/1)
 
     events =
       season.id
