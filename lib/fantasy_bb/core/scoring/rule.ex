@@ -1,4 +1,6 @@
 defmodule FantasyBb.Core.Scoring.Rule do
+  alias FantasyBb.Core.Scoring.Scorable
+
   @enforce_keys [:scorable_id, :point_value]
   defstruct [:scorable_id, :point_value]
 
@@ -7,5 +9,9 @@ defmodule FantasyBb.Core.Scoring.Rule do
       scorable_id: rule.scorable_id,
       point_value: rule.point_value
     }
+  end
+
+  def process(%FantasyBb.Core.Scoring.Rule{} = rule, {prev, curr}) do
+    Scorable.process(rule.scorable_id, rule.point_value, prev, curr)
   end
 end
