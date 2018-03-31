@@ -21,15 +21,14 @@ defmodule FantasyBb.Core.Scoring.Rule do
   def create_all(scorables, rules) do
     # This works because if there is a rule, it is the last value
     # Otherwise the scorable's default value is the last value
-    get_last_point_value =
-      fn({id, points}) ->
-        %FantasyBb.Core.Scoring.Rule{ scorable_id: id, point_value: last(points) }
-      end
+    get_last_point_value = fn {id, points} ->
+      %FantasyBb.Core.Scoring.Rule{scorable_id: id, point_value: last(points)}
+    end
 
     scorables
     |> Enum.concat(rules)
     |> Enum.map(&create/1)
-    |> Enum.group_by(&(Map.fetch!(&1, :scorable_id)), &(Map.fetch!(&1, :point_value)))
+    |> Enum.group_by(&Map.fetch!(&1, :scorable_id), &Map.fetch!(&1, :point_value))
     |> Enum.map(get_last_point_value)
   end
 end

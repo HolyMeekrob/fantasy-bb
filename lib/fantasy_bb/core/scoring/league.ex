@@ -1,7 +1,7 @@
 defmodule FantasyBb.Core.Scoring.League do
   alias FantasyBb.Core.Scoring.Event
   alias FantasyBb.Core.Scoring.EvictionCeremony
-  alias FantasyBb.Core.Scoring.JuryVote
+  alias FantasyBb.Core.Scoring.FinalCeremony
   alias FantasyBb.Core.Scoring.Rule
   alias FantasyBb.Core.Scoring.Season
   alias FantasyBb.Core.Scoring.Team
@@ -33,17 +33,15 @@ defmodule FantasyBb.Core.Scoring.League do
       |> Enum.group_by(&Map.fetch!(&1, :eviction_ceremony_id))
       |> Enum.map(&EvictionCeremony.create(elem(&1, 1)))
 
-    # TODO: Instead of individual jury votes, create a final ceremony
-    # Similar to how eviction ceremonies are made up of eviction votes
-    jury_votes =
+    final_ceremony =
       season
       |> FantasyBb.Data.Season.get_jury_votes()
-      |> JuryVote.create()
+      |> FinalCeremony.create()
 
     all_events =
       Enum.concat([events, trades, eviction_votes])
       |> Enum.sort_by(&event_sort_value/1, &event_compare/2)
-      |> Enum.concat(jury_votes)
+      |> Enum.concat([final_ceremony])
 
     %FantasyBb.Core.Scoring.League{
       season: Season.create(season),
