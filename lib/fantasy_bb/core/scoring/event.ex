@@ -29,6 +29,14 @@ defmodule FantasyBb.Core.Scoring.Event do
     put_in(league.season.hohs, hohs)
   end
 
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 2} = event, league) do
+    league
+  end
+
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 3} = event, league) do
+    league
+  end
+
   def process(_, league) do
     league
   end
