@@ -1,7 +1,10 @@
 defmodule FantasyBb.Core.Scoring.Season do
   alias FantasyBb.Data.Season
 
-  defstruct hohs: [], otb: [], voters: [], evictees: []
+  defstruct hohs: MapSet.new(),
+            otb: MapSet.new(),
+            voters: MapSet.new(),
+            evictees: MapSet.new()
 
   def create(%FantasyBb.Data.Schema.Season{} = season) do
     houseguests =
