@@ -360,4 +360,63 @@ defmodule FantasyBb.Core.EventTest do
       )
     end
   end
+
+  test "return to the house event" do
+    ptest week_number: positive_int(),
+          order: positive_int(),
+          league:
+            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              season:
+                Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                  hohs: list(of: int(min: 101, max: 200)),
+                  otb: list(of: int(min: 201, max: 300)),
+                  voters: list(of: int(min: 301, max: 400)),
+                  evictees: list(of: int(min: 401), min: 1)
+                })
+            }) do
+      event = %FantasyBb.Core.Scoring.Event{
+        event_type_id: 9,
+        houseguest_id: Enum.random(league.season.evictees),
+        week_number: week_number,
+        order: order,
+        timestamp: NaiveDateTime.utc_now()
+      }
+
+      league =
+        put_in(
+          league.season.voters,
+          Enum.into(league.season.voters, MapSet.new())
+        )
+
+      league =
+        put_in(
+          league.season.evictees,
+          Enum.into(league.season.evictees, MapSet.new())
+        )
+
+      original_voters = league.season.voters
+      result = Event.process(event, league)
+      updated_voters = result.season.voters
+
+      assert(
+        Enum.count(updated_voters) === Enum.count(original_voters) + 1,
+        "There should be one more voter"
+      )
+
+      assert(
+        Enum.any?(updated_voters, &(&1 === event.houseguest_id)),
+        "Returned houseguest should be a voter"
+      )
+
+      assert(
+        Enum.all?(original_voters, &Enum.member?(updated_voters, &1)),
+        "All prior voters should still be voters"
+      )
+
+      assert(
+        not Enum.member?(result.season.evictees, event.houseguest_id),
+        "Returned houseguest should no longer be an evictee"
+      )
+    end
+  end
 end

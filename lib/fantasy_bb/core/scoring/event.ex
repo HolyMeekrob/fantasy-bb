@@ -84,6 +84,15 @@ defmodule FantasyBb.Core.Scoring.Event do
     put_in(league.season.voters, voters)
   end
 
+  # Return to the house event
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 9} = event, league) do
+    voters = MapSet.put(league.season.voters, event.houseguest_id)
+    evictees = MapSet.delete(league.season.evictees, event.houseguest_id)
+
+    league = put_in(league.season.voters, voters)
+    put_in(league.season.evictees, evictees)
+  end
+
   def process(_, league) do
     league
   end
