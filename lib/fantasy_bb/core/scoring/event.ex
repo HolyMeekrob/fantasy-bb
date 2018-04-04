@@ -93,6 +93,47 @@ defmodule FantasyBb.Core.Scoring.Event do
     put_in(league.season.evictees, evictees)
   end
 
+  # America's choice event
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 10} = event, league) do
+    league
+  end
+
+  # Miscellaneous competition event
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 11} = event, league) do
+    league
+  end
+
+  # America's favorite player event
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 12} = event, league) do
+    league
+  end
+
+  # Self-eviction event
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 13} = event, league) do
+    evictees = MapSet.put(league.season.evictees, event.houseguest_id)
+    voters = MapSet.delete(league.season.voters, event.houseguest_id)
+    hohs = MapSet.delete(league.season.hohs, event.houseguest_id)
+    otb = MapSet.delete(league.season.otb, event.houseguest_id)
+
+    league = put_in(league.season.evictees, evictees)
+    league = put_in(league.season.voters, voters)
+    league = put_in(league.season.hohs, hohs)
+    put_in(league.season.otb, otb)
+  end
+
+  # Removal event
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 14} = event, league) do
+    evictees = MapSet.put(league.season.evictees, event.houseguest_id)
+    voters = MapSet.delete(league.season.voters, event.houseguest_id)
+    hohs = MapSet.delete(league.season.hohs, event.houseguest_id)
+    otb = MapSet.delete(league.season.otb, event.houseguest_id)
+
+    league = put_in(league.season.evictees, evictees)
+    league = put_in(league.season.voters, voters)
+    league = put_in(league.season.hohs, hohs)
+    put_in(league.season.otb, otb)
+  end
+
   def process(_, league) do
     league
   end

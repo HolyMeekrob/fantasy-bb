@@ -419,4 +419,497 @@ defmodule FantasyBb.Core.EventTest do
       )
     end
   end
+
+  test "America's choice event" do
+    ptest houseguest_id: positive_int(),
+          week_number: positive_int(),
+          order: positive_int(),
+          league:
+            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              season: FantasyBb.Core.Scoring.Season
+            }) do
+      event = %FantasyBb.Core.Scoring.Event{
+        event_type_id: 10,
+        houseguest_id: houseguest_id,
+        week_number: week_number,
+        order: order,
+        timestamp: NaiveDateTime.utc_now()
+      }
+
+      result = Event.process(event, league)
+      assert(Map.equal?(league, result), "should not change the league state")
+    end
+  end
+
+  test "competition event" do
+    ptest houseguest_id: positive_int(),
+          week_number: positive_int(),
+          order: positive_int(),
+          league:
+            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              season: FantasyBb.Core.Scoring.Season
+            }) do
+      event = %FantasyBb.Core.Scoring.Event{
+        event_type_id: 11,
+        houseguest_id: houseguest_id,
+        week_number: week_number,
+        order: order,
+        timestamp: NaiveDateTime.utc_now()
+      }
+
+      result = Event.process(event, league)
+      assert(Map.equal?(league, result), "should not change the league state")
+    end
+  end
+
+  test "America's favorite player event" do
+    ptest houseguest_id: positive_int(),
+          week_number: positive_int(),
+          order: positive_int(),
+          league:
+            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              season: FantasyBb.Core.Scoring.Season
+            }) do
+      event = %FantasyBb.Core.Scoring.Event{
+        event_type_id: 12,
+        houseguest_id: houseguest_id,
+        week_number: week_number,
+        order: order,
+        timestamp: NaiveDateTime.utc_now()
+      }
+
+      result = Event.process(event, league)
+      assert(Map.equal?(league, result), "should not change the league state")
+    end
+  end
+
+  describe "Self-eviction event" do
+    test "when houseguest is a voter" do
+      ptest week_number: positive_int(),
+            order: positive_int(),
+            league:
+              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                season:
+                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    hohs: list(of: int(min: 101, max: 200)),
+                    otb: list(of: int(min: 201, max: 300)),
+                    voters: list(of: int(min: 301, max: 400), min: 1),
+                    evictees: list(of: int(min: 401))
+                  })
+              }) do
+        event = %FantasyBb.Core.Scoring.Event{
+          event_type_id: 13,
+          houseguest_id: Enum.random(league.season.voters),
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        league =
+          put_in(
+            league.season.voters,
+            Enum.into(league.season.voters, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.hohs,
+            Enum.into(league.season.hohs, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.otb,
+            Enum.into(league.season.otb, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.evictees,
+            Enum.into(league.season.evictees, MapSet.new())
+          )
+
+        original_evictees = league.season.evictees
+        result = Event.process(event, league)
+        updated_evictees = result.season.evictees
+
+        assert(
+          Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
+          "There should be one more evictee"
+        )
+
+        assert(
+          Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
+          "Houseguest should be an evictee"
+        )
+
+        assert(
+          Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
+          "All prior evictees should still be evicted"
+        )
+
+        assert(
+          not Enum.member?(result.season.voters, event.houseguest_id),
+          "Evictee should no longer be a voter"
+        )
+      end
+    end
+
+    test "when houseguest is an hoh" do
+      ptest week_number: positive_int(),
+            order: positive_int(),
+            league:
+              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                season:
+                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    hohs: list(of: int(min: 101, max: 200), min: 1),
+                    otb: list(of: int(min: 201, max: 300)),
+                    voters: list(of: int(min: 301, max: 400)),
+                    evictees: list(of: int(min: 401))
+                  })
+              }) do
+        event = %FantasyBb.Core.Scoring.Event{
+          event_type_id: 13,
+          houseguest_id: Enum.random(league.season.hohs),
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        league =
+          put_in(
+            league.season.voters,
+            Enum.into(league.season.voters, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.hohs,
+            Enum.into(league.season.hohs, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.otb,
+            Enum.into(league.season.otb, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.evictees,
+            Enum.into(league.season.evictees, MapSet.new())
+          )
+
+        original_evictees = league.season.evictees
+        result = Event.process(event, league)
+        updated_evictees = result.season.evictees
+
+        assert(
+          Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
+          "There should be one more evictee"
+        )
+
+        assert(
+          Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
+          "Houseguest should be an evictee"
+        )
+
+        assert(
+          Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
+          "All prior evictees should still be evicted"
+        )
+
+        assert(
+          not Enum.member?(result.season.hohs, event.houseguest_id),
+          "Evictee should no longer be a Head of Household"
+        )
+      end
+    end
+
+    test "when houseguest is on the block" do
+      ptest week_number: positive_int(),
+            order: positive_int(),
+            league:
+              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                season:
+                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    hohs: list(of: int(min: 101, max: 200)),
+                    otb: list(of: int(min: 201, max: 300), min: 1),
+                    voters: list(of: int(min: 301, max: 400)),
+                    evictees: list(of: int(min: 401))
+                  })
+              }) do
+        event = %FantasyBb.Core.Scoring.Event{
+          event_type_id: 13,
+          houseguest_id: Enum.random(league.season.otb),
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        league =
+          put_in(
+            league.season.voters,
+            Enum.into(league.season.voters, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.hohs,
+            Enum.into(league.season.hohs, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.otb,
+            Enum.into(league.season.otb, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.evictees,
+            Enum.into(league.season.evictees, MapSet.new())
+          )
+
+        original_evictees = league.season.evictees
+        result = Event.process(event, league)
+        updated_evictees = result.season.evictees
+
+        assert(
+          Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
+          "There should be one more evictee"
+        )
+
+        assert(
+          Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
+          "Houseguest should be an evictee"
+        )
+
+        assert(
+          Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
+          "All prior evictees should still be evicted"
+        )
+
+        assert(
+          not Enum.member?(result.season.otb, event.houseguest_id),
+          "Evictee should no longer be on the block"
+        )
+      end
+    end
+  end
+
+  describe "Removal event" do
+    test "when houseguest is a voter" do
+      ptest week_number: positive_int(),
+            order: positive_int(),
+            league:
+              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                season:
+                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    hohs: list(of: int(min: 101, max: 200)),
+                    otb: list(of: int(min: 201, max: 300)),
+                    voters: list(of: int(min: 301, max: 400), min: 1),
+                    evictees: list(of: int(min: 401))
+                  })
+              }) do
+        event = %FantasyBb.Core.Scoring.Event{
+          event_type_id: 14,
+          houseguest_id: Enum.random(league.season.voters),
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        league =
+          put_in(
+            league.season.voters,
+            Enum.into(league.season.voters, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.hohs,
+            Enum.into(league.season.hohs, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.otb,
+            Enum.into(league.season.otb, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.evictees,
+            Enum.into(league.season.evictees, MapSet.new())
+          )
+
+        original_evictees = league.season.evictees
+        result = Event.process(event, league)
+        updated_evictees = result.season.evictees
+
+        assert(
+          Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
+          "There should be one more evictee"
+        )
+
+        assert(
+          Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
+          "Houseguest should be an evictee"
+        )
+
+        assert(
+          Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
+          "All prior evictees should still be evicted"
+        )
+
+        assert(
+          not Enum.member?(result.season.voters, event.houseguest_id),
+          "Evictee should no longer be a voter"
+        )
+      end
+    end
+
+    test "when houseguest is an hoh" do
+      ptest week_number: positive_int(),
+            order: positive_int(),
+            league:
+              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                season:
+                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    hohs: list(of: int(min: 101, max: 200), min: 1),
+                    otb: list(of: int(min: 201, max: 300)),
+                    voters: list(of: int(min: 301, max: 400)),
+                    evictees: list(of: int(min: 401))
+                  })
+              }) do
+        event = %FantasyBb.Core.Scoring.Event{
+          event_type_id: 14,
+          houseguest_id: Enum.random(league.season.hohs),
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        league =
+          put_in(
+            league.season.voters,
+            Enum.into(league.season.voters, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.hohs,
+            Enum.into(league.season.hohs, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.otb,
+            Enum.into(league.season.otb, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.evictees,
+            Enum.into(league.season.evictees, MapSet.new())
+          )
+
+        original_evictees = league.season.evictees
+        result = Event.process(event, league)
+        updated_evictees = result.season.evictees
+
+        assert(
+          Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
+          "There should be one more evictee"
+        )
+
+        assert(
+          Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
+          "Houseguest should be an evictee"
+        )
+
+        assert(
+          Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
+          "All prior evictees should still be evicted"
+        )
+
+        assert(
+          not Enum.member?(result.season.hohs, event.houseguest_id),
+          "Evictee should no longer be a Head of Household"
+        )
+      end
+    end
+
+    test "when houseguest is on the block" do
+      ptest week_number: positive_int(),
+            order: positive_int(),
+            league:
+              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                season:
+                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    hohs: list(of: int(min: 101, max: 200)),
+                    otb: list(of: int(min: 201, max: 300), min: 1),
+                    voters: list(of: int(min: 301, max: 400)),
+                    evictees: list(of: int(min: 401))
+                  })
+              }) do
+        event = %FantasyBb.Core.Scoring.Event{
+          event_type_id: 14,
+          houseguest_id: Enum.random(league.season.otb),
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        league =
+          put_in(
+            league.season.voters,
+            Enum.into(league.season.voters, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.hohs,
+            Enum.into(league.season.hohs, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.otb,
+            Enum.into(league.season.otb, MapSet.new())
+          )
+
+        league =
+          put_in(
+            league.season.evictees,
+            Enum.into(league.season.evictees, MapSet.new())
+          )
+
+        original_evictees = league.season.evictees
+        result = Event.process(event, league)
+        updated_evictees = result.season.evictees
+
+        assert(
+          Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
+          "There should be one more evictee"
+        )
+
+        assert(
+          Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
+          "Houseguest should be an evictee"
+        )
+
+        assert(
+          Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
+          "All prior evictees should still be evicted"
+        )
+
+        assert(
+          not Enum.member?(result.season.otb, event.houseguest_id),
+          "Evictee should no longer be on the block"
+        )
+      end
+    end
+  end
 end
