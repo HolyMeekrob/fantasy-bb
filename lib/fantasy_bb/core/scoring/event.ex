@@ -75,6 +75,15 @@ defmodule FantasyBb.Core.Scoring.Event do
     put_in(league.season.otb, otb)
   end
 
+  # Replacement nomination event
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 8} = event, league) do
+    otb = MapSet.put(league.season.otb, event.houseguest_id)
+    voters = MapSet.delete(league.season.voters, event.houseguest_id)
+
+    league = put_in(league.season.otb, otb)
+    put_in(league.season.voters, voters)
+  end
+
   def process(_, league) do
     league
   end
