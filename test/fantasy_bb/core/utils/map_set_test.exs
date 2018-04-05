@@ -1,7 +1,7 @@
 defmodule FantasyBb.Core.MapSetTest do
   use ExUnit.Case, async: true
 
-  import FantasyBb.Core.Utils.MapSet, only: [xor: 2]
+  import FantasyBb.Core.Utils.MapSet
 
   describe "xor" do
     test "both sets are empty" do
