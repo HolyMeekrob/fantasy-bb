@@ -28,7 +28,7 @@ defmodule FantasyBb.Core.Scoring do
   end
 
   defp process_event(%Trade{} = trade, league) do
-    league
+    Trade.process(trade, league)
   end
 
   defp process_event(%EvictionCeremony{} = ceremony, league) do

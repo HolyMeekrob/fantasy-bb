@@ -8,8 +8,10 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season:
                 Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                  id: positive_int(),
                   hohs: list(of: int(min: 101, max: 200)),
                   otb: list(of: int(min: 201, max: 300)),
                   voters: list(of: int(min: 301, max: 400), min: 1),
@@ -42,22 +44,22 @@ defmodule FantasyBb.Core.EventTest do
 
       assert(
         Enum.count(updated_hohs) === Enum.count(original_hohs) + 1,
-        "There should be one more HoH"
+        "there should be one more HoH"
       )
 
       assert(
         Enum.any?(updated_hohs, &(&1 === event.houseguest_id)),
-        "Event houseguest should be included in new HoHs"
+        "event houseguest should be included in new HoHs"
       )
 
       assert(
         Enum.all?(original_hohs, &Enum.member?(updated_hohs, &1)),
-        "All previous HoHs should still be present"
+        "all previous HoHs should still be present"
       )
 
       assert(
         not Enum.member?(result.season.voters, event.houseguest_id),
-        "New HoH should no longer be a voter"
+        "new HoH should no longer be a voter"
       )
     end
   end
@@ -68,6 +70,7 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season: FantasyBb.Core.Scoring.Season
             }) do
       event = %FantasyBb.Core.Scoring.Event{
@@ -89,6 +92,7 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season: FantasyBb.Core.Scoring.Season
             }) do
       event = %FantasyBb.Core.Scoring.Event{
@@ -110,6 +114,7 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season: FantasyBb.Core.Scoring.Season
             }) do
       event = %FantasyBb.Core.Scoring.Event{
@@ -130,8 +135,10 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season:
                 Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                  id: positive_int(),
                   hohs: list(of: int(min: 101, max: 200)),
                   otb: list(of: int(min: 201, max: 300)),
                   voters: list(of: int(min: 301, max: 400), min: 1),
@@ -164,22 +171,22 @@ defmodule FantasyBb.Core.EventTest do
 
       assert(
         Enum.count(updated_otb) === Enum.count(original_otb) + 1,
-        "There should be one more on the block"
+        "there should be one more on the block"
       )
 
       assert(
         Enum.any?(updated_otb, &(&1 === event.houseguest_id)),
-        "Nominee should be on the block"
+        "nominee should be on the block"
       )
 
       assert(
         Enum.all?(original_otb, &Enum.member?(updated_otb, &1)),
-        "Everyone already on the block should still be on the block"
+        "everyone already on the block should still be on the block"
       )
 
       assert(
         not Enum.member?(result.season.voters, event.houseguest_id),
-        "Nominee should no longer be a voter"
+        "nominee should no longer be a voter"
       )
     end
   end
@@ -189,8 +196,10 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season:
                 Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                  id: positive_int(),
                   hohs: list(of: int(min: 101, max: 200)),
                   otb: list(of: int(min: 201, max: 300)),
                   voters: list(of: int(min: 301, max: 400), min: 1),
@@ -223,22 +232,22 @@ defmodule FantasyBb.Core.EventTest do
 
       assert(
         Enum.count(updated_otb) === Enum.count(original_otb) + 1,
-        "There should be one more on the block"
+        "there should be one more on the block"
       )
 
       assert(
         Enum.any?(updated_otb, &(&1 === event.houseguest_id)),
-        "Event houseguest should be on the block"
+        "event houseguest should be on the block"
       )
 
       assert(
         Enum.all?(original_otb, &Enum.member?(updated_otb, &1)),
-        "Everyone already on the block should still be on the block"
+        "everyone already on the block should still be on the block"
       )
 
       assert(
         not Enum.member?(result.season.voters, event.houseguest_id),
-        "On the block houseguest should no longer be a voter"
+        "on the block houseguest should no longer be a voter"
       )
     end
   end
@@ -248,8 +257,10 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season:
                 Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                  id: positive_int(),
                   hohs: list(of: int(min: 101, max: 200)),
                   otb: list(of: int(min: 201, max: 300), min: 1),
                   voters: list(of: int(min: 301, max: 400)),
@@ -282,22 +293,22 @@ defmodule FantasyBb.Core.EventTest do
 
       assert(
         Enum.count(updated_voters) === Enum.count(original_voters) + 1,
-        "There should be one more voter"
+        "there should be one more voter"
       )
 
       assert(
         Enum.any?(updated_voters, &(&1 === event.houseguest_id)),
-        "Event houseguest should be a voter"
+        "event houseguest should be a voter"
       )
 
       assert(
         Enum.all?(original_voters, &Enum.member?(updated_voters, &1)),
-        "All existing voters should still be there"
+        "all existing voters should still be there"
       )
 
       assert(
         not Enum.member?(result.season.otb, event.houseguest_id),
-        "Event houseguest should no longer be on the block"
+        "event houseguest should no longer be on the block"
       )
     end
   end
@@ -307,8 +318,10 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season:
                 Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                  id: positive_int(),
                   hohs: list(of: int(min: 101, max: 200)),
                   otb: list(of: int(min: 201, max: 300)),
                   voters: list(of: int(min: 301, max: 400), min: 1),
@@ -341,22 +354,22 @@ defmodule FantasyBb.Core.EventTest do
 
       assert(
         Enum.count(updated_otb) === Enum.count(original_otb) + 1,
-        "There should be one more on the block"
+        "there should be one more on the block"
       )
 
       assert(
         Enum.any?(updated_otb, &(&1 === event.houseguest_id)),
-        "Replacement nominee should be on the block"
+        "replacement nominee should be on the block"
       )
 
       assert(
         Enum.all?(original_otb, &Enum.member?(updated_otb, &1)),
-        "Everyone already on the block should still be on the block"
+        "everyone already on the block should still be on the block"
       )
 
       assert(
         not Enum.member?(result.season.voters, event.houseguest_id),
-        "Replacement nominee should no longer be a voter"
+        "replacement nominee should no longer be a voter"
       )
     end
   end
@@ -366,8 +379,10 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season:
                 Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                  id: positive_int(),
                   hohs: list(of: int(min: 101, max: 200)),
                   otb: list(of: int(min: 201, max: 300)),
                   voters: list(of: int(min: 301, max: 400)),
@@ -400,22 +415,22 @@ defmodule FantasyBb.Core.EventTest do
 
       assert(
         Enum.count(updated_voters) === Enum.count(original_voters) + 1,
-        "There should be one more voter"
+        "there should be one more voter"
       )
 
       assert(
         Enum.any?(updated_voters, &(&1 === event.houseguest_id)),
-        "Returned houseguest should be a voter"
+        "returned houseguest should be a voter"
       )
 
       assert(
         Enum.all?(original_voters, &Enum.member?(updated_voters, &1)),
-        "All prior voters should still be voters"
+        "all prior voters should still be voters"
       )
 
       assert(
         not Enum.member?(result.season.evictees, event.houseguest_id),
-        "Returned houseguest should no longer be an evictee"
+        "returned houseguest should no longer be an evictee"
       )
     end
   end
@@ -426,6 +441,7 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season: FantasyBb.Core.Scoring.Season
             }) do
       event = %FantasyBb.Core.Scoring.Event{
@@ -447,6 +463,7 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season: FantasyBb.Core.Scoring.Season
             }) do
       event = %FantasyBb.Core.Scoring.Event{
@@ -468,6 +485,7 @@ defmodule FantasyBb.Core.EventTest do
           order: positive_int(),
           league:
             Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+              id: positive_int(),
               season: FantasyBb.Core.Scoring.Season
             }) do
       event = %FantasyBb.Core.Scoring.Event{
@@ -489,8 +507,10 @@ defmodule FantasyBb.Core.EventTest do
             order: positive_int(),
             league:
               Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                id: positive_int(),
                 season:
                   Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    id: positive_int(),
                     hohs: list(of: int(min: 101, max: 200)),
                     otb: list(of: int(min: 201, max: 300)),
                     voters: list(of: int(min: 301, max: 400), min: 1),
@@ -535,22 +555,22 @@ defmodule FantasyBb.Core.EventTest do
 
         assert(
           Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
-          "There should be one more evictee"
+          "there should be one more evictee"
         )
 
         assert(
           Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
-          "Houseguest should be an evictee"
+          "houseguest should be an evictee"
         )
 
         assert(
           Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
-          "All prior evictees should still be evicted"
+          "all prior evictees should still be evicted"
         )
 
         assert(
           not Enum.member?(result.season.voters, event.houseguest_id),
-          "Evictee should no longer be a voter"
+          "evictee should no longer be a voter"
         )
       end
     end
@@ -560,8 +580,10 @@ defmodule FantasyBb.Core.EventTest do
             order: positive_int(),
             league:
               Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                id: positive_int(),
                 season:
                   Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    id: positive_int(),
                     hohs: list(of: int(min: 101, max: 200), min: 1),
                     otb: list(of: int(min: 201, max: 300)),
                     voters: list(of: int(min: 301, max: 400)),
@@ -606,22 +628,22 @@ defmodule FantasyBb.Core.EventTest do
 
         assert(
           Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
-          "There should be one more evictee"
+          "there should be one more evictee"
         )
 
         assert(
           Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
-          "Houseguest should be an evictee"
+          "houseguest should be an evictee"
         )
 
         assert(
           Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
-          "All prior evictees should still be evicted"
+          "all prior evictees should still be evicted"
         )
 
         assert(
           not Enum.member?(result.season.hohs, event.houseguest_id),
-          "Evictee should no longer be a Head of Household"
+          "evictee should no longer be a Head of Household"
         )
       end
     end
@@ -631,8 +653,10 @@ defmodule FantasyBb.Core.EventTest do
             order: positive_int(),
             league:
               Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                id: positive_int(),
                 season:
                   Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    id: positive_int(),
                     hohs: list(of: int(min: 101, max: 200)),
                     otb: list(of: int(min: 201, max: 300), min: 1),
                     voters: list(of: int(min: 301, max: 400)),
@@ -677,22 +701,22 @@ defmodule FantasyBb.Core.EventTest do
 
         assert(
           Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
-          "There should be one more evictee"
+          "there should be one more evictee"
         )
 
         assert(
           Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
-          "Houseguest should be an evictee"
+          "houseguest should be an evictee"
         )
 
         assert(
           Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
-          "All prior evictees should still be evicted"
+          "all prior evictees should still be evicted"
         )
 
         assert(
           not Enum.member?(result.season.otb, event.houseguest_id),
-          "Evictee should no longer be on the block"
+          "evictee should no longer be on the block"
         )
       end
     end
@@ -704,8 +728,10 @@ defmodule FantasyBb.Core.EventTest do
             order: positive_int(),
             league:
               Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                id: positive_int(),
                 season:
                   Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    id: positive_int(),
                     hohs: list(of: int(min: 101, max: 200)),
                     otb: list(of: int(min: 201, max: 300)),
                     voters: list(of: int(min: 301, max: 400), min: 1),
@@ -750,22 +776,22 @@ defmodule FantasyBb.Core.EventTest do
 
         assert(
           Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
-          "There should be one more evictee"
+          "there should be one more evictee"
         )
 
         assert(
           Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
-          "Houseguest should be an evictee"
+          "houseguest should be an evictee"
         )
 
         assert(
           Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
-          "All prior evictees should still be evicted"
+          "all prior evictees should still be evicted"
         )
 
         assert(
           not Enum.member?(result.season.voters, event.houseguest_id),
-          "Evictee should no longer be a voter"
+          "evictee should no longer be a voter"
         )
       end
     end
@@ -775,8 +801,10 @@ defmodule FantasyBb.Core.EventTest do
             order: positive_int(),
             league:
               Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                id: positive_int(),
                 season:
                   Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    id: positive_int(),
                     hohs: list(of: int(min: 101, max: 200), min: 1),
                     otb: list(of: int(min: 201, max: 300)),
                     voters: list(of: int(min: 301, max: 400)),
@@ -821,22 +849,22 @@ defmodule FantasyBb.Core.EventTest do
 
         assert(
           Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
-          "There should be one more evictee"
+          "there should be one more evictee"
         )
 
         assert(
           Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
-          "Houseguest should be an evictee"
+          "houseguest should be an evictee"
         )
 
         assert(
           Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
-          "All prior evictees should still be evicted"
+          "all prior evictees should still be evicted"
         )
 
         assert(
           not Enum.member?(result.season.hohs, event.houseguest_id),
-          "Evictee should no longer be a Head of Household"
+          "evictee should no longer be a Head of Household"
         )
       end
     end
@@ -846,8 +874,10 @@ defmodule FantasyBb.Core.EventTest do
             order: positive_int(),
             league:
               Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
+                id: positive_int(),
                 season:
                   Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
+                    id: positive_int(),
                     hohs: list(of: int(min: 101, max: 200)),
                     otb: list(of: int(min: 201, max: 300), min: 1),
                     voters: list(of: int(min: 301, max: 400)),
@@ -892,22 +922,22 @@ defmodule FantasyBb.Core.EventTest do
 
         assert(
           Enum.count(updated_evictees) === Enum.count(original_evictees) + 1,
-          "There should be one more evictee"
+          "there should be one more evictee"
         )
 
         assert(
           Enum.any?(updated_evictees, &(&1 === event.houseguest_id)),
-          "Houseguest should be an evictee"
+          "houseguest should be an evictee"
         )
 
         assert(
           Enum.all?(original_evictees, &Enum.member?(updated_evictees, &1)),
-          "All prior evictees should still be evicted"
+          "all prior evictees should still be evicted"
         )
 
         assert(
           not Enum.member?(result.season.otb, event.houseguest_id),
-          "Evictee should no longer be on the block"
+          "evictee should no longer be on the block"
         )
       end
     end

@@ -8,8 +8,8 @@ defmodule FantasyBb.Core.Scoring.League do
   alias FantasyBb.Core.Scoring.Trade
   alias FantasyBb.Data.League
 
-  @enforce_keys [:season]
-  defstruct [:season, events: [], rules: [], teams: []]
+  @enforce_keys [:id, :season]
+  defstruct [:id, :season, events: [], rules: [], teams: []]
 
   def create(%FantasyBb.Data.Schema.League{} = league) do
     season = League.get_season(league)
@@ -48,6 +48,7 @@ defmodule FantasyBb.Core.Scoring.League do
       |> Enum.concat([final_ceremony])
 
     %FantasyBb.Core.Scoring.League{
+      id: league.id,
       season: Season.create(season),
       rules: rules,
       events: all_events,

@@ -34,17 +34,17 @@ defmodule FantasyBb.Core.Scoring.Event do
   end
 
   # Final HoH (Round 1) event
-  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 2} = event, league) do
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 2}, league) do
     league
   end
 
   # Final HoH (Round 2) event
-  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 3} = event, league) do
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 3}, league) do
     league
   end
 
   # PoV event
-  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 4} = event, league) do
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 4}, league) do
     league
   end
 
@@ -94,17 +94,17 @@ defmodule FantasyBb.Core.Scoring.Event do
   end
 
   # America's choice event
-  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 10} = event, league) do
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 10}, league) do
     league
   end
 
   # Miscellaneous competition event
-  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 11} = event, league) do
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 11}, league) do
     league
   end
 
   # America's favorite player event
-  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 12} = event, league) do
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 12}, league) do
     league
   end
 
@@ -132,9 +132,5 @@ defmodule FantasyBb.Core.Scoring.Event do
     league = put_in(league.season.voters, voters)
     league = put_in(league.season.hohs, hohs)
     put_in(league.season.otb, otb)
-  end
-
-  def process(_, league) do
-    league
   end
 end
