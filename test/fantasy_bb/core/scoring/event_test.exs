@@ -29,13 +29,13 @@ defmodule FantasyBb.Core.EventTest do
       league =
         put_in(
           league.season.hohs,
-          Enum.into(league.season.hohs, MapSet.new())
+          MapSet.new(league.season.hohs)
         )
 
       league =
         put_in(
           league.season.voters,
-          Enum.into(league.season.voters, MapSet.new())
+          MapSet.new(league.season.voters)
         )
 
       original_hohs = league.season.hohs
@@ -156,13 +156,13 @@ defmodule FantasyBb.Core.EventTest do
       league =
         put_in(
           league.season.otb,
-          Enum.into(league.season.otb, MapSet.new())
+          MapSet.new(league.season.otb)
         )
 
       league =
         put_in(
           league.season.voters,
-          Enum.into(league.season.voters, MapSet.new())
+          MapSet.new(league.season.voters)
         )
 
       original_otb = league.season.otb
@@ -217,13 +217,13 @@ defmodule FantasyBb.Core.EventTest do
       league =
         put_in(
           league.season.otb,
-          Enum.into(league.season.otb, MapSet.new())
+          MapSet.new(league.season.otb)
         )
 
       league =
         put_in(
           league.season.voters,
-          Enum.into(league.season.voters, MapSet.new())
+          MapSet.new(league.season.voters)
         )
 
       original_otb = league.season.otb
@@ -278,13 +278,13 @@ defmodule FantasyBb.Core.EventTest do
       league =
         put_in(
           league.season.otb,
-          Enum.into(league.season.otb, MapSet.new())
+          MapSet.new(league.season.otb)
         )
 
       league =
         put_in(
           league.season.voters,
-          Enum.into(league.season.voters, MapSet.new())
+          MapSet.new(league.season.voters)
         )
 
       original_voters = league.season.voters
@@ -339,13 +339,13 @@ defmodule FantasyBb.Core.EventTest do
       league =
         put_in(
           league.season.otb,
-          Enum.into(league.season.otb, MapSet.new())
+          MapSet.new(league.season.otb)
         )
 
       league =
         put_in(
           league.season.voters,
-          Enum.into(league.season.voters, MapSet.new())
+          MapSet.new(league.season.voters)
         )
 
       original_otb = league.season.otb
@@ -400,13 +400,13 @@ defmodule FantasyBb.Core.EventTest do
       league =
         put_in(
           league.season.voters,
-          Enum.into(league.season.voters, MapSet.new())
+          MapSet.new(league.season.voters)
         )
 
       league =
         put_in(
           league.season.evictees,
-          Enum.into(league.season.evictees, MapSet.new())
+          MapSet.new(league.season.evictees)
         )
 
       original_voters = league.season.voters
@@ -528,25 +528,25 @@ defmodule FantasyBb.Core.EventTest do
         league =
           put_in(
             league.season.voters,
-            Enum.into(league.season.voters, MapSet.new())
+            MapSet.new(league.season.voters)
           )
 
         league =
           put_in(
             league.season.hohs,
-            Enum.into(league.season.hohs, MapSet.new())
+            MapSet.new(league.season.hohs)
           )
 
         league =
           put_in(
             league.season.otb,
-            Enum.into(league.season.otb, MapSet.new())
+            MapSet.new(league.season.otb)
           )
 
         league =
           put_in(
             league.season.evictees,
-            Enum.into(league.season.evictees, MapSet.new())
+            MapSet.new(league.season.evictees)
           )
 
         original_evictees = league.season.evictees
@@ -601,25 +601,25 @@ defmodule FantasyBb.Core.EventTest do
         league =
           put_in(
             league.season.voters,
-            Enum.into(league.season.voters, MapSet.new())
+            MapSet.new(league.season.voters)
           )
 
         league =
           put_in(
             league.season.hohs,
-            Enum.into(league.season.hohs, MapSet.new())
+            MapSet.new(league.season.hohs)
           )
 
         league =
           put_in(
             league.season.otb,
-            Enum.into(league.season.otb, MapSet.new())
+            MapSet.new(league.season.otb)
           )
 
         league =
           put_in(
             league.season.evictees,
-            Enum.into(league.season.evictees, MapSet.new())
+            MapSet.new(league.season.evictees)
           )
 
         original_evictees = league.season.evictees
@@ -674,25 +674,25 @@ defmodule FantasyBb.Core.EventTest do
         league =
           put_in(
             league.season.voters,
-            Enum.into(league.season.voters, MapSet.new())
+            MapSet.new(league.season.voters)
           )
 
         league =
           put_in(
             league.season.hohs,
-            Enum.into(league.season.hohs, MapSet.new())
+            MapSet.new(league.season.hohs)
           )
 
         league =
           put_in(
             league.season.otb,
-            Enum.into(league.season.otb, MapSet.new())
+            MapSet.new(league.season.otb)
           )
 
         league =
           put_in(
             league.season.evictees,
-            Enum.into(league.season.evictees, MapSet.new())
+            MapSet.new(league.season.evictees)
           )
 
         original_evictees = league.season.evictees
@@ -749,25 +749,25 @@ defmodule FantasyBb.Core.EventTest do
         league =
           put_in(
             league.season.voters,
-            Enum.into(league.season.voters, MapSet.new())
+            MapSet.new(league.season.voters)
           )
 
         league =
           put_in(
             league.season.hohs,
-            Enum.into(league.season.hohs, MapSet.new())
+            MapSet.new(league.season.hohs)
           )
 
         league =
           put_in(
             league.season.otb,
-            Enum.into(league.season.otb, MapSet.new())
+            MapSet.new(league.season.otb)
           )
 
         league =
           put_in(
             league.season.evictees,
-            Enum.into(league.season.evictees, MapSet.new())
+            MapSet.new(league.season.evictees)
           )
 
         original_evictees = league.season.evictees
@@ -822,25 +822,25 @@ defmodule FantasyBb.Core.EventTest do
         league =
           put_in(
             league.season.voters,
-            Enum.into(league.season.voters, MapSet.new())
+            MapSet.new(league.season.voters)
           )
 
         league =
           put_in(
             league.season.hohs,
-            Enum.into(league.season.hohs, MapSet.new())
+            MapSet.new(league.season.hohs)
           )
 
         league =
           put_in(
             league.season.otb,
-            Enum.into(league.season.otb, MapSet.new())
+            MapSet.new(league.season.otb)
           )
 
         league =
           put_in(
             league.season.evictees,
-            Enum.into(league.season.evictees, MapSet.new())
+            MapSet.new(league.season.evictees)
           )
 
         original_evictees = league.season.evictees
@@ -895,25 +895,25 @@ defmodule FantasyBb.Core.EventTest do
         league =
           put_in(
             league.season.voters,
-            Enum.into(league.season.voters, MapSet.new())
+            MapSet.new(league.season.voters)
           )
 
         league =
           put_in(
             league.season.hohs,
-            Enum.into(league.season.hohs, MapSet.new())
+            MapSet.new(league.season.hohs)
           )
 
         league =
           put_in(
             league.season.otb,
-            Enum.into(league.season.otb, MapSet.new())
+            MapSet.new(league.season.otb)
           )
 
         league =
           put_in(
             league.season.evictees,
-            Enum.into(league.season.evictees, MapSet.new())
+            MapSet.new(league.season.evictees)
           )
 
         original_evictees = league.season.evictees
