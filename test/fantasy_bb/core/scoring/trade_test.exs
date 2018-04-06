@@ -38,7 +38,7 @@ defmodule FantasyBb.Core.TradeTest do
       }
 
       result = Trade.process(trade, league)
-      assert league === result
+      assert(league === result, "teams should not change")
     end
 
     test "one-for one trade" do
@@ -77,9 +77,20 @@ defmodule FantasyBb.Core.TradeTest do
       updated_team_two = Enum.find(result.teams, get_by_id(2)).houseguests
       updated_team_three = Enum.find(result.teams, get_by_id(3)).houseguests
 
-      assert MapSet.equal?(updated_team_one, MapSet.new([1, 3, 7]))
-      assert MapSet.equal?(updated_team_two, MapSet.new([4, 5]))
-      assert MapSet.equal?(updated_team_three, MapSet.new([2, 6, 8, 9]))
+      assert(
+        MapSet.equal?(updated_team_one, MapSet.new([1, 3, 7])),
+        "team should have traded houseguests"
+      )
+
+      assert(
+        MapSet.equal?(updated_team_two, MapSet.new([4, 5])),
+        "team should be unchanged"
+      )
+
+      assert(
+        MapSet.equal?(updated_team_three, MapSet.new([2, 6, 8, 9])),
+        "team should have traded houseguests"
+      )
     end
 
     test "two-for two trade" do
@@ -118,9 +129,20 @@ defmodule FantasyBb.Core.TradeTest do
       updated_team_two = Enum.find(result.teams, get_by_id(2)).houseguests
       updated_team_three = Enum.find(result.teams, get_by_id(3)).houseguests
 
-      assert MapSet.equal?(updated_team_one, MapSet.new([1, 2, 3]))
-      assert MapSet.equal?(updated_team_two, MapSet.new([4, 8, 9, 10, 12]))
-      assert MapSet.equal?(updated_team_three, MapSet.new([5, 6, 7, 11]))
+      assert(
+        MapSet.equal?(updated_team_one, MapSet.new([1, 2, 3])),
+        "team should be unchanged"
+      )
+
+      assert(
+        MapSet.equal?(updated_team_two, MapSet.new([4, 8, 9, 10, 12])),
+        "team should have traded houseguests"
+      )
+
+      assert(
+        MapSet.equal?(updated_team_three, MapSet.new([5, 6, 7, 11])),
+        "team should have traded houseguests"
+      )
     end
 
     test "one for two trade" do
@@ -159,9 +181,20 @@ defmodule FantasyBb.Core.TradeTest do
       updated_team_two = Enum.find(result.teams, get_by_id(2)).houseguests
       updated_team_three = Enum.find(result.teams, get_by_id(3)).houseguests
 
-      assert MapSet.equal?(updated_team_one, MapSet.new([1, 2, 3]))
-      assert MapSet.equal?(updated_team_two, MapSet.new([5, 6, 9]))
-      assert MapSet.equal?(updated_team_three, MapSet.new([4, 7, 8]))
+      assert(
+        MapSet.equal?(updated_team_one, MapSet.new([1, 2, 3])),
+        "team should be unchanged"
+      )
+
+      assert(
+        MapSet.equal?(updated_team_two, MapSet.new([5, 6, 9])),
+        "team should have traded houseguests"
+      )
+
+      assert(
+        MapSet.equal?(updated_team_three, MapSet.new([4, 7, 8])),
+        "team should have traded houseguests"
+      )
     end
   end
 
