@@ -1,18 +1,19 @@
 defmodule FantasyBb.Core.Utils.NilTest do
   use ExUnit.Case, async: true
-  use Quixir
+  use ExUnitProperties
 
   import FantasyBb.Core.Utils.Nil
 
   describe "is_nil" do
     test "given nil" do
-      ptest default: any() do
+      check all default <- StreamData.term() do
         assert with_default(nil, default) === default
       end
     end
 
     test "given not-nil" do
-      ptest default: any(), val: any() do
+      check all default <- StreamData.term(),
+                val <- StreamData.term() do
         assert with_default(val, default) === val
       end
     end

@@ -1,5 +1,6 @@
 defmodule FantasyBb.Core.Utils.MapTest do
   use ExUnit.Case, async: true
+  use ExUnitProperties
 
   import FantasyBb.Core.Utils.Map
 
@@ -49,41 +50,27 @@ defmodule FantasyBb.Core.Utils.MapTest do
   end
 
   describe "map" do
-    test "given an empty map" do
-      func = fn x -> x + 1 end
-      input = Map.new()
+    test "given a map" do
+      check all input <- StreamData.map_of(StreamData.atom(:alphanumeric), StreamData.integer()) do
+        func = fn x -> x + 1 end
+        result = FantasyBb.Core.Utils.Map.map(input, func)
 
-      result = map(input, func)
+        assert(
+          MapSet.equal?(
+            MapSet.new(Map.keys(input)),
+            MapSet.new(Map.keys(result))
+          ),
+          "the keys should be the same"
+        )
 
-      assert(
-        Map.equal?(result, Map.new()),
-        "the result should be empty"
-      )
-    end
-
-    test "given a non-empty map" do
-      input = %{
-        a: -5,
-        b: 0,
-        c: 3,
-        d: 104
-      }
-
-      func = fn x -> x + 1 end
-
-      expected_output = %{
-        a: -4,
-        b: 1,
-        c: 4,
-        d: 105
-      }
-
-      result = map(input, func)
-
-      assert(
-        Map.equal?(result, expected_output),
-        "the values should equal the result of running the given function on each input value"
-      )
+        assert(
+          Enum.all?(
+            Map.keys(input),
+            &(func.(Map.fetch!(input, &1)) === Map.fetch!(result, &1))
+          ),
+          "the values should equal the result of running the given function on each input value"
+        )
+      end
     end
   end
 end

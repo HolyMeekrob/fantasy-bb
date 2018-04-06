@@ -42,7 +42,7 @@ defmodule FantasyBb.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:oauth2, "~> 0.9.1"},
-      {:quixir, "~> 0.9.3", only: :test}
+      {:stream_data, "~> 0.4.2", only: :test}
     ]
   end
 

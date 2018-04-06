@@ -1,23 +1,13 @@
 defmodule FantasyBb.Core.EventTest do
   use ExUnit.Case, async: true
-  use Quixir
+  use ExUnitProperties
+
   alias FantasyBb.Core.Scoring.Event
 
   test "hoh event" do
-    ptest week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season:
-                Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                  id: positive_int(),
-                  hohs: list(of: int(min: 101, max: 200)),
-                  otb: list(of: int(min: 201, max: 300)),
-                  voters: list(of: int(min: 301, max: 400), min: 1),
-                  evictees: list(of: int(min: 401))
-                })
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 1,
         houseguest_id: Enum.random(league.season.voters),
@@ -25,18 +15,6 @@ defmodule FantasyBb.Core.EventTest do
         order: order,
         timestamp: NaiveDateTime.utc_now()
       }
-
-      league =
-        put_in(
-          league.season.hohs,
-          MapSet.new(league.season.hohs)
-        )
-
-      league =
-        put_in(
-          league.season.voters,
-          MapSet.new(league.season.voters)
-        )
 
       original_hohs = league.season.hohs
       result = Event.process(event, league)
@@ -65,14 +43,10 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "final hoh round 1 event" do
-    ptest houseguest_id: positive_int(),
-          week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season: FantasyBb.Core.Scoring.Season
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              houseguest_id <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 2,
         houseguest_id: houseguest_id,
@@ -87,14 +61,10 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "final hoh round 2 event" do
-    ptest houseguest_id: positive_int(),
-          week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season: FantasyBb.Core.Scoring.Season
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              houseguest_id <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 3,
         houseguest_id: houseguest_id,
@@ -109,14 +79,10 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "pov event" do
-    ptest houseguest_id: positive_int(),
-          week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season: FantasyBb.Core.Scoring.Season
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              houseguest_id <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 4,
         houseguest_id: houseguest_id,
@@ -131,20 +97,9 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "nomination event" do
-    ptest week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season:
-                Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                  id: positive_int(),
-                  hohs: list(of: int(min: 101, max: 200)),
-                  otb: list(of: int(min: 201, max: 300)),
-                  voters: list(of: int(min: 301, max: 400), min: 1),
-                  evictees: list(of: int(min: 401))
-                })
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 5,
         houseguest_id: Enum.random(league.season.voters),
@@ -152,18 +107,6 @@ defmodule FantasyBb.Core.EventTest do
         order: order,
         timestamp: NaiveDateTime.utc_now()
       }
-
-      league =
-        put_in(
-          league.season.otb,
-          MapSet.new(league.season.otb)
-        )
-
-      league =
-        put_in(
-          league.season.voters,
-          MapSet.new(league.season.voters)
-        )
 
       original_otb = league.season.otb
       result = Event.process(event, league)
@@ -192,20 +135,9 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "on the block event" do
-    ptest week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season:
-                Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                  id: positive_int(),
-                  hohs: list(of: int(min: 101, max: 200)),
-                  otb: list(of: int(min: 201, max: 300)),
-                  voters: list(of: int(min: 301, max: 400), min: 1),
-                  evictees: list(of: int(min: 401))
-                })
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 6,
         houseguest_id: Enum.random(league.season.voters),
@@ -213,18 +145,6 @@ defmodule FantasyBb.Core.EventTest do
         order: order,
         timestamp: NaiveDateTime.utc_now()
       }
-
-      league =
-        put_in(
-          league.season.otb,
-          MapSet.new(league.season.otb)
-        )
-
-      league =
-        put_in(
-          league.season.voters,
-          MapSet.new(league.season.voters)
-        )
 
       original_otb = league.season.otb
       result = Event.process(event, league)
@@ -253,20 +173,9 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "off the block event" do
-    ptest week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season:
-                Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                  id: positive_int(),
-                  hohs: list(of: int(min: 101, max: 200)),
-                  otb: list(of: int(min: 201, max: 300), min: 1),
-                  voters: list(of: int(min: 301, max: 400)),
-                  evictees: list(of: int(min: 401))
-                })
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 7,
         houseguest_id: Enum.random(league.season.otb),
@@ -274,18 +183,6 @@ defmodule FantasyBb.Core.EventTest do
         order: order,
         timestamp: NaiveDateTime.utc_now()
       }
-
-      league =
-        put_in(
-          league.season.otb,
-          MapSet.new(league.season.otb)
-        )
-
-      league =
-        put_in(
-          league.season.voters,
-          MapSet.new(league.season.voters)
-        )
 
       original_voters = league.season.voters
       result = Event.process(event, league)
@@ -314,20 +211,9 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "replacement nomination event" do
-    ptest week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season:
-                Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                  id: positive_int(),
-                  hohs: list(of: int(min: 101, max: 200)),
-                  otb: list(of: int(min: 201, max: 300)),
-                  voters: list(of: int(min: 301, max: 400), min: 1),
-                  evictees: list(of: int(min: 401))
-                })
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 8,
         houseguest_id: Enum.random(league.season.voters),
@@ -335,18 +221,6 @@ defmodule FantasyBb.Core.EventTest do
         order: order,
         timestamp: NaiveDateTime.utc_now()
       }
-
-      league =
-        put_in(
-          league.season.otb,
-          MapSet.new(league.season.otb)
-        )
-
-      league =
-        put_in(
-          league.season.voters,
-          MapSet.new(league.season.voters)
-        )
 
       original_otb = league.season.otb
       result = Event.process(event, league)
@@ -375,20 +249,9 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "return to the house event" do
-    ptest week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season:
-                Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                  id: positive_int(),
-                  hohs: list(of: int(min: 101, max: 200)),
-                  otb: list(of: int(min: 201, max: 300)),
-                  voters: list(of: int(min: 301, max: 400)),
-                  evictees: list(of: int(min: 401), min: 1)
-                })
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 9,
         houseguest_id: Enum.random(league.season.evictees),
@@ -396,18 +259,6 @@ defmodule FantasyBb.Core.EventTest do
         order: order,
         timestamp: NaiveDateTime.utc_now()
       }
-
-      league =
-        put_in(
-          league.season.voters,
-          MapSet.new(league.season.voters)
-        )
-
-      league =
-        put_in(
-          league.season.evictees,
-          MapSet.new(league.season.evictees)
-        )
 
       original_voters = league.season.voters
       result = Event.process(event, league)
@@ -436,14 +287,10 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "America's choice event" do
-    ptest houseguest_id: positive_int(),
-          week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season: FantasyBb.Core.Scoring.Season
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              houseguest_id <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 10,
         houseguest_id: houseguest_id,
@@ -458,14 +305,10 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "competition event" do
-    ptest houseguest_id: positive_int(),
-          week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season: FantasyBb.Core.Scoring.Season
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              houseguest_id <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 11,
         houseguest_id: houseguest_id,
@@ -480,14 +323,10 @@ defmodule FantasyBb.Core.EventTest do
   end
 
   test "America's favorite player event" do
-    ptest houseguest_id: positive_int(),
-          week_number: positive_int(),
-          order: positive_int(),
-          league:
-            Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-              id: positive_int(),
-              season: FantasyBb.Core.Scoring.Season
-            }) do
+    check all week_number <- StreamData.positive_integer(),
+              order <- StreamData.positive_integer(),
+              houseguest_id <- StreamData.positive_integer(),
+              league <- league_generator() do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 12,
         houseguest_id: houseguest_id,
@@ -503,20 +342,9 @@ defmodule FantasyBb.Core.EventTest do
 
   describe "Self-eviction event" do
     test "when houseguest is a voter" do
-      ptest week_number: positive_int(),
-            order: positive_int(),
-            league:
-              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-                id: positive_int(),
-                season:
-                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                    id: positive_int(),
-                    hohs: list(of: int(min: 101, max: 200)),
-                    otb: list(of: int(min: 201, max: 300)),
-                    voters: list(of: int(min: 301, max: 400), min: 1),
-                    evictees: list(of: int(min: 401))
-                  })
-              }) do
+      check all week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league <- league_generator() do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 13,
           houseguest_id: Enum.random(league.season.voters),
@@ -524,30 +352,6 @@ defmodule FantasyBb.Core.EventTest do
           order: order,
           timestamp: NaiveDateTime.utc_now()
         }
-
-        league =
-          put_in(
-            league.season.voters,
-            MapSet.new(league.season.voters)
-          )
-
-        league =
-          put_in(
-            league.season.hohs,
-            MapSet.new(league.season.hohs)
-          )
-
-        league =
-          put_in(
-            league.season.otb,
-            MapSet.new(league.season.otb)
-          )
-
-        league =
-          put_in(
-            league.season.evictees,
-            MapSet.new(league.season.evictees)
-          )
 
         original_evictees = league.season.evictees
         result = Event.process(event, league)
@@ -576,20 +380,9 @@ defmodule FantasyBb.Core.EventTest do
     end
 
     test "when houseguest is an hoh" do
-      ptest week_number: positive_int(),
-            order: positive_int(),
-            league:
-              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-                id: positive_int(),
-                season:
-                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                    id: positive_int(),
-                    hohs: list(of: int(min: 101, max: 200), min: 1),
-                    otb: list(of: int(min: 201, max: 300)),
-                    voters: list(of: int(min: 301, max: 400)),
-                    evictees: list(of: int(min: 401))
-                  })
-              }) do
+      check all week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league <- league_generator() do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 13,
           houseguest_id: Enum.random(league.season.hohs),
@@ -597,30 +390,6 @@ defmodule FantasyBb.Core.EventTest do
           order: order,
           timestamp: NaiveDateTime.utc_now()
         }
-
-        league =
-          put_in(
-            league.season.voters,
-            MapSet.new(league.season.voters)
-          )
-
-        league =
-          put_in(
-            league.season.hohs,
-            MapSet.new(league.season.hohs)
-          )
-
-        league =
-          put_in(
-            league.season.otb,
-            MapSet.new(league.season.otb)
-          )
-
-        league =
-          put_in(
-            league.season.evictees,
-            MapSet.new(league.season.evictees)
-          )
 
         original_evictees = league.season.evictees
         result = Event.process(event, league)
@@ -649,20 +418,9 @@ defmodule FantasyBb.Core.EventTest do
     end
 
     test "when houseguest is on the block" do
-      ptest week_number: positive_int(),
-            order: positive_int(),
-            league:
-              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-                id: positive_int(),
-                season:
-                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                    id: positive_int(),
-                    hohs: list(of: int(min: 101, max: 200)),
-                    otb: list(of: int(min: 201, max: 300), min: 1),
-                    voters: list(of: int(min: 301, max: 400)),
-                    evictees: list(of: int(min: 401))
-                  })
-              }) do
+      check all week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league <- league_generator() do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 13,
           houseguest_id: Enum.random(league.season.otb),
@@ -670,30 +428,6 @@ defmodule FantasyBb.Core.EventTest do
           order: order,
           timestamp: NaiveDateTime.utc_now()
         }
-
-        league =
-          put_in(
-            league.season.voters,
-            MapSet.new(league.season.voters)
-          )
-
-        league =
-          put_in(
-            league.season.hohs,
-            MapSet.new(league.season.hohs)
-          )
-
-        league =
-          put_in(
-            league.season.otb,
-            MapSet.new(league.season.otb)
-          )
-
-        league =
-          put_in(
-            league.season.evictees,
-            MapSet.new(league.season.evictees)
-          )
 
         original_evictees = league.season.evictees
         result = Event.process(event, league)
@@ -724,20 +458,9 @@ defmodule FantasyBb.Core.EventTest do
 
   describe "Removal event" do
     test "when houseguest is a voter" do
-      ptest week_number: positive_int(),
-            order: positive_int(),
-            league:
-              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-                id: positive_int(),
-                season:
-                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                    id: positive_int(),
-                    hohs: list(of: int(min: 101, max: 200)),
-                    otb: list(of: int(min: 201, max: 300)),
-                    voters: list(of: int(min: 301, max: 400), min: 1),
-                    evictees: list(of: int(min: 401))
-                  })
-              }) do
+      check all week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league <- league_generator() do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 14,
           houseguest_id: Enum.random(league.season.voters),
@@ -745,30 +468,6 @@ defmodule FantasyBb.Core.EventTest do
           order: order,
           timestamp: NaiveDateTime.utc_now()
         }
-
-        league =
-          put_in(
-            league.season.voters,
-            MapSet.new(league.season.voters)
-          )
-
-        league =
-          put_in(
-            league.season.hohs,
-            MapSet.new(league.season.hohs)
-          )
-
-        league =
-          put_in(
-            league.season.otb,
-            MapSet.new(league.season.otb)
-          )
-
-        league =
-          put_in(
-            league.season.evictees,
-            MapSet.new(league.season.evictees)
-          )
 
         original_evictees = league.season.evictees
         result = Event.process(event, league)
@@ -797,20 +496,9 @@ defmodule FantasyBb.Core.EventTest do
     end
 
     test "when houseguest is an hoh" do
-      ptest week_number: positive_int(),
-            order: positive_int(),
-            league:
-              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-                id: positive_int(),
-                season:
-                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                    id: positive_int(),
-                    hohs: list(of: int(min: 101, max: 200), min: 1),
-                    otb: list(of: int(min: 201, max: 300)),
-                    voters: list(of: int(min: 301, max: 400)),
-                    evictees: list(of: int(min: 401))
-                  })
-              }) do
+      check all week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league <- league_generator() do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 14,
           houseguest_id: Enum.random(league.season.hohs),
@@ -818,30 +506,6 @@ defmodule FantasyBb.Core.EventTest do
           order: order,
           timestamp: NaiveDateTime.utc_now()
         }
-
-        league =
-          put_in(
-            league.season.voters,
-            MapSet.new(league.season.voters)
-          )
-
-        league =
-          put_in(
-            league.season.hohs,
-            MapSet.new(league.season.hohs)
-          )
-
-        league =
-          put_in(
-            league.season.otb,
-            MapSet.new(league.season.otb)
-          )
-
-        league =
-          put_in(
-            league.season.evictees,
-            MapSet.new(league.season.evictees)
-          )
 
         original_evictees = league.season.evictees
         result = Event.process(event, league)
@@ -870,20 +534,9 @@ defmodule FantasyBb.Core.EventTest do
     end
 
     test "when houseguest is on the block" do
-      ptest week_number: positive_int(),
-            order: positive_int(),
-            league:
-              Pollution.VG.struct(%FantasyBb.Core.Scoring.League{
-                id: positive_int(),
-                season:
-                  Pollution.VG.struct(%FantasyBb.Core.Scoring.Season{
-                    id: positive_int(),
-                    hohs: list(of: int(min: 101, max: 200)),
-                    otb: list(of: int(min: 201, max: 300), min: 1),
-                    voters: list(of: int(min: 301, max: 400)),
-                    evictees: list(of: int(min: 401))
-                  })
-              }) do
+      check all week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league <- league_generator() do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 14,
           houseguest_id: Enum.random(league.season.otb),
@@ -891,30 +544,6 @@ defmodule FantasyBb.Core.EventTest do
           order: order,
           timestamp: NaiveDateTime.utc_now()
         }
-
-        league =
-          put_in(
-            league.season.voters,
-            MapSet.new(league.season.voters)
-          )
-
-        league =
-          put_in(
-            league.season.hohs,
-            MapSet.new(league.season.hohs)
-          )
-
-        league =
-          put_in(
-            league.season.otb,
-            MapSet.new(league.season.otb)
-          )
-
-        league =
-          put_in(
-            league.season.evictees,
-            MapSet.new(league.season.evictees)
-          )
 
         original_evictees = league.season.evictees
         result = Event.process(event, league)
@@ -941,5 +570,40 @@ defmodule FantasyBb.Core.EventTest do
         )
       end
     end
+  end
+
+  defp league_generator() do
+    create_league = fn obj ->
+      struct(FantasyBb.Core.Scoring.League, obj)
+    end
+
+    create_season = fn obj ->
+      struct(FantasyBb.Core.Scoring.Season, obj)
+    end
+
+    StreamData.map(
+      StreamData.fixed_map(%{
+        id: StreamData.positive_integer(),
+        season:
+          StreamData.map(
+            StreamData.fixed_map(%{
+              id: StreamData.positive_integer(),
+              hohs: set_generator(1001, 2000),
+              otb: set_generator(2001, 3000),
+              voters: set_generator(3001, 4000),
+              evictees: set_generator(4001, 5000)
+            }),
+            create_season
+          )
+      }),
+      create_league
+    )
+  end
+
+  defp set_generator(min, max) do
+    StreamData.map(
+      StreamData.list_of(StreamData.member_of(Enum.to_list(min..max)), min_length: 1),
+      &MapSet.new/1
+    )
   end
 end
