@@ -13,14 +13,12 @@ defmodule FantasyBb.Core.Scoring do
   end
 
   defp process(event, league) do
-    updated_league =
-      event
-      |> process_event(league)
-      |> drop_event()
+    updated_league = process_event(event, league)
 
     league.rules
     |> Enum.reduce({league, updated_league}, &Rule.process/2)
     |> elem(1)
+    |> drop_event()
   end
 
   defp process_event(%Event{} = event, league) do
@@ -39,7 +37,7 @@ defmodule FantasyBb.Core.Scoring do
     FinalCeremony.process(ceremony, league)
   end
 
-  defp drop_event(%League{events: events} = league) do
-    %League{league | events: Enum.drop(events, 1)}
+  defp drop_event(%League{events: [_ | remaining]} = league) do
+    %League{league | events: remaining}
   end
 end

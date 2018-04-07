@@ -12,6 +12,10 @@ defmodule FantasyBb.Core.Scoring.Rule do
   end
 
   def process(%FantasyBb.Core.Scoring.Rule{} = rule, {prev, curr}) do
-    Scorable.process(rule.scorable_id, rule.point_value, prev, curr)
+    if(Scorable.should_process(rule.scorable_id, hd(curr.events))) do
+      Scorable.process(rule.scorable_id, rule.point_value, prev, curr)
+    else
+      {prev, curr}
+    end
   end
 end

@@ -1,7 +1,6 @@
 defmodule FantasyBb.Core.Scoring.FinalCeremonyTest do
   use ExUnit.Case, async: true
 
-
   alias FantasyBb.Core.Scoring.JuryVote
   alias FantasyBb.Core.Scoring.League
   alias FantasyBb.Core.Scoring.Season
