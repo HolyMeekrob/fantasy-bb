@@ -12,10 +12,8 @@ defmodule FantasyBb.Core.Utils.Map do
   end
 
   def map(obj, fun) do
-    put = fn x, acc ->
-      Map.put(acc, x, fun.(Map.fetch!(obj, x)))
-    end
-
-    Enum.reduce(Map.keys(obj), Map.new(), put)
+    obj
+    |> Enum.map(fn {k, v} -> {k, fun.(v)} end)
+    |> Map.new()
   end
 end

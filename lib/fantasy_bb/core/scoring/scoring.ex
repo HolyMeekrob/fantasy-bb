@@ -32,7 +32,7 @@ defmodule FantasyBb.Core.Scoring do
   end
 
   defp process_event(%EvictionCeremony{} = ceremony, league) do
-    league
+    EvictionCeremony.process(ceremony, league)
   end
 
   defp process_event(%FinalCeremony{} = vote, league) do

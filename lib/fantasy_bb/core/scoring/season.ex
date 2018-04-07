@@ -1,5 +1,6 @@
 defmodule FantasyBb.Core.Scoring.Season do
   alias FantasyBb.Data.Season
+
   @enforce_keys [:id]
   defstruct [
     :id,
