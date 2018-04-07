@@ -8,4 +8,17 @@ defmodule FantasyBb.Core.Scoring.FinalCeremony do
       votes: Enum.map(votes, &JuryVote.create/1)
     }
   end
+
+  def process(_, league) do
+    evictees =
+      league.season.voters
+      |> MapSet.union(league.season.hohs)
+      |> MapSet.union(league.season.otb)
+      |> MapSet.union(league.season.evictees)
+
+    league = put_in(league.season.hohs, MapSet.new())
+    league = put_in(league.season.otb, MapSet.new())
+    league = put_in(league.season.voters, MapSet.new())
+    put_in(league.season.evictees, evictees)
+  end
 end
