@@ -1,4 +1,4 @@
-defmodule FantasyBb.Core.EventTest do
+defmodule FantasyBb.Core.Scoring.EventTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
@@ -7,7 +7,7 @@ defmodule FantasyBb.Core.EventTest do
   test "hoh event" do
     check all week_number <- StreamData.positive_integer(),
               order <- StreamData.positive_integer(),
-              league <- league_generator() do
+              league <- league_generator({0, 0, 1, 0}) do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 1,
         houseguest_id: Enum.random(league.season.voters),
@@ -99,7 +99,7 @@ defmodule FantasyBb.Core.EventTest do
   test "nomination event" do
     check all week_number <- StreamData.positive_integer(),
               order <- StreamData.positive_integer(),
-              league <- league_generator() do
+              league <- league_generator({0, 0, 1, 0}) do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 5,
         houseguest_id: Enum.random(league.season.voters),
@@ -137,7 +137,7 @@ defmodule FantasyBb.Core.EventTest do
   test "on the block event" do
     check all week_number <- StreamData.positive_integer(),
               order <- StreamData.positive_integer(),
-              league <- league_generator() do
+              league <- league_generator({0, 0, 1, 0}) do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 6,
         houseguest_id: Enum.random(league.season.voters),
@@ -175,7 +175,7 @@ defmodule FantasyBb.Core.EventTest do
   test "off the block event" do
     check all week_number <- StreamData.positive_integer(),
               order <- StreamData.positive_integer(),
-              league <- league_generator() do
+              league <- league_generator({0, 1, 0, 0}) do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 7,
         houseguest_id: Enum.random(league.season.otb),
@@ -213,7 +213,7 @@ defmodule FantasyBb.Core.EventTest do
   test "replacement nomination event" do
     check all week_number <- StreamData.positive_integer(),
               order <- StreamData.positive_integer(),
-              league <- league_generator() do
+              league <- league_generator({0, 0, 1, 0}) do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 8,
         houseguest_id: Enum.random(league.season.voters),
@@ -251,7 +251,7 @@ defmodule FantasyBb.Core.EventTest do
   test "return to the house event" do
     check all week_number <- StreamData.positive_integer(),
               order <- StreamData.positive_integer(),
-              league <- league_generator() do
+              league <- league_generator({0, 0, 0, 1}) do
       event = %FantasyBb.Core.Scoring.Event{
         event_type_id: 9,
         houseguest_id: Enum.random(league.season.evictees),
@@ -344,7 +344,7 @@ defmodule FantasyBb.Core.EventTest do
     test "when houseguest is a voter" do
       check all week_number <- StreamData.positive_integer(),
                 order <- StreamData.positive_integer(),
-                league <- league_generator() do
+                league <- league_generator({0, 0, 1, 0}) do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 13,
           houseguest_id: Enum.random(league.season.voters),
@@ -382,7 +382,7 @@ defmodule FantasyBb.Core.EventTest do
     test "when houseguest is an hoh" do
       check all week_number <- StreamData.positive_integer(),
                 order <- StreamData.positive_integer(),
-                league <- league_generator() do
+                league <- league_generator({1, 0, 0, 0}) do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 13,
           houseguest_id: Enum.random(league.season.hohs),
@@ -420,7 +420,7 @@ defmodule FantasyBb.Core.EventTest do
     test "when houseguest is on the block" do
       check all week_number <- StreamData.positive_integer(),
                 order <- StreamData.positive_integer(),
-                league <- league_generator() do
+                league <- league_generator({0, 1, 0, 0}) do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 13,
           houseguest_id: Enum.random(league.season.otb),
@@ -460,7 +460,7 @@ defmodule FantasyBb.Core.EventTest do
     test "when houseguest is a voter" do
       check all week_number <- StreamData.positive_integer(),
                 order <- StreamData.positive_integer(),
-                league <- league_generator() do
+                league <- league_generator({0, 0, 1, 0}) do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 14,
           houseguest_id: Enum.random(league.season.voters),
@@ -498,7 +498,7 @@ defmodule FantasyBb.Core.EventTest do
     test "when houseguest is an hoh" do
       check all week_number <- StreamData.positive_integer(),
                 order <- StreamData.positive_integer(),
-                league <- league_generator() do
+                league <- league_generator({1, 0, 0, 0}) do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 14,
           houseguest_id: Enum.random(league.season.hohs),
@@ -536,7 +536,7 @@ defmodule FantasyBb.Core.EventTest do
     test "when houseguest is on the block" do
       check all week_number <- StreamData.positive_integer(),
                 order <- StreamData.positive_integer(),
-                league <- league_generator() do
+                league <- league_generator({0, 1, 0, 0}) do
         event = %FantasyBb.Core.Scoring.Event{
           event_type_id: 14,
           houseguest_id: Enum.random(league.season.otb),
@@ -572,37 +572,39 @@ defmodule FantasyBb.Core.EventTest do
     end
   end
 
-  defp league_generator() do
-    create_league = fn obj ->
-      struct(FantasyBb.Core.Scoring.League, obj)
-    end
-
-    create_season = fn obj ->
-      struct(FantasyBb.Core.Scoring.Season, obj)
-    end
-
+  defp league_generator({min_hohs, min_otb, min_voters, min_evictees} \\ {0, 0, 0, 0}) do
     StreamData.map(
       StreamData.fixed_map(%{
         id: StreamData.positive_integer(),
-        season:
-          StreamData.map(
-            StreamData.fixed_map(%{
-              id: StreamData.positive_integer(),
-              hohs: set_generator(1001, 2000),
-              otb: set_generator(2001, 3000),
-              voters: set_generator(3001, 4000),
-              evictees: set_generator(4001, 5000)
-            }),
-            create_season
-          )
+        season: season_generator(min_hohs, min_otb, min_voters, min_evictees)
       }),
-      create_league
+      struct_builder(FantasyBb.Core.Scoring.League)
     )
   end
 
-  defp set_generator(min, max) do
+  defp season_generator(min_hohs, min_otb, min_voters, min_evictees) do
     StreamData.map(
-      StreamData.list_of(StreamData.member_of(Enum.to_list(min..max)), min_length: 1),
+      StreamData.fixed_map(%{
+        id: StreamData.positive_integer(),
+        hohs: set_generator(1001, 2000, min_hohs),
+        otb: set_generator(2001, 3000, min_otb),
+        voters: set_generator(3001, 4000, min_voters),
+        evictees: set_generator(4001, 5000, min_evictees)
+      }),
+      struct_builder(FantasyBb.Core.Scoring.Season)
+    )
+  end
+
+  defp struct_builder(type) do
+    fn obj -> struct(type, obj) end
+  end
+
+  defp set_generator(min, max, min_length) do
+    StreamData.map(
+      StreamData.list_of(
+        StreamData.member_of(Enum.to_list(min..max)),
+        min_length: min_length
+      ),
       &MapSet.new/1
     )
   end

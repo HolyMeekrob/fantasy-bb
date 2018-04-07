@@ -1,4 +1,4 @@
-defmodule FantasyBb.Core.TradeTest do
+defmodule FantasyBb.Core.Scoring.TradeTest do
   use ExUnit.Case, async: true
   alias FantasyBb.Core.Scoring.League
   alias FantasyBb.Core.Scoring.Season
