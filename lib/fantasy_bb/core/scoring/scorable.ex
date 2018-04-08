@@ -27,6 +27,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 1 and is_final_event(remaining, 1)
   end
 
+  # Standard PoV
+  def should_process(6, [%Event{} = event | remaining]) do
+    event.event_type_id === 4 and is_standard_eviction(event) and not is_final_event(remaining, 4)
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -53,6 +58,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Final HoH
   def process(5, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Standard HoH
+  def process(6, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
