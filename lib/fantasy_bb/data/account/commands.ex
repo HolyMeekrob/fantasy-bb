@@ -21,7 +21,7 @@ defmodule FantasyBb.Data.Account.Commands do
     |> upsert_func.()
   end
 
-  defp upsert_user(_, _) do
+  defp upsert_user(_input, _func) do
     raise "Email is required to upsert a user."
   end
 end

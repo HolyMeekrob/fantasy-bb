@@ -33,13 +33,13 @@ defmodule FantasyBb.Core.Season do
 
   def status(season) do
     case {started?(season), completed?(season)} do
-      {false, _} ->
+      {false, _completed} ->
         :upcoming
 
-      {_, false} ->
+      {_started, false} ->
         :current
 
-      {_, _} ->
+      {_starned, _completed} ->
         :complete
     end
   end

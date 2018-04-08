@@ -4,7 +4,7 @@ defmodule FantasyBb.Core.Scoring.EvictionCeremony do
   @enforce_keys [:week_number, :order, :timestamp]
   defstruct [:week_number, :order, :timestamp, votes: []]
 
-  def create([head | _] = votes) do
+  def create([head | _tail] = votes) do
     ceremony = head.eviction_ceremony
 
     %FantasyBb.Core.Scoring.EvictionCeremony{
@@ -34,7 +34,7 @@ defmodule FantasyBb.Core.Scoring.EvictionCeremony do
     ceremony.votes
     |> Enum.group_by(&Map.fetch!(&1, :candidate_id))
     |> FantasyBb.Core.Utils.Map.map(&Enum.count/1)
-    |> Enum.sort_by(fn {_, votes} -> votes end, &>/2)
+    |> Enum.sort_by(fn {_id, votes} -> votes end, &>/2)
     |> List.first()
     |> elem(0)
   end

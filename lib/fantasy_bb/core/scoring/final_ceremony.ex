@@ -9,7 +9,7 @@ defmodule FantasyBb.Core.Scoring.FinalCeremony do
     }
   end
 
-  def process(_, league) do
+  def process(_ceremony, league) do
     evictees =
       league.season.voters
       |> MapSet.union(league.season.hohs)

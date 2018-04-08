@@ -37,7 +37,7 @@ defmodule FantasyBb.Core.Scoring do
     FinalCeremony.process(ceremony, league)
   end
 
-  defp drop_event(%League{events: [_ | remaining]} = league) do
+  defp drop_event(%League{events: [_current | remaining]} = league) do
     %League{league | events: remaining}
   end
 end
