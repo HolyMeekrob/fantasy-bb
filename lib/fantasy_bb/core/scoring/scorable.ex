@@ -42,6 +42,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 4 and is_final_event(remaining, 4)
   end
 
+  # Standard Nomination
+  def should_process(9, [%Event{} = event | _remaining]) do
+    event.event_type_id === 5 and is_standard_eviction(event)
+  end
+
+  # Double Eviction Nomination
+  def should_process(10, [%Event{} = event | _remaining]) do
+    event.event_type_id === 5 and is_double_eviction(event)
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -83,6 +93,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Final PoV
   def process(8, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Standard Nomination
+  def process(9, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Double Eviction Nomination
+  def process(10, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
