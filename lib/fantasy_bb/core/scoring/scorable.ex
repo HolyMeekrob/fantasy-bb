@@ -52,6 +52,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 5 and is_double_eviction(event)
   end
 
+  # On the block
+  def should_process(11, [%Event{} = event | _remaining]) do
+    event.event_type_id === 6
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -103,6 +108,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Double Eviction Nomination
   def process(10, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Double Eviction Nomination
+  def process(11, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
