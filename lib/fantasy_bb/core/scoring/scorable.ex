@@ -1,60 +1,67 @@
 defmodule FantasyBb.Core.Scoring.Scorable do
   alias FantasyBb.Core.Scoring.Event
+  alias FantasyBb.Core.Scoring.League
   alias FantasyBb.Core.Scoring.Team
 
   # Standard HoH
-  def should_process(1, [%Event{} = event | remaining]) do
+  def should_process(1, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 1 and is_standard_eviction(event) and not is_final_event(remaining, 1)
   end
 
   # Double Eviction HoH
-  def should_process(2, [%Event{} = event | remaining]) do
+  def should_process(2, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 1 and is_double_eviction(event) and not is_final_event(remaining, 1)
   end
 
   # Final HoH (Round 1)
-  def should_process(3, [%Event{} = event | _remaining]) do
+  def should_process(3, %League{events: [%Event{} = event | _remaining]}) do
     event.event_type_id === 2
   end
 
   # Final HoH (Round 2)
-  def should_process(4, [%Event{} = event | _remaining]) do
+  def should_process(4, %League{events: [%Event{} = event | _remaining]}) do
     event.event_type_id === 3
   end
 
   # Final HoH
-  def should_process(5, [%Event{} = event | remaining]) do
+  def should_process(5, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 1 and is_final_event(remaining, 1)
   end
 
   # Standard PoV
-  def should_process(6, [%Event{} = event | remaining]) do
+  def should_process(6, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 4 and is_standard_eviction(event) and not is_final_event(remaining, 4)
   end
 
   # Double Eviction PoV
-  def should_process(7, [%Event{} = event | remaining]) do
+  def should_process(7, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 4 and is_double_eviction(event) and not is_final_event(remaining, 4)
   end
 
   # Final PoV
-  def should_process(8, [%Event{} = event | remaining]) do
+  def should_process(8, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 4 and is_final_event(remaining, 4)
   end
 
   # Standard Nomination
-  def should_process(9, [%Event{} = event | _remaining]) do
+  def should_process(9, %League{events: [%Event{} = event | _remaining]}) do
     event.event_type_id === 5 and is_standard_eviction(event)
   end
 
   # Double Eviction Nomination
-  def should_process(10, [%Event{} = event | _remaining]) do
+  def should_process(10, %League{events: [%Event{} = event | _remaining]}) do
     event.event_type_id === 5 and is_double_eviction(event)
   end
 
   # On the block
-  def should_process(11, [%Event{} = event | _remaining]) do
+  def should_process(11, %League{events: [%Event{} = event | _remaining]}) do
     event.event_type_id === 6
+  end
+
+  # Veto self
+  def should_process(12, %League{events: [%Event{} = event | _remaining]} = league) do
+    event.event_type_id === 7 and is_standard_eviction(event) and
+      league.season.pov === event.houseguest_id
   end
 
   def should_process(_event_type_id, _events) do
@@ -113,6 +120,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Double Eviction Nomination
   def process(11, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Veto self
+  def process(12, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
