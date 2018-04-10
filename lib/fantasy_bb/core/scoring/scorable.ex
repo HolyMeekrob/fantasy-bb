@@ -3,12 +3,12 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   alias FantasyBb.Core.Scoring.League
   alias FantasyBb.Core.Scoring.Team
 
-  # Standard HoH
+  # Standard eviction HoH
   def should_process(1, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 1 and is_standard_eviction(event) and not is_final_event(remaining, 1)
   end
 
-  # Double Eviction HoH
+  # Double eviction HoH
   def should_process(2, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 1 and is_double_eviction(event) and not is_final_event(remaining, 1)
   end
@@ -28,12 +28,12 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 1 and is_final_event(remaining, 1)
   end
 
-  # Standard PoV
+  # Standard eviction PoV
   def should_process(6, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 4 and is_standard_eviction(event) and not is_final_event(remaining, 4)
   end
 
-  # Double Eviction PoV
+  # Double eviction PoV
   def should_process(7, %League{events: [%Event{} = event | remaining]}) do
     event.event_type_id === 4 and is_double_eviction(event) and not is_final_event(remaining, 4)
   end
@@ -43,12 +43,12 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 4 and is_final_event(remaining, 4)
   end
 
-  # Standard Nomination
+  # Standard nomination
   def should_process(9, %League{events: [%Event{} = event | _remaining]}) do
     event.event_type_id === 5 and is_standard_eviction(event)
   end
 
-  # Double Eviction Nomination
+  # Double eviction nomination
   def should_process(10, %League{events: [%Event{} = event | _remaining]}) do
     event.event_type_id === 5 and is_double_eviction(event)
   end
@@ -58,9 +58,15 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 6
   end
 
-  # Veto self
+  # Veto self - standard eviction
   def should_process(12, %League{events: [%Event{} = event | _remaining]} = league) do
     event.event_type_id === 7 and is_standard_eviction(event) and
+      league.season.pov === event.houseguest_id
+  end
+
+  # Veto self - double eviction
+  def should_process(13, %League{events: [%Event{} = event | _remaining]} = league) do
+    event.event_type_id === 7 and is_double_eviction(event) and
       league.season.pov === event.houseguest_id
   end
 
@@ -68,12 +74,12 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     false
   end
 
-  # Standard HoH
+  # Standard evction HoH
   def process(1, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
-  # Double Eviction HoH
+  # Double eviction HoH
   def process(2, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
@@ -93,12 +99,12 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     award_points_to_event_assignee(points, prev, curr)
   end
 
-  # Standard PoV
+  # Standard eviction PoV
   def process(6, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
-  # Double Eviction PoV
+  # Double eviction PoV
   def process(7, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
@@ -108,23 +114,28 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     award_points_to_event_assignee(points, prev, curr)
   end
 
-  # Standard Nomination
+  # Standard nomination
   def process(9, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
-  # Double Eviction Nomination
+  # Double eviction nomination
   def process(10, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
-  # Double Eviction Nomination
+  # Double eviction nomination
   def process(11, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
-  # Veto self
+  # Veto self - standard eviction
   def process(12, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Veto self - double eviction
+  def process(13, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
