@@ -92,7 +92,11 @@ defmodule FantasyBb.Core.Scoring.EventTest do
       }
 
       result = Event.process(event, league)
-      assert(Map.equal?(league, result), "should not change the league state")
+
+      assert(
+        result.season.pov === houseguest_id,
+        "should update the pov holder"
+      )
     end
   end
 

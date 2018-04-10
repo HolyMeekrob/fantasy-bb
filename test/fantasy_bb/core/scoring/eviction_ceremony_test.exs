@@ -31,15 +31,27 @@ defmodule FantasyBb.Core.Scoring.EvictionCeremonyTest do
 
       result = process(ceremony, league)
 
-      assert(Enum.empty?(result.season.hohs), "heads of household should be cleared")
-      assert(Enum.empty?(result.season.otb), "on the block should be cleared")
+      assert(is_nil(result.season.pov), "power of veto should be cleared")
+
+      assert(
+        Enum.empty?(result.season.hohs),
+        "heads of household should be cleared"
+      )
+
+      assert(
+        Enum.empty?(result.season.otb),
+        "on the block should be cleared"
+      )
 
       assert(
         MapSet.equal?(result.season.voters, MapSet.new([1, 7, 3])),
         "voters should be everyone except evictee"
       )
 
-      assert(MapSet.equal?(result.season.evictees, MapSet.new([103, 381, 101, 5])))
+      assert(
+        MapSet.equal?(result.season.evictees, MapSet.new([103, 381, 101, 5])),
+        "evictees should have added evictee"
+      )
     end
 
     test "multiple unanimous votes" do
@@ -67,15 +79,27 @@ defmodule FantasyBb.Core.Scoring.EvictionCeremonyTest do
 
       result = process(ceremony, league)
 
-      assert(Enum.empty?(result.season.hohs), "heads of household should be cleared")
-      assert(Enum.empty?(result.season.otb), "on the block should be cleared")
+      assert(is_nil(result.season.pov), "power of veto should be cleared")
+
+      assert(
+        Enum.empty?(result.season.hohs),
+        "heads of household should be cleared"
+      )
+
+      assert(
+        Enum.empty?(result.season.otb),
+        "on the block should be cleared"
+      )
 
       assert(
         MapSet.equal?(result.season.voters, MapSet.new([1, 7, 3, 10, 20])),
         "voters should be everyone except evictee"
       )
 
-      assert(MapSet.equal?(result.season.evictees, MapSet.new([103, 381, 101, 5])))
+      assert(
+        MapSet.equal?(result.season.evictees, MapSet.new([103, 381, 101, 5])),
+        "evictees should have added evictee"
+      )
     end
 
     test "split votes between two candidates" do
@@ -102,15 +126,27 @@ defmodule FantasyBb.Core.Scoring.EvictionCeremonyTest do
       }
 
       result = process(ceremony, league)
-      assert(Enum.empty?(result.season.hohs), "heads of household should be cleared")
-      assert(Enum.empty?(result.season.otb), "on the block should be cleared")
+      assert(is_nil(result.season.pov), "power of veto should be cleared")
+
+      assert(
+        Enum.empty?(result.season.hohs),
+        "heads of household should be cleared"
+      )
+
+      assert(
+        Enum.empty?(result.season.otb),
+        "on the block should be cleared"
+      )
 
       assert(
         MapSet.equal?(result.season.voters, MapSet.new([1, 5, 3, 10, 20])),
         "voters should be everyone except evictee"
       )
 
-      assert(MapSet.equal?(result.season.evictees, MapSet.new([103, 381, 101, 7])))
+      assert(
+        MapSet.equal?(result.season.evictees, MapSet.new([103, 381, 101, 7])),
+        "evictees should have added evictee"
+      )
     end
 
     test "split votes between more than two candidates" do
@@ -140,15 +176,30 @@ defmodule FantasyBb.Core.Scoring.EvictionCeremonyTest do
       }
 
       result = process(ceremony, league)
-      assert(Enum.empty?(result.season.hohs), "heads of household should be cleared")
-      assert(Enum.empty?(result.season.otb), "on the block should be cleared")
+      assert(is_nil(result.season.pov), "power of veto should be cleared")
 
       assert(
-        MapSet.equal?(result.season.voters, MapSet.new([1, 5, 3, 10, 11, 20, 22, 25, 99])),
+        Enum.empty?(result.season.hohs),
+        "heads of household should be cleared"
+      )
+
+      assert(
+        Enum.empty?(result.season.otb),
+        "on the block should be cleared"
+      )
+
+      assert(
+        MapSet.equal?(
+          result.season.voters,
+          MapSet.new([1, 5, 3, 10, 11, 20, 22, 25, 99])
+        ),
         "voters should be everyone except evictee"
       )
 
-      assert(MapSet.equal?(result.season.evictees, MapSet.new([103, 381, 101, 7])))
+      assert(
+        MapSet.equal?(result.season.evictees, MapSet.new([103, 381, 101, 7])),
+        "evictees should have added evictee"
+      )
     end
   end
 end

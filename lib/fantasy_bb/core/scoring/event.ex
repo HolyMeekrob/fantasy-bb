@@ -44,8 +44,8 @@ defmodule FantasyBb.Core.Scoring.Event do
   end
 
   # PoV event
-  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 4}, league) do
-    league
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 4} = event, league) do
+    put_in(league.season.pov, event.houseguest_id)
   end
 
   # Nomination event

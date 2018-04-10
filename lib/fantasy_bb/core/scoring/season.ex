@@ -4,6 +4,7 @@ defmodule FantasyBb.Core.Scoring.Season do
   @enforce_keys [:id]
   defstruct [
     :id,
+    :pov,
     hohs: MapSet.new(),
     otb: MapSet.new(),
     voters: MapSet.new(),
