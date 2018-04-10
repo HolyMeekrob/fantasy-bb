@@ -84,6 +84,20 @@ defmodule FantasyBb.Core.Scoring.Scorable do
       not MapSet.member?(league.season.otb, league.season.pov)
   end
 
+  # Veto another whilst on the block - standard eviction
+  def should_process(16, %League{events: [%Event{} = event | _remaining]} = league) do
+    event.event_type_id === 7 and is_standard_eviction(event) and
+      league.season.pov !== event.houseguest_id and
+      MapSet.member?(league.season.otb, league.season.pov)
+  end
+
+  # Veto another whilst on the block - double eviction
+  def should_process(17, %League{events: [%Event{} = event | _remaining]} = league) do
+    event.event_type_id === 7 and is_double_eviction(event) and
+      league.season.pov !== event.houseguest_id and
+      MapSet.member?(league.season.otb, league.season.pov)
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -161,6 +175,18 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Veto another whilst not on the block - double eviction
   def process(15, points, prev, curr) do
+    league = add_points_for_houseguest(curr.season.pov, curr, points)
+    {prev, league}
+  end
+
+  # Veto another whilst not on the block - standard eviction
+  def process(16, points, prev, curr) do
+    league = add_points_for_houseguest(curr.season.pov, curr, points)
+    {prev, league}
+  end
+
+  # Veto another whilst not on the block - double eviction
+  def process(17, points, prev, curr) do
     league = add_points_for_houseguest(curr.season.pov, curr, points)
     {prev, league}
   end

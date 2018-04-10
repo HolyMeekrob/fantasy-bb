@@ -1914,7 +1914,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         curr = %League{
           id: league_id,
           season: %Season{
-            id: season_id
+            id: season_id,
+            pov: houseguest_id
           },
           events: [event | remaining_events],
           teams: [
@@ -2133,7 +2134,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         curr = %League{
           id: league_id,
           season: %Season{
-            id: season_id
+            id: season_id,
+            pov: houseguest_id
           },
           events: [event | remaining_events],
           teams: [
@@ -2353,6 +2355,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
           id: league_id,
           season: %Season{
             id: season_id,
+            pov: 1,
             otb: MapSet.new([5])
           },
           events: [event | remaining_events],
@@ -2630,6 +2633,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
           id: league_id,
           season: %Season{
             id: season_id,
+            pov: 1,
             otb: MapSet.new([5])
           },
           events: [event | remaining_events],
@@ -2847,6 +2851,562 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
             id: season_id,
             pov: 1,
             otb: MapSet.new([5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert_team_has_points(result, 1, 10 + point_value)
+        assert_team_has_points(result, 2, 20)
+      end
+    end
+  end
+
+  @scorable_id 16
+  describe "use veto on another whilst on the block during a standard eviction ceremony" do
+    test "is not an off the block event" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator(),
+                event_type_id <-
+                  StreamData.filter(
+                    StreamData.positive_integer(),
+                    &(&1 !== 7)
+                  ) do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: 1,
+            otb: MapSet.new([1, 5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "is not a standard eviction ceremony" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(7),
+                order <- StreamData.map(StreamData.positive_integer(), &(&1 + 1)),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: 1,
+            otb: MapSet.new([1, 5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "veto holder is the houseguest taken off the block" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(7),
+                order <- StreamData.constant(1),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: houseguest_id,
+            otb: MapSet.new([1, 5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "veto holder is not on the block" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(7),
+                order <- StreamData.constant(1),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: 1,
+            otb: MapSet.new([2, 5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "veto holder takes another off the block whilst on the block during a standard eviction ceremony" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(7),
+                order <- StreamData.constant(1),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: 1,
+            otb: MapSet.new([1, 5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert_team_has_points(result, 1, 10 + point_value)
+        assert_team_has_points(result, 2, 20)
+      end
+    end
+  end
+
+  @scorable_id 17
+  describe "use veto on another whilst on the block during a double eviction ceremony" do
+    test "is not an off the block event" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator(),
+                event_type_id <-
+                  StreamData.filter(
+                    StreamData.positive_integer(),
+                    &(&1 !== 7)
+                  ) do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: 1,
+            otb: MapSet.new([1, 5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "is not a double eviction ceremony" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(7),
+                order <- StreamData.constant(1),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: 1,
+            otb: MapSet.new([1, 5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "veto holder is the houseguest taken off the block" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(7),
+                order <- StreamData.map(StreamData.positive_integer(), &(&1 + 1)),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: houseguest_id,
+            otb: MapSet.new([1, 5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "veto holder is not on the block" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(7),
+                order <- StreamData.map(StreamData.positive_integer(), &(&1 + 1)),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: 1,
+            otb: MapSet.new([2, 5])
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "veto holder takes another off the block whilst on the block during a double eviction ceremony" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(7),
+                order <- StreamData.map(StreamData.positive_integer(), &(&1 + 1)),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            pov: 1,
+            otb: MapSet.new([1, 5])
           },
           events: [event | remaining_events],
           teams: [
