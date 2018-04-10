@@ -66,6 +66,11 @@ defmodule FantasyBb.Core.Scoring.Event do
     put_in(league.season.voters, voters)
   end
 
+  # Off the block event - veto not used
+  def process(%FantasyBb.Core.Scoring.Event{event_type_id: 7, houseguest_id: nil}, league) do
+    league
+  end
+
   # Off the block event
   def process(%FantasyBb.Core.Scoring.Event{event_type_id: 7} = event, league) do
     voters = MapSet.put(league.season.voters, event.houseguest_id)

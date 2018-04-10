@@ -176,41 +176,60 @@ defmodule FantasyBb.Core.Scoring.EventTest do
     end
   end
 
-  test "off the block event" do
-    check all week_number <- StreamData.positive_integer(),
-              order <- StreamData.positive_integer(),
-              league <- league_generator({0, 1, 0, 0}) do
-      event = %FantasyBb.Core.Scoring.Event{
-        event_type_id: 7,
-        houseguest_id: Enum.random(league.season.otb),
-        week_number: week_number,
-        order: order,
-        timestamp: NaiveDateTime.utc_now()
-      }
+  describe "off the block event" do
+    test "veto not used" do
+      check all week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league <- league_generator({0, 1, 0, 0}) do
+        event = %FantasyBb.Core.Scoring.Event{
+          event_type_id: 7,
+          houseguest_id: nil,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
 
-      original_voters = league.season.voters
-      result = Event.process(event, league)
-      updated_voters = result.season.voters
+        result = Event.process(event, league)
+        assert(Map.equal?(league, result), "should not change the league state")
+      end
+    end
 
-      assert(
-        Enum.count(updated_voters) === Enum.count(original_voters) + 1,
-        "there should be one more voter"
-      )
+    test "houseguest taken off" do
+      check all week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league <- league_generator({0, 1, 0, 0}) do
+        event = %FantasyBb.Core.Scoring.Event{
+          event_type_id: 7,
+          houseguest_id: Enum.random(league.season.otb),
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
 
-      assert(
-        Enum.any?(updated_voters, &(&1 === event.houseguest_id)),
-        "event houseguest should be a voter"
-      )
+        original_voters = league.season.voters
+        result = Event.process(event, league)
+        updated_voters = result.season.voters
 
-      assert(
-        Enum.all?(original_voters, &Enum.member?(updated_voters, &1)),
-        "all existing voters should still be there"
-      )
+        assert(
+          Enum.count(updated_voters) === Enum.count(original_voters) + 1,
+          "there should be one more voter"
+        )
 
-      assert(
-        not Enum.member?(result.season.otb, event.houseguest_id),
-        "event houseguest should no longer be on the block"
-      )
+        assert(
+          Enum.any?(updated_voters, &(&1 === event.houseguest_id)),
+          "event houseguest should be a voter"
+        )
+
+        assert(
+          Enum.all?(original_voters, &Enum.member?(updated_voters, &1)),
+          "all existing voters should still be there"
+        )
+
+        assert(
+          not Enum.member?(result.season.otb, event.houseguest_id),
+          "event houseguest should no longer be on the block"
+        )
+      end
     end
   end
 

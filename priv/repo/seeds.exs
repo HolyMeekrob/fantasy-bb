@@ -716,6 +716,8 @@ Seeds.create_event(
   "Temple of Temptation competition. Kevin claimed the temptation and earned $27, but eliminated himself from winning the competition."
 )
 
+Seeds.create_event(taken_off.id, nil, get_ceremony.(3).id)
+
 Seeds.create_event(
   americas_choice.id,
   jessica.id,
@@ -741,6 +743,7 @@ Seeds.create_event(hoh.id, jessica.id, get_ceremony.(4).id, "What's the Hold Up?
 Seeds.create_event(nom.id, josh.id, get_ceremony.(4).id)
 Seeds.create_event(nom.id, ramses.id, get_ceremony.(4).id)
 Seeds.create_event(pov.id, jessica.id, get_ceremony.(4).id, "BB Juicy Blast competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony.(3).id)
 
 Seeds.create_vote(get_ceremony.(4).id, paul.id, ramses.id)
 Seeds.create_vote(get_ceremony.(4).id, christmas.id, ramses.id)
@@ -772,8 +775,9 @@ Seeds.create_event(
 )
 
 Seeds.create_event(nom.id, cody.id, get_ceremony.(5).id)
-Seeds.create_event(nom.id, cody.id, get_ceremony.(5).id)
+Seeds.create_event(nom.id, jessica.id, get_ceremony.(5).id)
 Seeds.create_event(pov.id, paul.id, get_ceremony.(5).id)
+Seeds.create_event(taken_off.id, jason.id, get_ceremony.(3).id)
 
 # Week 7
 IO.puts("Seeding week 7")
@@ -880,6 +884,7 @@ Seeds.create_event(hoh.id, jason.id, get_ceremony.(9).id, "Everyone's a Wiener c
 Seeds.create_event(nom.id, matt.id, get_ceremony.(9).id)
 Seeds.create_event(nom.id, raven.id, get_ceremony.(9).id)
 Seeds.create_event(pov.id, jason.id, get_ceremony.(9).id, "Hide and Go Veto competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony.(3).id)
 
 Seeds.create_vote(get_ceremony.(9).id, josh.id, matt.id)
 Seeds.create_vote(get_ceremony.(9).id, paul.id, matt.id)
@@ -911,6 +916,7 @@ Seeds.create_event(hoh.id, alex.id, week_11_de_ceremony.id, "Fake News competiti
 Seeds.create_event(nom.id, kevin.id, week_11_de_ceremony.id)
 Seeds.create_event(nom.id, raven.id, week_11_de_ceremony.id)
 Seeds.create_event(pov.id, josh.id, week_11_de_ceremony.id, "Lime Drop competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony.(3).id)
 
 Seeds.create_vote(week_11_de_ceremony.id, josh.id, kevin.id)
 Seeds.create_vote(week_11_de_ceremony.id, paul.id, raven.id)
@@ -922,6 +928,7 @@ Seeds.create_event(hoh.id, josh.id, get_ceremony.(11).id, "The Revengers competi
 Seeds.create_event(nom.id, kevin.id, get_ceremony.(11).id)
 Seeds.create_event(nom.id, alex.id, get_ceremony.(11).id)
 Seeds.create_event(pov.id, paul.id, get_ceremony.(11).id, "BB Comics competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony.(3).id)
 
 Seeds.create_vote(get_ceremony.(11).id, josh.id, alex.id)
 Seeds.create_vote(get_ceremony.(11).id, paul.id, kevin.id)
@@ -933,6 +940,7 @@ Seeds.create_event(hoh.id, paul.id, get_ceremony.(12).id, "What the Bleep? compe
 Seeds.create_event(nom.id, josh.id, get_ceremony.(12).id)
 Seeds.create_event(nom.id, kevin.id, get_ceremony.(12).id)
 Seeds.create_event(pov.id, paul.id, get_ceremony.(12).id, "Back to the Veto competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony.(3).id)
 
 Seeds.create_vote(get_ceremony.(12).id, christmas.id, kevin.id)
 
@@ -946,10 +954,21 @@ Seeds.create_event(
   "Tail of the Unicorn competition."
 )
 
-Seeds.create_event(final_hoh_2.id, josh.id, get_ceremony.(13).id, "Knock 'Em Down competition.'")
-Seeds.create_event(hoh.id, josh.id, get_ceremony.(13).id, "Scales of Just-Us competition.")
-Seeds.create_event(win_afp.id, cody.id, get_ceremony.(13).id)
+Seeds.create_event(
+  final_hoh_2.id,
+  josh.id,
+  get_ceremony.(13).id,
+  "Knock 'Em Down competition."
+)
 
+Seeds.create_event(
+  hoh.id,
+  josh.id,
+  get_ceremony.(13).id,
+  "Scales of Just-Us competition."
+)
+
+Seeds.create_event(win_afp.id, cody.id, get_ceremony.(13).id)
 Seeds.create_vote(get_ceremony.(13).id, josh.id, christmas.id)
 
 # Jury
