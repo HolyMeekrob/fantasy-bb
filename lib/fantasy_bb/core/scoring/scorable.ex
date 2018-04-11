@@ -1,5 +1,6 @@
 defmodule FantasyBb.Core.Scoring.Scorable do
   alias FantasyBb.Core.Scoring.Event
+  alias FantasyBb.Core.Scoring.EvictionCeremony
   alias FantasyBb.Core.Scoring.League
   alias FantasyBb.Core.Scoring.Team
 
@@ -142,6 +143,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 8 and is_double_eviction(event)
   end
 
+  # Dodge eviction - standard eviction
+  def should_process(26, %League{events: [%EvictionCeremony{} = ceremony | _remaining]}) do
+    is_standard_eviction(ceremony)
+  end
+
+  # Dodge eviction - double eviction
+  def should_process(27, %League{events: [%EvictionCeremony{} = ceremony | _remaining]}) do
+    is_double_eviction(ceremony)
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -277,6 +288,34 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   # Double eviction replacement nomination
   def process(25, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Dodge eviction - standard eviction
+  def process(26, points, prev, curr) do
+    add_points = fn houseguest, league ->
+      add_points_for_houseguest(houseguest, league, points)
+    end
+
+    league =
+      prev.season.otb
+      |> MapSet.difference(curr.season.evictees)
+      |> Enum.reduce(curr, add_points)
+
+    {prev, league}
+  end
+
+  # Dodge eviction - double eviction
+  def process(27, points, prev, curr) do
+    add_points = fn houseguest, league ->
+      add_points_for_houseguest(houseguest, league, points)
+    end
+
+    league =
+      prev.season.otb
+      |> MapSet.difference(curr.season.evictees)
+      |> Enum.reduce(curr, add_points)
+
+    {prev, league}
   end
 
   def process(_event_type_id, _points, prev, curr) do
