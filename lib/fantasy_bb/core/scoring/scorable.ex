@@ -153,6 +153,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     is_double_eviction(ceremony)
   end
 
+  # Vote for evicted houseguest
+  def should_process(28, %League{events: [%EvictionCeremony{} | _remaining]}) do
+    true
+  end
+
+  # Vote for non-evicted houseguest
+  def should_process(29, %League{events: [%EvictionCeremony{} | _remaining]}) do
+    true
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -313,6 +323,50 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     league =
       prev.season.otb
       |> MapSet.difference(curr.season.evictees)
+      |> Enum.reduce(curr, add_points)
+
+    {prev, league}
+  end
+
+  # Vote for evicted houseguest
+  def process(28, points, prev, curr) do
+    add_points = fn houseguest, league ->
+      add_points_for_houseguest(houseguest, league, points)
+    end
+
+    evictee =
+      curr.season.evictees
+      |> MapSet.difference(prev.season.evictees)
+      |> Enum.at(0)
+
+    league =
+      curr.events
+      |> hd()
+      |> Map.fetch!(:votes)
+      |> Enum.filter(&(Map.fetch!(&1, :candidate_id) === evictee))
+      |> Enum.map(&Map.fetch!(&1, :voter_id))
+      |> Enum.reduce(curr, add_points)
+
+    {prev, league}
+  end
+
+  # Vote for non-evicted houseguest
+  def process(29, points, prev, curr) do
+    add_points = fn houseguest, league ->
+      add_points_for_houseguest(houseguest, league, points)
+    end
+
+    evictee =
+      curr.season.evictees
+      |> MapSet.difference(prev.season.evictees)
+      |> Enum.at(0)
+
+    league =
+      curr.events
+      |> hd()
+      |> Map.fetch!(:votes)
+      |> Enum.filter(&(Map.fetch!(&1, :candidate_id) !== evictee))
+      |> Enum.map(&Map.fetch!(&1, :voter_id))
       |> Enum.reduce(curr, add_points)
 
     {prev, league}
