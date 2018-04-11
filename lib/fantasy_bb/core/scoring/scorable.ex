@@ -122,6 +122,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
       MapSet.member?(league.season.otb, league.season.pov)
   end
 
+  # Taken off the block - standard eviction
+  def should_process(22, %League{events: [%Event{} = event | _remaining]}) do
+    event.event_type_id === 7 and is_standard_eviction(event) and not is_nil(event.houseguest_id)
+  end
+
+  # Taken off the block - double eviction
+  def should_process(23, %League{events: [%Event{} = event | _remaining]}) do
+    event.event_type_id === 7 and is_double_eviction(event) and not is_nil(event.houseguest_id)
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -237,6 +247,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   def process(21, points, prev, curr) do
     league = add_points_for_houseguest(curr.season.pov, curr, points)
     {prev, league}
+  end
+
+  # Taken off the block - standard eviction
+  def process(22, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Taken off the block - double eviction
+  def process(23, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
   end
 
   def process(_event_type_id, _points, prev, curr) do
