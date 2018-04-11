@@ -132,6 +132,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 7 and is_double_eviction(event) and not is_nil(event.houseguest_id)
   end
 
+  # Standard replacement nomination
+  def should_process(24, %League{events: [%Event{} = event | _remaining]}) do
+    event.event_type_id === 8 and is_standard_eviction(event)
+  end
+
+  # Double eviction replacement nomination
+  def should_process(25, %League{events: [%Event{} = event | _remaining]}) do
+    event.event_type_id === 8 and is_double_eviction(event)
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -186,7 +196,7 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     award_points_to_event_assignee(points, prev, curr)
   end
 
-  # Double eviction nomination
+  # On the block
   def process(11, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
@@ -256,6 +266,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Taken off the block - double eviction
   def process(23, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Standard replacement nomination
+  def process(24, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Double eviction replacement nomination
+  def process(25, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 

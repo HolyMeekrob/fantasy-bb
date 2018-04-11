@@ -1553,9 +1553,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
                 season_id <- StreamData.positive_integer(),
                 event_type_id <- StreamData.constant(5),
                 order <- StreamData.constant(1),
-                next_event <- event_generator(event_type_id),
-                remaining_events <-
-                  StreamData.map(remaining_events_generator(), &[next_event | &1]) do
+                remaining_events <- remaining_events_generator() do
         houseguest_id = 5
 
         rule = %Rule{
@@ -1667,9 +1665,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
                 season_id <- StreamData.positive_integer(),
                 event_type_id <- StreamData.constant(5),
                 order <- StreamData.constant(1),
-                next_event <- event_generator(event_type_id),
-                remaining_events <-
-                  StreamData.map(remaining_events_generator(), &[next_event | &1]) do
+                remaining_events <- remaining_events_generator() do
         houseguest_id = 5
 
         rule = %Rule{
@@ -4697,6 +4693,334 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
                 season_id <- StreamData.positive_integer(),
                 event_type_id <- StreamData.constant(7),
                 order <- StreamData.map(StreamData.positive_integer(), &(&1 + 1)),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert_team_has_points(result, 1, 10)
+        assert_team_has_points(result, 2, 20 + point_value)
+      end
+    end
+  end
+
+  @scorable_id 24
+  describe "standard replacement nomination" do
+    test "is not a replacement nomination event" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator(),
+                event_type_id <-
+                  StreamData.filter(
+                    StreamData.positive_integer(),
+                    &(&1 !== 8)
+                  ) do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "is not a standard replacement nomination" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(8),
+                order <- StreamData.map(StreamData.positive_integer(), &(&1 + 1)),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "is a standard replacement nomination event" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(8),
+                order <- StreamData.constant(1),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert_team_has_points(result, 1, 10)
+        assert_team_has_points(result, 2, 20 + point_value)
+      end
+    end
+  end
+
+  @scorable_id 25
+  describe "double eviction replacement nomination" do
+    test "is not a nomination event" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator(),
+                event_type_id <-
+                  StreamData.filter(
+                    StreamData.positive_integer(),
+                    &(&1 !== 8)
+                  ) do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "is a standard replacement nomination event" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(8),
+                order <- StreamData.constant(1),
+                remaining_events <- remaining_events_generator() do
+        houseguest_id = 5
+
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        event = %Event{
+          event_type_id: event_type_id,
+          houseguest_id: houseguest_id,
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now()
+        }
+
+        prev_a = nil
+
+        curr = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id
+          },
+          events: [event | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "is a double eviction replacement nomination event" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                event_type_id <- StreamData.constant(8),
+                order <- StreamData.map(StreamData.positive_integer(), &(&1 + 1)),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
                 remaining_events <- remaining_events_generator() do
         houseguest_id = 5
 
