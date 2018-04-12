@@ -168,6 +168,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     true
   end
 
+  # Return to the house
+  def should_process(31, %League{events: [%Event{} = event | _remaining]}) do
+    event.event_type_id === 9
+  end
+
+  # Win America's choice
+  def should_process(32, %League{events: [%Event{} = event | _remaining]}) do
+    event.event_type_id === 10
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -404,6 +414,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     else
       {prev, curr}
     end
+  end
+
+  # Return to the house
+  def process(31, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Win America's choice
+  def process(32, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
   end
 
   def process(_event_type_id, _points, prev, curr) do
