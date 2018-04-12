@@ -163,6 +163,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     true
   end
 
+  # Sole vote against the house
+  def should_process(30, %League{events: [%EvictionCeremony{} | _remaining]}) do
+    true
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -370,6 +375,35 @@ defmodule FantasyBb.Core.Scoring.Scorable do
       |> Enum.reduce(curr, add_points)
 
     {prev, league}
+  end
+
+  # Sole vote against the house
+  def process(30, points, prev, curr) do
+    has_one_vote = fn {_candidate_id, votes} ->
+      Enum.count(votes) === 1
+    end
+
+    grouped_votes =
+      curr.events
+      |> hd()
+      |> Map.fetch!(:votes)
+      |> Enum.group_by(&Map.fetch!(&1, :candidate_id))
+
+    sole_vote = Enum.count(grouped_votes) === 2 and Enum.any?(grouped_votes, has_one_vote)
+
+    if(sole_vote) do
+      houseguest_id =
+        grouped_votes
+        |> Enum.find(has_one_vote)
+        |> elem(1)
+        |> hd()
+        |> Map.fetch!(:voter_id)
+
+      league = add_points_for_houseguest(houseguest_id, curr, points)
+      {prev, league}
+    else
+      {prev, curr}
+    end
   end
 
   def process(_event_type_id, _points, prev, curr) do
