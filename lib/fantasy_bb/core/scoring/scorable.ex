@@ -178,6 +178,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 10
   end
 
+  # Survive the week
+  def should_process(33, %League{events: [%EvictionCeremony{} | _remaining]}) do
+    true
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -424,6 +429,17 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   # Win America's choice
   def process(32, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Survive the week
+  def process(33, points, prev, curr) do
+    add_points = fn houseguest, league ->
+      add_points_for_houseguest(houseguest, league, points)
+    end
+
+    league = Enum.reduce(curr.season.voters, curr, add_points)
+
+    {prev, league}
   end
 
   def process(_event_type_id, _points, prev, curr) do
