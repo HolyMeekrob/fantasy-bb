@@ -1,6 +1,7 @@
 defmodule FantasyBb.Core.Scoring.Scorable do
   alias FantasyBb.Core.Scoring.Event
   alias FantasyBb.Core.Scoring.EvictionCeremony
+  alias FantasyBb.Core.Scoring.FinalCeremony
   alias FantasyBb.Core.Scoring.League
   alias FantasyBb.Core.Scoring.Team
 
@@ -187,6 +188,12 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   def should_process(34, %League{events: [%Event{} = event | _remaining]}) do
     event.event_type_id === 11
   end
+
+  # Win Big Brother
+  def should_process(35, %League{events: [%FinalCeremony{} | _remaining]}) do
+    true
+  end
+
 
   def should_process(_event_type_id, _events) do
     false
@@ -450,6 +457,22 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   # Win miscellaneous competition
   def process(34, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Win Big Brother
+  def process(35, points, prev, curr) do
+    winner = curr.events
+    |> hd()
+    |> Map.fetch!(:votes)
+    |> Enum.group_by(&Map.fetch!(&1, :candidate_id))
+    |> FantasyBb.Core.Utils.Map.map(&Enum.count/1)
+    |> Enum.sort_by(fn {_id, votes} -> votes end, &>/2)
+    |> List.first()
+    |> elem(0)
+
+    league = add_points_for_houseguest(winner, curr, points)
+
+    {prev, league}
   end
 
   def process(_event_type_id, _points, prev, curr) do
