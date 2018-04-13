@@ -194,6 +194,10 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     true
   end
 
+  # Finish in second place
+  def should_process(36, %League{events: [%FinalCeremony{} | _remaining]}) do
+    true
+  end
 
   def should_process(_event_type_id, _events) do
     false
@@ -461,17 +465,41 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Win Big Brother
   def process(35, points, prev, curr) do
-    winner = curr.events
-    |> hd()
-    |> Map.fetch!(:votes)
-    |> Enum.group_by(&Map.fetch!(&1, :candidate_id))
-    |> FantasyBb.Core.Utils.Map.map(&Enum.count/1)
-    |> Enum.sort_by(fn {_id, votes} -> votes end, &>/2)
-    |> List.first()
-    |> elem(0)
+    winner =
+      curr.events
+      |> hd()
+      |> Map.fetch!(:votes)
+      |> Enum.group_by(&Map.fetch!(&1, :candidate_id))
+      |> FantasyBb.Core.Utils.Map.map(&Enum.count/1)
+      |> Enum.sort_by(fn {_id, votes} -> votes end, &>/2)
+      |> List.first()
+      |> elem(0)
 
     league = add_points_for_houseguest(winner, curr, points)
+    {prev, league}
+  end
 
+  # Finish in second place
+  def process(36, points, prev, curr) do
+    groups =
+      curr.events
+      |> hd()
+      |> Map.fetch!(:votes)
+      |> Enum.group_by(&Map.fetch!(&1, :candidate_id))
+
+    groups =
+      Enum.reduce(prev.season.voters, groups, fn candidate, map ->
+        Map.put_new(map, candidate, [])
+      end)
+
+    loser =
+      groups
+      |> FantasyBb.Core.Utils.Map.map(&Enum.count/1)
+      |> Enum.sort_by(fn {_id, votes} -> votes end, &</2)
+      |> List.first()
+      |> elem(0)
+
+    league = add_points_for_houseguest(loser, curr, points)
     {prev, league}
   end
 
