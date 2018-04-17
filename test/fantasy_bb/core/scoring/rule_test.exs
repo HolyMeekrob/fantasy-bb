@@ -6596,6 +6596,182 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
     end
   end
 
+  @scorable_id 37
+  describe "finish Big Brother in third place" do
+    test "eviction ceremony with at least four people left in the house" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        ceremony = %EvictionCeremony{
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now(),
+          votes: [
+            %EvictionVote{voter_id: 1, candidate_id: 2},
+            %EvictionVote{voter_id: 3, candidate_id: 2},
+            %EvictionVote{voter_id: 5, candidate_id: 4},
+            %EvictionVote{voter_id: 6, candidate_id: 4},
+            %EvictionVote{voter_id: 7, candidate_id: 4}
+          ]
+        }
+
+        prev_a = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            otb: MapSet.new([2, 4]),
+            hohs: MapSet.new([8]),
+            evictees: MapSet.new([9, 10])
+          },
+          events: [ceremony | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3, 4, 5])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([6, 7, 8, 9, 10])
+            }
+          ]
+        }
+
+        curr = put_in(prev_a.season.otb, MapSet.new())
+        curr = put_in(curr.season.hohs, MapSet.new())
+        curr = put_in(curr.season.evictees, MapSet.new([4, 9, 10]))
+        curr = put_in(curr.season.voters, MapSet.new([1, 2, 3, 5, 6, 7, 8]))
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "eviction ceremony with three people left in the house" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        ceremony = %EvictionCeremony{
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now(),
+          votes: [
+            %EvictionVote{voter_id: 1, candidate_id: 2}
+          ]
+        }
+
+        prev_a = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            otb: MapSet.new([2, 4]),
+            hohs: MapSet.new([3]),
+            evictees: MapSet.new([5])
+          },
+          events: [ceremony | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5])
+            }
+          ]
+        }
+
+        curr = put_in(prev_a.season.otb, MapSet.new())
+        curr = put_in(curr.season.hohs, MapSet.new())
+        curr = put_in(curr.season.evictees, MapSet.new([2, 5]))
+        curr = put_in(curr.season.voters, MapSet.new([1, 3, 4]))
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "eviction ceremony with two people left in the house" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                order <- StreamData.positive_integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        ceremony = %EvictionCeremony{
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now(),
+          votes: [
+            %EvictionVote{voter_id: 1, candidate_id: 2}
+          ]
+        }
+
+        prev_a = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            voters: MapSet.new([2, 3]),
+            hohs: MapSet.new([1]),
+            evictees: MapSet.new([4, 5, 6])
+          },
+          events: [ceremony | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        curr = put_in(prev_a.season.otb, MapSet.new())
+        curr = put_in(curr.season.hohs, MapSet.new())
+        curr = put_in(curr.season.evictees, MapSet.new([2, 4, 5, 6]))
+        curr = put_in(curr.season.voters, MapSet.new([1, 3]))
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert_team_has_points(result, 1, 10 + point_value)
+        assert_team_has_points(result, 2, 20)
+      end
+    end
+  end
+
   defp assert_team_has_points(league, team_id, points) do
     team = Enum.find(league.teams, &(Map.fetch!(&1, :id) === team_id))
     assert(team.points === points, "teams should have correct points")

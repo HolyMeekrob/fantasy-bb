@@ -199,6 +199,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     true
   end
 
+  # Finish in third place
+  def should_process(37, %League{events: [%EvictionCeremony{} | _remaining]} = league) do
+    Enum.count(league.season.voters) === 2
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -500,6 +505,19 @@ defmodule FantasyBb.Core.Scoring.Scorable do
       |> elem(0)
 
     league = add_points_for_houseguest(loser, curr, points)
+    {prev, league}
+  end
+
+  # Finish in third place
+  def process(37, points, prev, curr) do
+    houseguest =
+      curr.events
+      |> hd()
+      |> Map.fetch!(:votes)
+      |> hd()
+      |> Map.fetch!(:candidate_id)
+
+    league = add_points_for_houseguest(houseguest, curr, points)
     {prev, league}
   end
 
