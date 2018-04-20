@@ -205,8 +205,18 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   end
 
   # Win America's favorite player
-  def should_process(38, %League{events: [%Event{} = event | _remainng]}) do
+  def should_process(38, %League{events: [%Event{} = event | _remaining]}) do
     event.event_type_id === 12
+  end
+
+  # Self-evict
+  def should_process(39, %League{events: [%Event{} = event | _remaining]}) do
+    event.event_type_id === 13
+  end
+
+  # Removed from the house
+  def should_process(40, %League{events: [%Event{} = event | _remaining]}) do
+    event.event_type_id === 14
   end
 
   def should_process(_event_type_id, _events) do
@@ -528,6 +538,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Win America's favorite player
   def process(38, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Win America's favorite player
+  def process(39, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
+  end
+
+  # Removed from the house
+  def process(40, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
 
