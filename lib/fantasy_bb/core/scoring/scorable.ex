@@ -204,6 +204,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     Enum.count(league.season.voters) === 2
   end
 
+  # Win America's favorite player
+  def should_process(38, %League{events: [%Event{} = event | _remainng]}) do
+    event.event_type_id === 12
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -519,6 +524,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
     league = add_points_for_houseguest(houseguest, curr, points)
     {prev, league}
+  end
+
+  # Win America's favorite player
+  def process(38, points, prev, curr) do
+    award_points_to_event_assignee(points, prev, curr)
   end
 
   def process(_event_type_id, _points, prev, curr) do
