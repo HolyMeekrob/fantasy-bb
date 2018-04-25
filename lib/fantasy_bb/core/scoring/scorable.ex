@@ -219,6 +219,16 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     event.event_type_id === 14
   end
 
+  # Evicted - standard eviction
+  def should_process(41, %League{events: [%EvictionCeremony{} = ceremony | _remaining]}) do
+    is_standard_eviction(ceremony)
+  end
+
+  # Evicted - double eviction
+  def should_process(42, %League{events: [%EvictionCeremony{} = ceremony | _remaining]}) do
+    is_double_eviction(ceremony)
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -390,10 +400,7 @@ defmodule FantasyBb.Core.Scoring.Scorable do
       add_points_for_houseguest(houseguest, league, points)
     end
 
-    evictee =
-      curr.season.evictees
-      |> MapSet.difference(prev.season.evictees)
-      |> Enum.at(0)
+    evictee = get_evictee(prev, curr)
 
     league =
       curr.events
@@ -412,10 +419,7 @@ defmodule FantasyBb.Core.Scoring.Scorable do
       add_points_for_houseguest(houseguest, league, points)
     end
 
-    evictee =
-      curr.season.evictees
-      |> MapSet.difference(prev.season.evictees)
-      |> Enum.at(0)
+    evictee = get_evictee(prev, curr)
 
     league =
       curr.events
@@ -551,6 +555,22 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     award_points_to_event_assignee(points, prev, curr)
   end
 
+  # Evicted - standard eviction
+  def process(41, points, prev, curr) do
+    evictee = get_evictee(prev, curr)
+    league = add_points_for_houseguest(evictee, curr, points)
+
+    {prev, league}
+  end
+
+  # Evicted - double eviction
+  def process(42, points, prev, curr) do
+    evictee = get_evictee(prev, curr)
+    league = add_points_for_houseguest(evictee, curr, points)
+
+    {prev, league}
+  end
+
   def process(_event_type_id, _points, prev, curr) do
     {prev, curr}
   end
@@ -590,5 +610,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     end
 
     put_in(league.teams, Enum.map(league.teams, update_team))
+  end
+
+  defp get_evictee(prev, curr) do
+    curr.season.evictees
+    |> MapSet.difference(prev.season.evictees)
+    |> Enum.at(0)
   end
 end
