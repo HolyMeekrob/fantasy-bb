@@ -21,7 +21,7 @@ defmodule FantasyBb.Data.Schema.JuryVote do
   def changeset(jury_vote, params \\ %{}) do
     jury_vote
     |> cast(params, [:season_id, :voter_id, :candidate_id])
-    |> validate_required([:season_id, :voter_id, :candidate_id])
+    |> validate_required([:season_id, :candidate_id])
     |> unique_constraint(:season_id, name: :jury_vote_season_id_voter_id_index)
     |> assoc_constraint(:season)
     |> foreign_key_constraint(:voter_id)

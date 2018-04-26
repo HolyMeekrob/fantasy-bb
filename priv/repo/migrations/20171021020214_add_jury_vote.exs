@@ -5,7 +5,7 @@ defmodule FantasyBb.Repo.Migrations.AddJuryVote do
     create table(:jury_vote, primary_key: false) do
       add(:id, :serial, primary_key: true)
       add(:season_id, references(:season, type: :serial), null: false)
-      add(:voter_id, references(:houseguest, type: :serial), null: false)
+      add(:voter_id, references(:houseguest, type: :serial))
       add(:candidate_id, references(:houseguest, type: :serial), null: false)
 
       timestamps(updated_at: false)
