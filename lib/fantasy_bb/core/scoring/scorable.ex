@@ -229,6 +229,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     is_double_eviction(ceremony)
   end
 
+  # Made jury
+  def should_process(43, %League{events: [%FinalCeremony{} | _remaining]}) do
+    true
+  end
+
   def should_process(_event_type_id, _events) do
     false
   end
@@ -567,6 +572,23 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   def process(42, points, prev, curr) do
     evictee = get_evictee(prev, curr)
     league = add_points_for_houseguest(evictee, curr, points)
+
+    {prev, league}
+  end
+
+  # Made jury
+  def process(43, points, prev, curr) do
+    add_points_for_voter = fn voter_id, league ->
+      add_points_for_houseguest(voter_id, league, points)
+    end
+
+    league =
+      curr.events
+      |> hd()
+      |> Map.fetch!(:votes)
+      |> Enum.map(&Map.fetch!(&1, :voter_id))
+      |> MapSet.new()
+      |> Enum.reduce(curr, add_points_for_voter)
 
     {prev, league}
   end

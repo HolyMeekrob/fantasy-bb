@@ -7344,6 +7344,64 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
     end
   end
 
+  @scorable_id 43
+  describe "made jury" do
+    test "final ceremony" do
+      check all point_value <- StreamData.integer(),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        ceremony = %FinalCeremony{
+          votes: [
+            %EvictionVote{voter_id: 1, candidate_id: 4},
+            %EvictionVote{voter_id: 3, candidate_id: 2},
+            %EvictionVote{voter_id: 5, candidate_id: 4}
+          ]
+        }
+
+        prev_a = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            otb: MapSet.new(),
+            hohs: MapSet.new(),
+            voters: MapSet.new([2, 4]),
+            evictees: MapSet.new([1, 3, 5])
+          },
+          events: [ceremony | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5])
+            }
+          ]
+        }
+
+        curr = put_in(prev_a.season.otb, MapSet.new())
+        curr = put_in(curr.season.hohs, MapSet.new())
+        curr = put_in(curr.season.evictees, MapSet.new([1, 2, 3]))
+        curr = put_in(curr.season.voters, MapSet.new())
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert_team_has_points(result, 1, 10 + point_value * 2)
+        assert_team_has_points(result, 2, 20 + point_value)
+      end
+    end
+  end
+
   defp assert_team_has_points(league, team_id, points) do
     team = Enum.find(league.teams, &(Map.fetch!(&1, :id) === team_id))
     assert(team.points === points, "teams should have correct points")
