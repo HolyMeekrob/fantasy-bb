@@ -19,7 +19,7 @@ defmodule FantasyBb.Core.Scoring.Season do
 
     %FantasyBb.Core.Scoring.Season{
       id: season.id,
-      voters: houseguests
+      voters: MapSet.new(houseguests)
     }
   end
 end

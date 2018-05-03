@@ -1,17 +1,19 @@
 defmodule FantasyBb.Core.League do
   alias FantasyBb.Data.League
+  import FantasyBb.Core.Scoring, only: [get_league_scores: 1]
 
   def create(league) do
     League.create(league)
   end
 
-  # TODO: Calculate scores
   def get_leagues_for_user(user_id) do
-    leagues =
-      League.query()
-      |> League.for_user(user_id)
-      |> League.get_all()
+    get_league_with_score = fn league ->
+      {league, get_league_scores(league)}
+    end
 
-    Enum.map(leagues, &{League.get_season(&1), &1})
+    League.query()
+    |> League.for_user(user_id)
+    |> League.get_all()
+    |> Enum.map(get_league_with_score)
   end
 end

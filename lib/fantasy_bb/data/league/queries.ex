@@ -11,9 +11,9 @@ defmodule FantasyBb.Data.League.Queries do
   def for_user(query, user_id) do
     from(
       league in query,
-      inner_join: teams in assoc(league, :teams),
-      where: teams.user_id == ^user_id,
-      preload: [teams: teams]
+      left_join: season in assoc(league, :season),
+      left_join: teams in assoc(league, :teams),
+      preload: [season: season, teams: teams]
     )
   end
 

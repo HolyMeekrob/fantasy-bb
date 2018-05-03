@@ -10,13 +10,19 @@ defmodule FantasyBbWeb.LeagueView do
   end
 
   def render("user_leagues.json", %{leagues: leagues, user_id: user_id}) do
+    get_season_status = fn {league, _scoring} ->
+      league
+      |> Map.fetch!(:season)
+      |> Season.status()
+    end
+
     leagues
-    |> Enum.group_by(&Season.status(elem(&1, 0)), league_overview(user_id))
+    |> Enum.group_by(get_season_status, league_overview(user_id))
     |> map(&render_many(&1, __MODULE__, "league_overview.json"))
   end
 
   defp league_overview(user_id) do
-    fn {_, league} -> league_overview(user_id, league) end
+    fn {league, _} -> league_overview(user_id, league) end
   end
 
   defp league_overview(user_id, league) do

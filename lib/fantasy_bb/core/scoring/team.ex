@@ -10,6 +10,7 @@ defmodule FantasyBb.Core.Scoring.Team do
       team
       |> Team.get_draft_picks()
       |> Enum.map(&DraftPick.get_houseguest/1)
+      |> Enum.map(&Map.fetch!(&1, :id))
       |> Enum.into(MapSet.new())
 
     %FantasyBb.Core.Scoring.Team{

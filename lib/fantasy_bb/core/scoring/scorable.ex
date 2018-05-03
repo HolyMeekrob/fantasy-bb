@@ -248,7 +248,7 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     false
   end
 
-  # Standard evction HoH
+  # Standard eviction HoH
   def process(1, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end

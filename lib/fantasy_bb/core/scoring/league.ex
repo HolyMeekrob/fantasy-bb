@@ -24,18 +24,17 @@ defmodule FantasyBb.Core.Scoring.League do
     events =
       season.id
       |> FantasyBb.Data.Event.for_scoring()
-      |> Event.create()
+      |> Enum.map(&Event.create/1)
 
     trades =
       season.id
       |> FantasyBb.Data.Trade.for_scoring()
-      |> Trade.create()
+      |> Enum.map(&Trade.create/1)
 
-    eviction_votes =
+    eviction_ceremonies =
       season.id
-      |> FantasyBb.Data.EvictionVote.for_scoring()
-      |> Enum.group_by(&Map.fetch!(&1, :eviction_ceremony_id))
-      |> Enum.map(&EvictionCeremony.create(elem(&1, 1)))
+      |> FantasyBb.Data.EvictionCeremony.for_scoring()
+      |> Enum.map(&EvictionCeremony.create/1)
 
     final_ceremony =
       season
@@ -43,7 +42,7 @@ defmodule FantasyBb.Core.Scoring.League do
       |> FinalCeremony.create()
 
     all_events =
-      Enum.concat([events, trades, eviction_votes])
+      Enum.concat([events, trades, eviction_ceremonies])
       |> Enum.sort_by(&event_sort_value/1, &event_compare/2)
       |> Enum.concat([final_ceremony])
 
