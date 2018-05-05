@@ -180,8 +180,12 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   end
 
   # Survive the week
-  def should_process(33, %League{events: [%EvictionCeremony{} | _remaining]}) do
-    true
+  def should_process(33, %League{events: [current | [next | _remaining]]}) do
+    has_week_number? = fn event -> Map.has_key?(event, :week_number) end
+    get_week_number = fn event -> Map.fetch!(event, :week_number) end
+
+    has_week_number?.(current) and has_week_number?.(next) and
+      get_week_number.(current) < get_week_number.(next)
   end
 
   # Win miscellaneous competition
@@ -241,6 +245,11 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Vote for loser
   def should_process(45, %League{events: [%FinalCeremony{} | _remaining]}) do
+    true
+  end
+
+  # Survive eviction
+  def should_process(46, %League{events: [%EvictionCeremony{} | _remaining]}) do
     true
   end
 
@@ -619,6 +628,17 @@ defmodule FantasyBb.Core.Scoring.Scorable do
       |> Enum.map(&Map.fetch!(&1, :voter_id))
       |> MapSet.new()
       |> Enum.reduce(curr, add_points_for_voter)
+
+    {prev, league}
+  end
+
+  # Survive eviction
+  def process(46, points, prev, curr) do
+    add_points = fn houseguest, league ->
+      add_points_for_houseguest(houseguest, league, points)
+    end
+
+    league = Enum.reduce(curr.season.voters, curr, add_points)
 
     {prev, league}
   end

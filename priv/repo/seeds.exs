@@ -401,7 +401,9 @@ scorables = %{
   vote_for_winner:
     Seeds.create_scorable("Vote for winner", "Cast one's jury vote for the Big Brother winner."),
   vote_for_loser:
-    Seeds.create_scorable("Vote for loser", "Cast one's jury vote for the Big Brother loser.")
+    Seeds.create_scorable("Vote for loser", "Cast one's jury vote for the Big Brother loser."),
+  survive_eviction:
+    Seeds.create_scorable("Survive eviction", "Remain in the house after an eviction ceremony.")
 }
 
 IO.puts("Creating event types")
