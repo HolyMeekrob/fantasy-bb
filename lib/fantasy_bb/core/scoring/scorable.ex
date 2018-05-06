@@ -125,13 +125,15 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   end
 
   # Taken off the block - standard eviction
-  def should_process(22, %League{events: [%Event{} = event | _remaining]}) do
-    event.event_type_id === 7 and is_standard_eviction(event) and not is_nil(event.houseguest_id)
+  def should_process(22, %League{events: [%Event{} = event | _remaining]} = league) do
+    event.event_type_id === 7 and is_standard_eviction(event) and not is_nil(event.houseguest_id) and
+      league.season.pov !== event.houseguest_id
   end
 
   # Taken off the block - double eviction
-  def should_process(23, %League{events: [%Event{} = event | _remaining]}) do
-    event.event_type_id === 7 and is_double_eviction(event) and not is_nil(event.houseguest_id)
+  def should_process(23, %League{events: [%Event{} = event | _remaining]} = league) do
+    event.event_type_id === 7 and is_double_eviction(event) and not is_nil(event.houseguest_id) and
+      league.season.pov !== event.houseguest_id
   end
 
   # Standard replacement nomination
@@ -334,13 +336,13 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     {prev, league}
   end
 
-  # Veto another whilst not on the block - standard eviction
+  # Veto another whilst on the block - standard eviction
   def process(16, points, prev, curr) do
     league = add_points_for_houseguest(curr.season.pov, curr, points)
     {prev, league}
   end
 
-  # Veto another whilst not on the block - double eviction
+  # Veto another whilst on the block - double eviction
   def process(17, points, prev, curr) do
     league = add_points_for_houseguest(curr.season.pov, curr, points)
     {prev, league}
@@ -462,13 +464,21 @@ defmodule FantasyBb.Core.Scoring.Scorable do
       Enum.count(votes) === 1
     end
 
-    grouped_votes =
+    voter_is_not_hoh = fn voter ->
+      not Enum.member?(prev.season.hohs, Map.fetch!(voter, :voter_id))
+    end
+
+    votes =
       curr.events
       |> hd()
       |> Map.fetch!(:votes)
-      |> Enum.group_by(&Map.fetch!(&1, :candidate_id))
+      |> Enum.filter(voter_is_not_hoh)
 
-    sole_vote = Enum.count(grouped_votes) === 2 and Enum.any?(grouped_votes, has_one_vote)
+    grouped_votes = Enum.group_by(votes, &Map.fetch!(&1, :candidate_id))
+
+    sole_vote =
+      Enum.count(votes) > 2 and Enum.count(grouped_votes) === 2 and
+        Enum.any?(grouped_votes, has_one_vote)
 
     if(sole_vote) do
       houseguest_id =

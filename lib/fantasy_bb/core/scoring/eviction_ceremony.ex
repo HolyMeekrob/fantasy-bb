@@ -25,6 +25,7 @@ defmodule FantasyBb.Core.Scoring.EvictionCeremony do
 
     voters =
       league.season.voters
+      |> MapSet.delete(evictee)
       |> MapSet.union(league.season.hohs)
       |> MapSet.union(MapSet.delete(league.season.otb, evictee))
 
