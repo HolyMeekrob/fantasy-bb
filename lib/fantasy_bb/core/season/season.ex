@@ -17,7 +17,6 @@ defmodule FantasyBb.Core.Season do
 
   def get_upcoming_seasons() do
     Season.get_upcoming()
-    |> Season.get_all()
   end
 
   def started?(season) do
