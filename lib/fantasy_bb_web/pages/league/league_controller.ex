@@ -3,6 +3,8 @@ defmodule FantasyBbWeb.LeagueController do
 
   alias FantasyBb.Core.League
 
+  import FantasyBb.Core.Scoring, only: [get_league_scores: 1]
+
   def create_view(conn, _params) do
     render(conn, "create.html")
   end
@@ -26,7 +28,10 @@ defmodule FantasyBbWeb.LeagueController do
   end
 
   def by_user_id(conn, %{user_id: user_id}) do
-    leagues = League.get_leagues_for_user(user_id)
+    leagues =
+      user_id
+      |> League.get_leagues_for_user()
+      |> Enum.map(&{&1, get_league_scores(&1)})
 
     render(conn, "user_leagues.json", %{leagues: leagues, user_id: user_id})
   end

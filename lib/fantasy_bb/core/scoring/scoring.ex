@@ -8,7 +8,11 @@ defmodule FantasyBb.Core.Scoring do
 
   def get_league_scores(%FantasyBb.Data.Schema.League{} = league) do
     initial_state = League.create(league)
-    Enum.reduce(initial_state.events, initial_state, &process/2)
+
+    initial_state.events
+    |> Enum.reduce(initial_state, &process/2)
+    |> Map.fetch!(:teams)
+    |> Enum.map(&Map.take(&1, [:id, :points]))
   end
 
   defp process(event, league) do
