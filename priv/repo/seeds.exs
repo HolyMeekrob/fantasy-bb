@@ -397,7 +397,12 @@ scorables = %{
       "Evicted (double eviction)",
       "Voted out of the house by fellow houseguests during a double eviction event."
     ),
-  make_jury: Seeds.create_scorable("Make jury", "Become a jury member upon eviction.", 10),
+  make_jury:
+    Seeds.create_scorable(
+      "Make jury",
+      "Vote in the final jury or be one of the houseguests being voted on.",
+      10
+    ),
   vote_for_winner:
     Seeds.create_scorable("Vote for winner", "Cast one's jury vote for the Big Brother winner."),
   vote_for_loser:

@@ -7638,8 +7638,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         {prev_b, result} = Rule.process(rule, {prev_a, curr})
 
         assert(prev_a === prev_b, "prior league state should not change")
-        assert_team_has_points(result, 1, 10 + point_value * 2)
-        assert_team_has_points(result, 2, 20 + point_value)
+        assert_team_has_points(result, 1, 10 + point_value * 3)
+        assert_team_has_points(result, 2, 20 + point_value * 2)
       end
     end
   end

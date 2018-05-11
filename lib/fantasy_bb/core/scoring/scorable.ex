@@ -599,6 +599,7 @@ defmodule FantasyBb.Core.Scoring.Scorable do
       |> Map.fetch!(:votes)
       |> Enum.map(&Map.fetch!(&1, :voter_id))
       |> MapSet.new()
+      |> MapSet.union(prev.season.voters)
       |> Enum.reduce(curr, add_points_for_voter)
 
     {prev, league}
