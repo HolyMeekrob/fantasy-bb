@@ -35,13 +35,16 @@ defmodule FantasyBbWeb.LeagueView do
     %{
       id: league.id,
       name: league.name,
+      teamId: user_team.id,
       teamName: user_team.name,
       teamRank:
         scores
         |> Enum.sort(score_sort)
         |> Enum.find_index(&(Map.fetch!(&1, :id) === user_team.id))
         |> (&(&1 + 1)).(),
-      teamCount: length(league.teams)
+      teamCount: length(league.teams),
+      seasonId: league.season.id,
+      seasonTitle: league.season.title
     }
   end
 end

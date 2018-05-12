@@ -39,6 +39,9 @@ leagueDecoder =
     decode League
         |> required "id" int
         |> required "name" string
+        |> required "teamId" int
         |> required "teamName" string
         |> required "teamRank" int
         |> required "teamCount" int
+        |> required "seasonId" int
+        |> required "seasonTitle" string

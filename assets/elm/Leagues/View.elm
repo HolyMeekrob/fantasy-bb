@@ -1,8 +1,10 @@
 module Leagues.View exposing (view)
 
+import Common.String exposing (rank)
 import Common.Views exposing (empty, layout, loading, title)
 import Header.View exposing (headerView)
-import Html exposing (Html, div, section, text)
+import Html exposing (Html, a, div, section, text)
+import Html.Attributes exposing (href)
 import Leagues.Types as Types exposing (League, Model, Msg)
 
 
@@ -32,9 +34,34 @@ content model =
 
 viewLeague : League -> Html Msg
 viewLeague league =
-    div
-        []
-        [ text league.name ]
+    let
+        place =
+            rank league.teamRank ++ " of " ++ toString league.teamCount
+    in
+        div
+            []
+            [ div
+                []
+                [ a
+                    [ href ("/league/" ++ toString league.id) ]
+                    [ text league.name ]
+                ]
+            , div
+                []
+                [ a
+                    [ href ("/team/" ++ toString league.teamId) ]
+                    [ text league.teamName ]
+                ]
+            , div
+                []
+                [ text place ]
+            , div
+                []
+                [ a
+                    [ href ("/season/" ++ toString league.seasonId) ]
+                    [ text league.seasonTitle ]
+                ]
+            ]
 
 
 loadingOverlay : Model -> Html Msg

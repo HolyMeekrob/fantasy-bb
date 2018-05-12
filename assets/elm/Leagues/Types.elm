@@ -22,9 +22,12 @@ type alias LeagueSummary =
 type alias League =
     { id : Int
     , name : String
+    , teamId : Int
     , teamName : String
     , teamRank : Int
     , teamCount : Int
+    , seasonId : Int
+    , seasonTitle : String
     }
 
 
