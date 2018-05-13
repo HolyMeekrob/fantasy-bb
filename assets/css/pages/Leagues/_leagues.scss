@@ -1,0 +1,21 @@
+.leagues {
+	width: 100%;
+	display: table;
+
+	.league {
+		display: table-row;
+	}
+
+	.league-headers {
+		display: table-header-group;
+	}
+
+	.league-header, .league-datum {
+		display: table-cell;
+		width: 25%;
+	}
+
+	.league-header {
+		padding-bottom: 1em;
+	}
+}

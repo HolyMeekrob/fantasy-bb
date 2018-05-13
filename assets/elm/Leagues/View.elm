@@ -4,7 +4,7 @@ import Common.String exposing (rank)
 import Common.Views exposing (empty, layout, loading, title)
 import Header.View exposing (headerView)
 import Html exposing (Html, a, div, section, text)
-import Html.Attributes exposing (href)
+import Html.Attributes exposing (class, href)
 import Leagues.Types as Types exposing (League, Model, Msg)
 
 
@@ -27,9 +27,20 @@ primaryView model =
 
 content : Model -> Html Msg
 content model =
-    div
-        []
-        (List.map viewLeague model.leagues)
+    let
+        columnHeader : String -> Html Msg
+        columnHeader title =
+            div
+                [ class "league-header" ]
+                [ text title ]
+    in
+        div
+            [ class "leagues" ]
+        <|
+            div
+                [ class "league-headers" ]
+                (List.map columnHeader [ "League", "Team", "Rank", "Season" ])
+                :: (List.map viewLeague model.leagues)
 
 
 viewLeague : League -> Html Msg
@@ -39,24 +50,24 @@ viewLeague league =
             rank league.teamRank ++ " of " ++ toString league.teamCount
     in
         div
-            []
+            [ class "league" ]
             [ div
-                []
+                [ class "league-datum" ]
                 [ a
                     [ href ("/league/" ++ toString league.id) ]
                     [ text league.name ]
                 ]
             , div
-                []
+                [ class "league-datum" ]
                 [ a
                     [ href ("/team/" ++ toString league.teamId) ]
                     [ text league.teamName ]
                 ]
             , div
-                []
+                [ class "league-datum" ]
                 [ text place ]
             , div
-                []
+                [ class "league-datum" ]
                 [ a
                     [ href ("/season/" ++ toString league.seasonId) ]
                     [ text league.seasonTitle ]
