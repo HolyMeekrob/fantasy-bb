@@ -9,7 +9,11 @@ initialModel : Model
 initialModel =
     { header = Header.State.initialModel
     , pageState = Types.Loading
-    , leagues = []
+    , leagues =
+        { upcoming = []
+        , current = []
+        , complete = []
+        }
     }
 
 
@@ -42,10 +46,7 @@ update msg model =
             in
                 { model
                     | header = headerModel
-                    , leagues =
-                        leagueSummary.upcoming
-                            ++ leagueSummary.current
-                            ++ leagueSummary.complete
+                    , leagues = leagueSummary
                     , pageState = Types.Loaded
                 }
                     ! []

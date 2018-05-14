@@ -8,7 +8,7 @@ import Http
 type alias Model =
     { header : Header.Types.Model
     , pageState : PageState
-    , leagues : List League
+    , leagues : LeagueSummary
     }
 
 
