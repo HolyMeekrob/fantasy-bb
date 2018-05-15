@@ -4,6 +4,7 @@ defmodule FantasyBb.Data.League do
   alias FantasyBb.Data.League.Queries
   alias FantasyBb.Data.Schema.League
 
+  defdelegate get(id), to: Queries
   defdelegate query(), to: Queries
   defdelegate for_user(query, user_id), to: Queries
   defdelegate get_all(query \\ League), to: Queries

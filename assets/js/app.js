@@ -11,6 +11,7 @@ import Home from '../elm/Home/Home';
 import Account_Profile from '../elm/Account/Profile/Profile';
 import Leagues from '../elm/Leagues/Leagues';
 import Leagues_Create from '../elm/Leagues/Create/Create';
+import Leagues_Show from '../elm/Leagues/Show/Show';
 import Players_Create from '../elm/Players/Create/Create';
 import Players_Show from '../elm/Players/Show/Show'
 import Seasons_Create from '../elm/Seasons/Create/Create'
@@ -21,6 +22,7 @@ const elmModules = {
 	Account_Profile: Account_Profile.Account.Profile,
 	Leagues: Leagues.Leagues,
 	Leagues_Create: Leagues_Create.Leagues.Create,
+	Leagues_Show: Leagues_Show.Leagues.Show,
 	Players_Create: Players_Create.Players.Create,
 	Players_Show: Players_Show.Players.Show,
 	Seasons_Create: Seasons_Create.Seasons.Create,
@@ -59,8 +61,9 @@ const appendCsrfHeaders = () => {
 	const getLocation = () => ({ location: window.location.href });
 
 	const flags = {
-		"Seasons.Show": getLocation,
-		"Players.Show": getLocation
+		"Leagues.Show": getLocation,
+		"Players.Show": getLocation,
+		"Seasons.Show": getLocation
 	}
 
 	const getFlags = () => {

@@ -9,10 +9,6 @@ defmodule FantasyBbWeb.LeagueController do
     render(conn, "create.html")
   end
 
-  def index(conn, _params) do
-    render(conn, "index.html")
-  end
-
   def create(conn, params) do
     with input = %{
            name: Map.get(params, "name"),
@@ -25,6 +21,18 @@ defmodule FantasyBbWeb.LeagueController do
       {:error, _} ->
         send_resp(conn, :internal_server_error, "Error creating league")
     end
+  end
+
+  def index(conn, _params) do
+    render(conn, "index.html")
+  end
+
+  def show(conn, %{"id" => _}) do
+    render(conn, "show.html")
+  end
+
+  def get(conn, %{"id" => id}) do
+    render(conn, "league.json", League.get(id))
   end
 
   def by_user_id(conn, %{user_id: user_id}) do

@@ -4,6 +4,10 @@ defmodule FantasyBb.Data.League.Queries do
 
   import Ecto.Query, only: [from: 1, from: 2]
 
+  def get(id) do
+    Repo.get(League, id)
+  end
+
   def query() do
     from(league in League)
   end

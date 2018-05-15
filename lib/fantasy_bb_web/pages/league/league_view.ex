@@ -5,6 +5,17 @@ defmodule FantasyBbWeb.LeagueView do
 
   import FantasyBb.Core.Utils.Map, only: [map: 2]
 
+  def render("league.json", %{league: league}) do
+    render("league.json", league)
+  end
+
+  def render("league.json", league) do
+    %{
+      id: league.id,
+      name: league.name
+    }
+  end
+
   def render("league_overview.json", %{league: league}) do
     league
   end

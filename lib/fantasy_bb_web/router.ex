@@ -50,6 +50,7 @@ defmodule FantasyBbWeb.Router do
     put("/account/user", AccountController, :update_user)
 
     get("/leagues/mine", LeagueController, :for_current_user)
+    get("/leagues/:id", LeagueController, :get)
     post("/leagues/", LeagueController, :create)
 
     get("/players/", PlayerController, :index)
@@ -74,6 +75,7 @@ defmodule FantasyBbWeb.Router do
 
     get("/", LeagueController, :index)
     get("/create", LeagueController, :create_view)
+    get("/:id", LeagueController, :show)
   end
 
   scope "/players", FantasyBbWeb do

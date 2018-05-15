@@ -73,13 +73,13 @@ viewLeague league =
             [ div
                 [ class "league-datum" ]
                 [ a
-                    [ href ("/league/" ++ toString league.id) ]
+                    [ href ("/leagues/" ++ toString league.id) ]
                     [ text league.name ]
                 ]
             , div
                 [ class "league-datum" ]
                 [ a
-                    [ href ("/team/" ++ toString league.teamId) ]
+                    [ href ("/teams/" ++ toString league.teamId) ]
                     [ text league.teamName ]
                 ]
             , div
@@ -88,7 +88,7 @@ viewLeague league =
             , div
                 [ class "league-datum" ]
                 [ a
-                    [ href ("/season/" ++ toString league.seasonId) ]
+                    [ href ("/seasons/" ++ toString league.seasonId) ]
                     [ text league.seasonTitle ]
                 ]
             ]
