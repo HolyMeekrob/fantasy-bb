@@ -14,7 +14,17 @@ type alias Model =
 type alias League =
     { id : Int
     , name : String
+    , teams : List Team
     , canEdit : Bool
+    }
+
+
+type alias Team =
+    { id : Int
+    , name : String
+    , ownerId : Int
+    , ownerName : String
+    , logo : String
     }
 
 

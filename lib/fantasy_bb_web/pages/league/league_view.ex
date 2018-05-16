@@ -10,10 +10,21 @@ defmodule FantasyBbWeb.LeagueView do
   end
 
   def render("league.json", league) do
+    get_team = fn team ->
+      %{
+        id: team.id,
+        name: team.name,
+        ownerId: team.user_id,
+        ownerName: "#{team.owner.first_name} #{team.owner.last_name}",
+        logo: team.logo
+      }
+    end
+
     %{
       id: league.id,
       name: league.name,
-      canEdit: league.is_commissioner
+      canEdit: league.is_commissioner,
+      teams: Enum.map(league.teams, get_team)
     }
   end
 

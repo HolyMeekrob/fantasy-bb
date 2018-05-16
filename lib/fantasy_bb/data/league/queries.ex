@@ -39,7 +39,8 @@ defmodule FantasyBb.Data.League.Queries do
       league in query,
       inner_join: season in assoc(league, :season),
       left_join: teams in assoc(league, :teams),
-      preload: [season: season, teams: teams]
+      left_join: owner in assoc(teams, :owner),
+      preload: [season: season, teams: {teams, owner: owner}]
     )
   end
 

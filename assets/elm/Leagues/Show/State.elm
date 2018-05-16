@@ -13,6 +13,7 @@ initialModel idStr =
     , league =
         { id = findId idStr
         , name = ""
+        , teams = []
         , canEdit = False
         }
     }
