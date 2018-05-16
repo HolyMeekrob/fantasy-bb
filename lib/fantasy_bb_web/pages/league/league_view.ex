@@ -12,7 +12,8 @@ defmodule FantasyBbWeb.LeagueView do
   def render("league.json", league) do
     %{
       id: league.id,
-      name: league.name
+      name: league.name,
+      canEdit: league.is_commissioner
     }
   end
 

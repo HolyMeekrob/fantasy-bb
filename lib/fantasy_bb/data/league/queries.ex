@@ -5,7 +5,11 @@ defmodule FantasyBb.Data.League.Queries do
   import Ecto.Query, only: [from: 1, from: 2]
 
   def get(id) do
-    Repo.get(League, id)
+    get(League, id)
+  end
+
+  def get(query, id) do
+    Repo.get(query, id)
   end
 
   def query() do
@@ -25,6 +29,15 @@ defmodule FantasyBb.Data.League.Queries do
       inner_join: user_league in subquery(user_leagues_query),
       on: user_league.id == league.id,
       left_join: season in assoc(league, :season),
+      left_join: teams in assoc(league, :teams),
+      preload: [season: season, teams: teams]
+    )
+  end
+
+  def for_overview(query) do
+    from(
+      league in query,
+      inner_join: season in assoc(league, :season),
       left_join: teams in assoc(league, :teams),
       preload: [season: season, teams: teams]
     )

@@ -13,7 +13,7 @@ defmodule FantasyBbWeb.LeagueController do
     with input = %{
            name: Map.get(params, "name"),
            season_id: Map.get(params, "seasonId"),
-           commissioner_id: Map.get(conn.assigns.current_user, :id)
+           commissioner_id: get_current_user_id(conn)
          },
          {:ok, league} <- League.create(input) do
       send_resp(conn, :created, to_string(league.id))
@@ -32,7 +32,16 @@ defmodule FantasyBbWeb.LeagueController do
   end
 
   def get(conn, %{"id" => id}) do
-    render(conn, "league.json", League.get(id))
+    league = League.get_overview(id)
+
+    league =
+      Map.put(
+        league,
+        :is_commissioner,
+        league.commissioner_id === get_current_user_id(conn)
+      )
+
+    render(conn, "league.json", league)
   end
 
   def by_user_id(conn, %{user_id: user_id}) do
@@ -45,7 +54,11 @@ defmodule FantasyBbWeb.LeagueController do
   end
 
   def for_current_user(conn, params) do
-    user_id = Map.get(conn.assigns.current_user, :id)
+    user_id = get_current_user_id(conn)
     by_user_id(conn, Map.put(params, :user_id, user_id))
+  end
+
+  defp get_current_user_id(conn) do
+    Map.get(conn.assigns.current_user, :id)
   end
 end

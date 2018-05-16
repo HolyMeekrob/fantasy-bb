@@ -14,6 +14,7 @@ type alias Model =
 type alias League =
     { id : Int
     , name : String
+    , canEdit : Bool
     }
 
 
