@@ -1,6 +1,8 @@
 defmodule FantasyBb.Core.League do
   alias FantasyBb.Data.League
 
+  defdelegate get_league_scores(league), to: FantasyBb.Core.Scoring
+
   def create(league) do
     League.create(league)
   end

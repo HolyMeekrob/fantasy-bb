@@ -16,7 +16,8 @@ defmodule FantasyBbWeb.LeagueView do
         name: team.name,
         ownerId: team.user_id,
         ownerName: "#{team.owner.first_name} #{team.owner.last_name}",
-        logo: team.logo
+        logo: team.logo,
+        points: team.points
       }
     end
 

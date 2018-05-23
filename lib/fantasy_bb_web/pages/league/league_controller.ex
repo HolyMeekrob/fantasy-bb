@@ -3,8 +3,6 @@ defmodule FantasyBbWeb.LeagueController do
 
   alias FantasyBb.Core.League
 
-  import FantasyBb.Core.Scoring, only: [get_league_scores: 1]
-
   def create_view(conn, _params) do
     render(conn, "create.html")
   end
@@ -33,13 +31,21 @@ defmodule FantasyBbWeb.LeagueController do
 
   def get(conn, %{"id" => id}) do
     league = League.get_overview(id)
+    scores = League.get_league_scores(league)
+    merge = &Map.merge/2
+
+    teams =
+      (league.teams ++ scores)
+      |> Enum.group_by(&Map.fetch!(&1, :id))
+      |> Map.values()
+      |> Enum.map(&Enum.reduce(&1, merge))
+
+    is_commissioner = league.commissioner_id === get_current_user_id(conn)
 
     league =
-      Map.put(
-        league,
-        :is_commissioner,
-        league.commissioner_id === get_current_user_id(conn)
-      )
+      league
+      |> Map.put(:is_commissioner, is_commissioner)
+      |> Map.put(:teams, teams)
 
     render(conn, "league.json", league)
   end
@@ -48,7 +54,7 @@ defmodule FantasyBbWeb.LeagueController do
     leagues =
       user_id
       |> League.get_leagues_for_user()
-      |> Enum.map(&{&1, get_league_scores(&1)})
+      |> Enum.map(&{&1, League.get_league_scores(&1)})
 
     render(conn, "user_leagues.json", %{leagues: leagues, user_id: user_id})
   end
