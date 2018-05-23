@@ -34,6 +34,7 @@ teamDecoder =
         |> required "ownerId" int
         |> required "ownerName" string
         |> optional "logo" string ""
+        |> required "points" int
 
 
 leagueDecoder : Decoder League

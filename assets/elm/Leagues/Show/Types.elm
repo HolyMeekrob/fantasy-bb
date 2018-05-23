@@ -7,6 +7,7 @@ import Http
 
 type alias Model =
     { header : Header.Types.Model
+    , pageState : PageState
     , league : League
     }
 
@@ -25,7 +26,13 @@ type alias Team =
     , ownerId : Int
     , ownerName : String
     , logo : String
+    , points : Int
     }
+
+
+type PageState
+    = Loading
+    | Loaded
 
 
 type alias Flags =

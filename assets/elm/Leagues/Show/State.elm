@@ -10,6 +10,7 @@ import Leagues.Show.Types as Types exposing (Flags, Model, Msg)
 initialModel : String -> Model
 initialModel idStr =
     { header = Header.State.initialModel
+    , pageState = Types.Loading
     , league =
         { id = findId idStr
         , name = ""
@@ -51,6 +52,7 @@ update msg model =
             in
                 ( { model
                     | header = headerModel
+                    , pageState = Types.Loaded
                     , league = league
                   }
                 , Cmd.none

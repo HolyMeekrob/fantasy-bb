@@ -1,0 +1,21 @@
+.teams {
+	width: 100%;
+	display: table;
+
+	.team {
+		display: table-row;
+	}
+
+	.team-headers {
+		display: table-header-group;
+	}
+
+	.team-header, .team-datum {
+		display: table-cell;
+	}
+
+	.team-header {
+		font-size: 0.9em;
+		padding-bottom: 0.5em;
+	}
+}
