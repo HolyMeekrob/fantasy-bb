@@ -13,9 +13,10 @@ import Leagues from '../elm/Leagues/Leagues';
 import Leagues_Create from '../elm/Leagues/Create/Create';
 import Leagues_Show from '../elm/Leagues/Show/Show';
 import Players_Create from '../elm/Players/Create/Create';
-import Players_Show from '../elm/Players/Show/Show'
-import Seasons_Create from '../elm/Seasons/Create/Create'
-import Seasons_Show from '../elm/Seasons/Show/Show'
+import Players_Show from '../elm/Players/Show/Show';
+import Seasons_Create from '../elm/Seasons/Create/Create';
+import Seasons_Show from '../elm/Seasons/Show/Show';
+import Teams_Show from '../elm/Teams/Show/Show';
 
 const elmModules = {
 	Home: Home.Home,
@@ -26,7 +27,8 @@ const elmModules = {
 	Players_Create: Players_Create.Players.Create,
 	Players_Show: Players_Show.Players.Show,
 	Seasons_Create: Seasons_Create.Seasons.Create,
-	Seasons_Show: Seasons_Show.Seasons.Show
+	Seasons_Show: Seasons_Show.Seasons.Show,
+	Teams_Show: Teams_Show.Teams.Show
 };
 
 // Insert CSRF token into outgoing requests
@@ -63,7 +65,8 @@ const appendCsrfHeaders = () => {
 	const flags = {
 		"Leagues.Show": getLocation,
 		"Players.Show": getLocation,
-		"Seasons.Show": getLocation
+		"Seasons.Show": getLocation,
+		"Teams.Show": getLocation
 	}
 
 	const getFlags = () => {

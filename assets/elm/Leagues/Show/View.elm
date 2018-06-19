@@ -19,7 +19,7 @@ primaryView model =
     section
         []
         [ loadingOverlay model
-        , title "My Leagues"
+        , title model.league.name
         , content model
         ]
 

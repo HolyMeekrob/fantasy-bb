@@ -62,6 +62,8 @@ defmodule FantasyBbWeb.Router do
     get("/seasons/upcoming", SeasonController, :get_upcoming)
     get("/seasons/:id", SeasonController, :get)
     put("/seasons/:id", SeasonController, :update)
+
+    get("/teams/:id", TeamController, :get)
   end
 
   scope "/account", FantasyBbWeb do
@@ -88,6 +90,12 @@ defmodule FantasyBbWeb.Router do
     pipe_through([:browser, :authenticated])
 
     get("/:id", SeasonController, :show)
+  end
+
+  scope "/teams", FantasyBbWeb do
+    pipe_through([:browser, :authenticated])
+
+    get("/:id", TeamController, :show)
   end
 
   scope "/admin", FantasyBbWeb, as: :admin do
