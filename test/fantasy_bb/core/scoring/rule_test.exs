@@ -6,6 +6,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
   alias FantasyBb.Core.Scoring.EvictionCeremony
   alias FantasyBb.Core.Scoring.EvictionVote
   alias FantasyBb.Core.Scoring.FinalCeremony
+  alias FantasyBb.Core.Scoring.JuryVote
   alias FantasyBb.Core.Scoring.League
   alias FantasyBb.Core.Scoring.Rule
   alias FantasyBb.Core.Scoring.Season
@@ -225,6 +226,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -443,6 +445,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 110 + point_value)
         assert_team_has_points(result, 2, -20)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -555,6 +558,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -667,6 +671,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -833,6 +838,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -1051,6 +1057,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -1269,6 +1276,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 110 + point_value)
         assert_team_has_points(result, 2, -20)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -1435,6 +1443,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -1599,6 +1608,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -1763,6 +1773,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -1875,6 +1886,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -2095,6 +2107,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -2315,6 +2328,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -2593,6 +2607,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, curr.season.pov, point_value)
       end
     end
   end
@@ -2871,6 +2886,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, curr.season.pov, point_value)
       end
     end
   end
@@ -3149,6 +3165,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, curr.season.pov, point_value)
       end
     end
   end
@@ -3427,6 +3444,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, curr.season.pov, point_value)
       end
     end
   end
@@ -3646,6 +3664,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, curr.season.pov, point_value)
       end
     end
   end
@@ -3865,6 +3884,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, curr.season.pov, point_value)
       end
     end
   end
@@ -4088,6 +4108,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, curr.season.pov, point_value)
       end
     end
   end
@@ -4311,6 +4332,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, curr.season.pov, point_value)
       end
     end
   end
@@ -4578,6 +4600,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -4845,6 +4868,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -5009,6 +5033,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -5173,6 +5198,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -5293,6 +5319,12 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value * 2)
+        assert_houseguest_gained_points(curr, result, 4, point_value)
+        assert_houseguest_gained_points(curr, result, 6, point_value)
+        assert_houseguest_gained_points(curr, result, 7, 0)
+        assert_houseguest_gained_points(curr, result, 2, 0)
+        assert_houseguest_gained_points(curr, result, 10, 0)
+        assert_houseguest_gained_points(curr, result, 11, 0)
       end
     end
 
@@ -5352,6 +5384,13 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20 + point_value * 2)
+        assert_houseguest_gained_points(curr, result, 4, point_value)
+        assert_houseguest_gained_points(curr, result, 6, point_value)
+        assert_houseguest_gained_points(curr, result, 12, point_value)
+        assert_houseguest_gained_points(curr, result, 7, 0)
+        assert_houseguest_gained_points(curr, result, 2, 0)
+        assert_houseguest_gained_points(curr, result, 10, 0)
+        assert_houseguest_gained_points(curr, result, 11, 0)
       end
     end
   end
@@ -5472,6 +5511,12 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value * 2)
+        assert_houseguest_gained_points(curr, result, 4, point_value)
+        assert_houseguest_gained_points(curr, result, 6, point_value)
+        assert_houseguest_gained_points(curr, result, 7, 0)
+        assert_houseguest_gained_points(curr, result, 2, 0)
+        assert_houseguest_gained_points(curr, result, 10, 0)
+        assert_houseguest_gained_points(curr, result, 11, 0)
       end
     end
 
@@ -5531,6 +5576,13 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20 + point_value * 2)
+        assert_houseguest_gained_points(curr, result, 4, point_value)
+        assert_houseguest_gained_points(curr, result, 6, point_value)
+        assert_houseguest_gained_points(curr, result, 12, point_value)
+        assert_houseguest_gained_points(curr, result, 2, 0)
+        assert_houseguest_gained_points(curr, result, 7, 0)
+        assert_houseguest_gained_points(curr, result, 10, 0)
+        assert_houseguest_gained_points(curr, result, 11, 0)
       end
     end
   end
@@ -5592,6 +5644,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value * 2)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, 1, point_value)
+        assert_houseguest_gained_points(curr, result, 3, point_value)
       end
     end
 
@@ -5650,6 +5704,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, 1, point_value)
+        assert_houseguest_gained_points(curr, result, 4, point_value)
       end
     end
   end
@@ -5712,6 +5768,9 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, 1, 0)
+        assert_houseguest_gained_points(curr, result, 3, 0)
+        assert_houseguest_gained_points(curr, result, 7, point_value)
       end
     end
 
@@ -5773,6 +5832,11 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, 1, 0)
+        assert_houseguest_gained_points(curr, result, 4, 0)
+        assert_houseguest_gained_points(curr, result, 9, 0)
+        assert_houseguest_gained_points(curr, result, 7, point_value)
+        assert_houseguest_gained_points(curr, result, 8, point_value)
       end
     end
   end
@@ -6132,6 +6196,9 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, 1, 0)
+        assert_houseguest_gained_points(curr, result, 3, 0)
+        assert_houseguest_gained_points(curr, result, 7, point_value)
       end
     end
   end
@@ -6244,6 +6311,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -6356,6 +6424,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -6496,6 +6565,11 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value * 4)
         assert_team_has_points(result, 2, 20 + point_value * 3)
+        assert_houseguest_gained_points(curr, result, 2, point_value)
+        assert_houseguest_gained_points(curr, result, 8, point_value)
+        assert_houseguest_gained_points(curr, result, 4, 0)
+        assert_houseguest_gained_points(curr, result, 9, 0)
+        assert_houseguest_gained_points(curr, result, 10, 0)
       end
     end
   end
@@ -6608,6 +6682,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -6626,9 +6701,9 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
 
         ceremony = %FinalCeremony{
           votes: [
-            %EvictionVote{voter_id: 1, candidate_id: 2},
-            %EvictionVote{voter_id: 3, candidate_id: 2},
-            %EvictionVote{voter_id: 5, candidate_id: 2}
+            %JuryVote{voter_id: 1, candidate_id: 2},
+            %JuryVote{voter_id: 3, candidate_id: 2},
+            %JuryVote{voter_id: 5, candidate_id: 2}
           ]
         }
 
@@ -6666,6 +6741,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, 2, point_value)
+        assert_houseguest_gained_points(curr, result, 4, 0)
       end
     end
 
@@ -6681,9 +6758,9 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
 
         ceremony = %FinalCeremony{
           votes: [
-            %EvictionVote{voter_id: 1, candidate_id: 4},
-            %EvictionVote{voter_id: 3, candidate_id: 2},
-            %EvictionVote{voter_id: 5, candidate_id: 4}
+            %JuryVote{voter_id: 1, candidate_id: 4},
+            %JuryVote{voter_id: 3, candidate_id: 2},
+            %JuryVote{voter_id: 5, candidate_id: 4}
           ]
         }
 
@@ -6721,6 +6798,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, 4, point_value)
+        assert_houseguest_gained_points(curr, result, 2, 0)
       end
     end
   end
@@ -6739,9 +6818,9 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
 
         ceremony = %FinalCeremony{
           votes: [
-            %EvictionVote{voter_id: 1, candidate_id: 2},
-            %EvictionVote{voter_id: 3, candidate_id: 2},
-            %EvictionVote{voter_id: 5, candidate_id: 2}
+            %JuryVote{voter_id: 1, candidate_id: 2},
+            %JuryVote{voter_id: 3, candidate_id: 2},
+            %JuryVote{voter_id: 5, candidate_id: 2}
           ]
         }
 
@@ -6779,6 +6858,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, 2, 0)
+        assert_houseguest_gained_points(curr, result, 4, point_value)
       end
     end
 
@@ -6794,9 +6875,9 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
 
         ceremony = %FinalCeremony{
           votes: [
-            %EvictionVote{voter_id: 1, candidate_id: 4},
-            %EvictionVote{voter_id: 3, candidate_id: 2},
-            %EvictionVote{voter_id: 5, candidate_id: 4}
+            %JuryVote{voter_id: 1, candidate_id: 4},
+            %JuryVote{voter_id: 3, candidate_id: 2},
+            %JuryVote{voter_id: 5, candidate_id: 4}
           ]
         }
 
@@ -6834,6 +6915,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, 2, point_value)
+        assert_houseguest_gained_points(curr, result, 4, 0)
       end
     end
   end
@@ -7010,6 +7093,9 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, 2, point_value)
+        assert_houseguest_gained_points(curr, result, 1, 0)
+        assert_houseguest_gained_points(curr, result, 3, 0)
       end
     end
   end
@@ -7122,6 +7208,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -7234,6 +7321,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -7346,6 +7434,7 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10)
         assert_team_has_points(result, 2, 20 + point_value)
+        assert_houseguest_gained_points(curr, result, houseguest_id, point_value)
       end
     end
   end
@@ -7464,6 +7553,10 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, 2, point_value)
+        assert_houseguest_gained_points(curr, result, 4, 0)
+        assert_houseguest_gained_points(curr, result, 5, 0)
+        assert_houseguest_gained_points(curr, result, 6, 0)
       end
     end
   end
@@ -7582,6 +7675,10 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20)
+        assert_houseguest_gained_points(curr, result, 2, point_value)
+        assert_houseguest_gained_points(curr, result, 4, 0)
+        assert_houseguest_gained_points(curr, result, 5, 0)
+        assert_houseguest_gained_points(curr, result, 6, 0)
       end
     end
   end
@@ -7600,9 +7697,9 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
 
         ceremony = %FinalCeremony{
           votes: [
-            %EvictionVote{voter_id: 1, candidate_id: 4},
-            %EvictionVote{voter_id: 3, candidate_id: 2},
-            %EvictionVote{voter_id: 5, candidate_id: 4}
+            %JuryVote{voter_id: 1, candidate_id: 4},
+            %JuryVote{voter_id: 3, candidate_id: 2},
+            %JuryVote{voter_id: 5, candidate_id: 4}
           ]
         }
 
@@ -7640,6 +7737,11 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value * 3)
         assert_team_has_points(result, 2, 20 + point_value * 2)
+        assert_houseguest_gained_points(curr, result, 1, point_value)
+        assert_houseguest_gained_points(curr, result, 2, point_value)
+        assert_houseguest_gained_points(curr, result, 3, point_value)
+        assert_houseguest_gained_points(curr, result, 4, point_value)
+        assert_houseguest_gained_points(curr, result, 5, point_value)
       end
     end
   end
@@ -7658,10 +7760,10 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
 
         ceremony = %FinalCeremony{
           votes: [
-            %EvictionVote{voter_id: 1, candidate_id: 4},
-            %EvictionVote{voter_id: 3, candidate_id: 2},
-            %EvictionVote{voter_id: 5, candidate_id: 4},
-            %EvictionVote{voter_id: 6, candidate_id: 4}
+            %JuryVote{voter_id: 1, candidate_id: 4},
+            %JuryVote{voter_id: 3, candidate_id: 2},
+            %JuryVote{voter_id: 5, candidate_id: 4},
+            %JuryVote{voter_id: 6, candidate_id: 4}
           ]
         }
 
@@ -7699,6 +7801,10 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20 + point_value * 2)
+        assert_houseguest_gained_points(curr, result, 1, point_value)
+        assert_houseguest_gained_points(curr, result, 5, point_value)
+        assert_houseguest_gained_points(curr, result, 6, point_value)
+        assert_houseguest_gained_points(curr, result, 3, 0)
       end
     end
   end
@@ -7717,13 +7823,13 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
 
         ceremony = %FinalCeremony{
           votes: [
-            %EvictionVote{voter_id: 1, candidate_id: 4},
-            %EvictionVote{voter_id: 3, candidate_id: 2},
-            %EvictionVote{voter_id: 5, candidate_id: 4},
-            %EvictionVote{voter_id: 6, candidate_id: 4},
-            %EvictionVote{voter_id: 7, candidate_id: 2},
-            %EvictionVote{voter_id: 8, candidate_id: 4},
-            %EvictionVote{voter_id: 9, candidate_id: 2}
+            %JuryVote{voter_id: 1, candidate_id: 4},
+            %JuryVote{voter_id: 3, candidate_id: 2},
+            %JuryVote{voter_id: 5, candidate_id: 4},
+            %JuryVote{voter_id: 6, candidate_id: 4},
+            %JuryVote{voter_id: 7, candidate_id: 2},
+            %JuryVote{voter_id: 8, candidate_id: 4},
+            %JuryVote{voter_id: 9, candidate_id: 2}
           ]
         }
 
@@ -7761,6 +7867,15 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value)
         assert_team_has_points(result, 2, 20 + point_value * 2)
+        assert_houseguest_gained_points(curr, result, 3, point_value)
+        assert_houseguest_gained_points(curr, result, 7, point_value)
+        assert_houseguest_gained_points(curr, result, 9, point_value)
+        assert_houseguest_gained_points(curr, result, 1, 0)
+        assert_houseguest_gained_points(curr, result, 2, 0)
+        assert_houseguest_gained_points(curr, result, 4, 0)
+        assert_houseguest_gained_points(curr, result, 5, 0)
+        assert_houseguest_gained_points(curr, result, 6, 0)
+        assert_houseguest_gained_points(curr, result, 8, 0)
       end
     end
   end
@@ -7798,7 +7913,8 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
             id: season_id,
             otb: MapSet.new([2, 4]),
             hohs: MapSet.new([8]),
-            evictees: MapSet.new([9, 10])
+            evictees: MapSet.new([9, 10]),
+            voters: MapSet.new([1, 3, 5, 6, 7])
           },
           events: [ceremony | remaining_events],
           teams: [
@@ -7825,6 +7941,16 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
         assert(prev_a === prev_b, "prior league state should not change")
         assert_team_has_points(result, 1, 10 + point_value * 4)
         assert_team_has_points(result, 2, 20 + point_value * 3)
+        assert_houseguest_gained_points(curr, result, 1, point_value)
+        assert_houseguest_gained_points(curr, result, 2, point_value)
+        assert_houseguest_gained_points(curr, result, 3, point_value)
+        assert_houseguest_gained_points(curr, result, 5, point_value)
+        assert_houseguest_gained_points(curr, result, 6, point_value)
+        assert_houseguest_gained_points(curr, result, 7, point_value)
+        assert_houseguest_gained_points(curr, result, 8, point_value)
+        assert_houseguest_gained_points(curr, result, 4, 0)
+        assert_houseguest_gained_points(curr, result, 9, 0)
+        assert_houseguest_gained_points(curr, result, 10, 0)
       end
     end
   end
@@ -7832,6 +7958,16 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
   defp assert_team_has_points(league, team_id, points) do
     team = Enum.find(league.teams, &(Map.fetch!(&1, :id) === team_id))
     assert(team.points === points, "teams should have correct points")
+  end
+
+  defp assert_houseguest_gained_points(prev, curr, houseguest_id, points) do
+    prev_val = Map.get(prev.houseguests, houseguest_id, 0)
+    curr_val = Map.get(curr.houseguests, houseguest_id, 0)
+
+    assert(
+      prev_val + points === curr_val,
+      "houseguest should have gained the correct points"
+    )
   end
 
   defp event_generator(event_type_id) do

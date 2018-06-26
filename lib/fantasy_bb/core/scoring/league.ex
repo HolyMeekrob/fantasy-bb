@@ -9,11 +9,17 @@ defmodule FantasyBb.Core.Scoring.League do
   alias FantasyBb.Data.League
 
   @enforce_keys [:id, :season]
-  defstruct [:id, :season, events: [], rules: [], teams: []]
+  defstruct [:id, :season, events: [], rules: [], teams: [], houseguests: Map.new()]
 
   def create(%FantasyBb.Data.Schema.League{} = league) do
     season = League.get_season(league)
     teams = Enum.map(league.teams, &Team.create/1)
+
+    houseguests =
+      Map.new(
+        season.houseguests,
+        fn houseguest -> {houseguest.id, 0} end
+      )
 
     rules =
       league
@@ -51,7 +57,8 @@ defmodule FantasyBb.Core.Scoring.League do
       season: Season.create(season),
       rules: rules,
       events: all_events,
-      teams: teams
+      teams: teams,
+      houseguests: houseguests
     }
   end
 
