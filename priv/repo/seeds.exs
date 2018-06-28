@@ -549,8 +549,126 @@ season_19_houseguests = [
   }
 ]
 
-{season, houseguests, weeks} =
+season_20_houseguests = [
+  %{
+    first_name: "Angela",
+    last_name: "Rummans",
+    nickname: nil,
+    birthday: ~D[1992-03-23],
+    hometown: "Hilton Head, CA"
+  },
+  %{
+    first_name: "Angie",
+    last_name: "Lantry",
+    nickname: "Rockstar",
+    birthday: ~D[1983-06-22],
+    hometown: "Columbia, MD"
+  },
+  %{
+    first_name: "Bayleigh",
+    last_name: "Dayton",
+    nickname: nil,
+    birthday: ~D[1993-05-25],
+    hometown: "Lee's Summit, MO"
+  },
+  %{
+    first_name: "Brett",
+    last_name: "Robinson",
+    nickname: nil,
+    birthday: nil,
+    hometown: "Oakdale, CT"
+  },
+  %{
+    first_name: "Christopher",
+    last_name: "Williams",
+    nickname: "Swaggy C",
+    birthday: ~D[1995-02-17],
+    hometown: "Bridgeport, CT"
+  },
+  %{
+    first_name: "Faysal",
+    last_name: "Shafaat",
+    nickname: nil,
+    birthday: ~D[1991-10-17],
+    hometown: "Orlando, FL"
+  },
+  %{
+    first_name: "Haleigh",
+    last_name: "Broucher",
+    nickname: nil,
+    birthday: ~D[1997-01-23],
+    hometown: "Village Mills, TX"
+  },
+  %{
+    first_name: "Joseph",
+    last_name: "Mounduix",
+    nickname: "JC",
+    birthday: ~D[1990-02-06],
+    hometown: "Miami, FL"
+  },
+  %{
+    first_name: "Kaitlyn",
+    last_name: "Herman",
+    nickname: nil,
+    birthday: ~D[1994-04-24],
+    hometown: "Plainview, NY"
+  },
+  %{
+    first_name: "Kaycee",
+    last_name: "Clark",
+    nickname: nil,
+    birthday: ~D[1987-12-26],
+    hometown: "San Diego, CA"
+  },
+  %{
+    first_name: "Rachel",
+    last_name: "Swindler",
+    nickname: nil,
+    birthday: ~D[1988-07-15],
+    hometown: "Myrtle Beach, SC"
+  },
+  %{
+    first_name: "Samantha",
+    last_name: "Bledsoe",
+    nickname: "Sam",
+    birthday: nil,
+    hometown: "Stuarts Draft, VA"
+  },
+  %{
+    first_name: "Scottie",
+    last_name: "Salton",
+    nickname: nil,
+    birthday: ~D[1992-01-10],
+    hometown: "Shorewood, IL"
+  },
+  %{
+    first_name: "Stephen",
+    last_name: "Arienta",
+    nickname: "Steve",
+    birthday: ~D[1978-05-02],
+    hometown: "Parsippany, NJ"
+  },
+  %{
+    first_name: "Tyler",
+    last_name: "Crispen",
+    nickname: nil,
+    birthday: ~D[1995-02-18],
+    hometown: "Rossford, OH"
+  },
+  %{
+    first_name: "Winston",
+    last_name: "Hines",
+    nickname: nil,
+    birthday: nil,
+    hometown: "Somerset, KY"
+  }
+]
+
+{season_19, houseguests_19, weeks_19} =
   Seeds.build_season(~D[2017-06-28], "Big Brother 19", season_19_houseguests, 14)
+
+{season_20, houseguests_20, weeks_20} =
+  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 1)
 
 [
   alex,
@@ -570,10 +688,34 @@ season_19_houseguests = [
   paul,
   ramses,
   raven
-] = houseguests
+] = houseguests_19
 
-eviction_ceremonies = Enum.map(weeks, &Seeds.create_eviction_ceremony(&1.id, 1))
-get_ceremony = &Enum.fetch!(eviction_ceremonies, &1)
+[
+  angela,
+  rockstar,
+  bayleigh,
+  brett,
+  swaggy,
+  faysal,
+  haleigh,
+  jc,
+  kaitlyn,
+  kaycee,
+  rachel,
+  sam,
+  scottie,
+  steve,
+  tyler,
+  winston
+] = houseguests_20
+
+eviction_ceremonies_19 = Enum.map(weeks_19, &Seeds.create_eviction_ceremony(&1.id, 1))
+eviction_ceremonies_20 = Enum.map(weeks_20, &Seeds.create_eviction_ceremony(&1.id, 1))
+get_ceremony_19 = &Enum.fetch!(eviction_ceremonies_19, &1)
+get_ceremony_20 = &Enum.fetch!(eviction_ceremonies_20, &1)
+
+# Season 19
+IO.puts("Seeding season 19")
 
 # Week 1
 IO.puts("Seeding week 1")
@@ -581,34 +723,34 @@ IO.puts("Seeding week 1")
 Seeds.create_event(
   win_comp.id,
   kevin.id,
-  get_ceremony.(0).id,
+  get_ceremony_19.(0).id,
   "Garden of Temptation. Kevin won $25,000 by being the first to press the button. This allowed Paul to enter the house and triggered the Tempted by the Fruit competition which, in turn, resulted in the first eviction ceremony. Also, Kevin became ineligible to win the first Head of Household."
 )
 
 Seeds.create_event(
   win_comp.id,
   cody.id,
-  get_ceremony.(0).id,
+  get_ceremony_19.(0).id,
   "Tempted by the Fruit. Cody was the last houseguest standing."
 )
 
-Seeds.create_event(nom.id, christmas.id, get_ceremony.(0).id)
-Seeds.create_event(nom.id, cameron.id, get_ceremony.(0).id)
-Seeds.create_event(nom.id, jillian.id, get_ceremony.(0).id)
+Seeds.create_event(nom.id, christmas.id, get_ceremony_19.(0).id)
+Seeds.create_event(nom.id, cameron.id, get_ceremony_19.(0).id)
+Seeds.create_event(nom.id, jillian.id, get_ceremony_19.(0).id)
 
-Seeds.create_vote(get_ceremony.(0).id, josh.id, christmas.id)
-Seeds.create_vote(get_ceremony.(0).id, kevin.id, cameron.id)
-Seeds.create_vote(get_ceremony.(0).id, alex.id, cameron.id)
-Seeds.create_vote(get_ceremony.(0).id, raven.id, cameron.id)
-Seeds.create_vote(get_ceremony.(0).id, jason.id, christmas.id)
-Seeds.create_vote(get_ceremony.(0).id, matt.id, jillian.id)
-Seeds.create_vote(get_ceremony.(0).id, mark.id, jillian.id)
-Seeds.create_vote(get_ceremony.(0).id, elena.id, cameron.id)
-Seeds.create_vote(get_ceremony.(0).id, cody.id, jillian.id)
-Seeds.create_vote(get_ceremony.(0).id, jessica.id, cameron.id)
-Seeds.create_vote(get_ceremony.(0).id, ramses.id, cameron.id)
-Seeds.create_vote(get_ceremony.(0).id, dom.id, cameron.id)
-Seeds.create_vote(get_ceremony.(0).id, megan.id, cameron.id)
+Seeds.create_vote(get_ceremony_19.(0).id, josh.id, christmas.id)
+Seeds.create_vote(get_ceremony_19.(0).id, kevin.id, cameron.id)
+Seeds.create_vote(get_ceremony_19.(0).id, alex.id, cameron.id)
+Seeds.create_vote(get_ceremony_19.(0).id, raven.id, cameron.id)
+Seeds.create_vote(get_ceremony_19.(0).id, jason.id, christmas.id)
+Seeds.create_vote(get_ceremony_19.(0).id, matt.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(0).id, mark.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(0).id, elena.id, cameron.id)
+Seeds.create_vote(get_ceremony_19.(0).id, cody.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(0).id, jessica.id, cameron.id)
+Seeds.create_vote(get_ceremony_19.(0).id, ramses.id, cameron.id)
+Seeds.create_vote(get_ceremony_19.(0).id, dom.id, cameron.id)
+Seeds.create_vote(get_ceremony_19.(0).id, megan.id, cameron.id)
 
 # Week 2
 IO.puts("Seeding week 2")
@@ -616,92 +758,98 @@ IO.puts("Seeding week 2")
 Seeds.create_event(
   hoh.id,
   cody.id,
-  get_ceremony.(1).id,
+  get_ceremony_19.(1).id,
   "Hangs in the Balance competition. Josh took the golden apple and earned safety for the week, but in doing so eliminated his team from this competition."
 )
 
 Seeds.create_event(
   americas_choice.id,
   paul.id,
-  get_ceremony.(1).id,
+  get_ceremony_19.(1).id,
   "Paul took the Pendant of Protection inside the Den of Temptation. Ramses was consequently bitten and must place himself on the block as a special third nominee once within the next three eviction ceremonies."
 )
 
-Seeds.create_event(nom.id, jillian.id, get_ceremony.(1).id)
-Seeds.create_event(nom.id, megan.id, get_ceremony.(1).id)
-Seeds.create_event(evict_self.id, megan.id, get_ceremony.(1).id)
+Seeds.create_event(nom.id, jillian.id, get_ceremony_19.(1).id)
+Seeds.create_event(nom.id, megan.id, get_ceremony_19.(1).id)
+Seeds.create_event(evict_self.id, megan.id, get_ceremony_19.(1).id)
 
 Seeds.create_event(
   replacement_nom.id,
   alex.id,
-  get_ceremony.(1).id,
+  get_ceremony_19.(1).id,
   "Replacement for Megan's self-eviction."
 )
 
 Seeds.create_event(
   pov.id,
   alex.id,
-  get_ceremony.(1).id,
+  get_ceremony_19.(1).id,
   "Fin to Win competition. Raven took the gold starfish temptation and kept herself from being a Have-Not for the rest of the season."
 )
 
-Seeds.create_event(taken_off.id, alex.id, get_ceremony.(1).id)
+Seeds.create_event(taken_off.id, alex.id, get_ceremony_19.(1).id)
 
 Seeds.create_event(
   replacement_nom.id,
   christmas.id,
-  get_ceremony.(1).id,
+  get_ceremony_19.(1).id,
   "Cody attempted to nominate Paul, but he was protected by the Pendant of Protection."
 )
 
-Seeds.create_vote(get_ceremony.(1).id, josh.id, jillian.id)
-Seeds.create_vote(get_ceremony.(1).id, paul.id, jillian.id)
-Seeds.create_vote(get_ceremony.(1).id, kevin.id, jillian.id)
-Seeds.create_vote(get_ceremony.(1).id, alex.id, christmas.id)
-Seeds.create_vote(get_ceremony.(1).id, raven.id, jillian.id)
-Seeds.create_vote(get_ceremony.(1).id, jason.id, christmas.id)
-Seeds.create_vote(get_ceremony.(1).id, matt.id, jillian.id)
-Seeds.create_vote(get_ceremony.(1).id, mark.id, jillian.id)
-Seeds.create_vote(get_ceremony.(1).id, elena.id, jillian.id)
-Seeds.create_vote(get_ceremony.(1).id, jessica.id, christmas.id)
-Seeds.create_vote(get_ceremony.(1).id, ramses.id, christmas.id)
-Seeds.create_vote(get_ceremony.(1).id, dom.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(1).id, josh.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(1).id, paul.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(1).id, kevin.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(1).id, alex.id, christmas.id)
+Seeds.create_vote(get_ceremony_19.(1).id, raven.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(1).id, jason.id, christmas.id)
+Seeds.create_vote(get_ceremony_19.(1).id, matt.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(1).id, mark.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(1).id, elena.id, jillian.id)
+Seeds.create_vote(get_ceremony_19.(1).id, jessica.id, christmas.id)
+Seeds.create_vote(get_ceremony_19.(1).id, ramses.id, christmas.id)
+Seeds.create_vote(get_ceremony_19.(1).id, dom.id, jillian.id)
 
 # Week 3
 IO.puts("Seeding week 3")
-Seeds.create_event(hoh.id, paul.id, get_ceremony.(2).id, "Sugar Shot competition.")
+Seeds.create_event(hoh.id, paul.id, get_ceremony_19.(2).id, "Sugar Shot competition.")
 
 Seeds.create_event(
   americas_choice.id,
   christmas.id,
-  get_ceremony.(2).id,
+  get_ceremony_19.(2).id,
   "Christmas accepted the Ring of Replacement and cursed Cody, Jessica, and Jason with toad suits."
 )
 
-Seeds.create_event(nom.id, alex.id, get_ceremony.(2).id)
-Seeds.create_event(nom.id, josh.id, get_ceremony.(2).id)
+Seeds.create_event(nom.id, alex.id, get_ceremony_19.(2).id)
+Seeds.create_event(nom.id, josh.id, get_ceremony_19.(2).id)
 
 Seeds.create_event(
   otb.id,
   ramses.id,
-  get_ceremony.(2).id,
+  get_ceremony_19.(2).id,
   "Ramses put himself on the block to fulfill his temptation curse obligation."
 )
 
-Seeds.create_event(pov.id, paul.id, get_ceremony.(2).id, "Path of Least Resistance competition.")
-Seeds.create_event(taken_off.id, josh.id, get_ceremony.(2).id)
-Seeds.create_event(replacement_nom.id, cody.id, get_ceremony.(2).id)
+Seeds.create_event(
+  pov.id,
+  paul.id,
+  get_ceremony_19.(2).id,
+  "Path of Least Resistance competition."
+)
 
-Seeds.create_vote(get_ceremony.(2).id, josh.id, cody.id)
-Seeds.create_vote(get_ceremony.(2).id, christmas.id, ramses.id)
-Seeds.create_vote(get_ceremony.(2).id, kevin.id, ramses.id)
-Seeds.create_vote(get_ceremony.(2).id, raven.id, cody.id)
-Seeds.create_vote(get_ceremony.(2).id, jason.id, cody.id)
-Seeds.create_vote(get_ceremony.(2).id, matt.id, cody.id)
-Seeds.create_vote(get_ceremony.(2).id, mark.id, cody.id)
-Seeds.create_vote(get_ceremony.(2).id, elena.id, cody.id)
-Seeds.create_vote(get_ceremony.(2).id, jessica.id, ramses.id)
-Seeds.create_vote(get_ceremony.(2).id, dom.id, cody.id)
+Seeds.create_event(taken_off.id, josh.id, get_ceremony_19.(2).id)
+Seeds.create_event(replacement_nom.id, cody.id, get_ceremony_19.(2).id)
+
+Seeds.create_vote(get_ceremony_19.(2).id, josh.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(2).id, christmas.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(2).id, kevin.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(2).id, raven.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(2).id, jason.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(2).id, matt.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(2).id, mark.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(2).id, elena.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(2).id, jessica.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(2).id, dom.id, cody.id)
 
 # Week 4
 IO.puts("Seeding week 4")
@@ -709,149 +857,156 @@ IO.puts("Seeding week 4")
 Seeds.create_event(
   hoh.id,
   alex.id,
-  get_ceremony.(3).id,
+  get_ceremony_19.(3).id,
   "Space Cadets competition. Christmas did not participate due to injury."
 )
 
-Seeds.create_event(nom.id, dom.id, get_ceremony.(3).id)
-Seeds.create_event(nom.id, jessica.id, get_ceremony.(3).id)
+Seeds.create_event(nom.id, dom.id, get_ceremony_19.(3).id)
+Seeds.create_event(nom.id, jessica.id, get_ceremony_19.(3).id)
 
 Seeds.create_event(
   pov.id,
   jason.id,
-  get_ceremony.(3).id,
+  get_ceremony_19.(3).id,
   "Temple of Temptation competition. Kevin claimed the temptation and earned $27, but eliminated himself from winning the competition."
 )
 
-Seeds.create_event(taken_off.id, nil, get_ceremony.(3).id)
+Seeds.create_event(taken_off.id, nil, get_ceremony_19.(3).id)
 
 Seeds.create_event(
   americas_choice.id,
   jessica.id,
-  get_ceremony.(3).id,
+  get_ceremony_19.(3).id,
   "Jessica accepted the Halting Hex temptation. This resulted in a Temptation Competition over each of the next three weeks."
 )
 
-Seeds.create_vote(get_ceremony.(3).id, josh.id, dom.id)
-Seeds.create_vote(get_ceremony.(3).id, paul.id, dom.id)
-Seeds.create_vote(get_ceremony.(3).id, christmas.id, dom.id)
-Seeds.create_vote(get_ceremony.(3).id, kevin.id, dom.id)
-Seeds.create_vote(get_ceremony.(3).id, raven.id, dom.id)
-Seeds.create_vote(get_ceremony.(3).id, jason.id, dom.id)
-Seeds.create_vote(get_ceremony.(3).id, matt.id, dom.id)
-Seeds.create_vote(get_ceremony.(3).id, mark.id, dom.id)
-Seeds.create_vote(get_ceremony.(3).id, elena.id, dom.id)
-Seeds.create_vote(get_ceremony.(3).id, ramses.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, josh.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, paul.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, christmas.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, kevin.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, raven.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, jason.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, matt.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, mark.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, elena.id, dom.id)
+Seeds.create_vote(get_ceremony_19.(3).id, ramses.id, dom.id)
 
 # Week 5
 IO.puts("Seeding week 5")
-Seeds.create_event(return_to_house.id, cody.id, get_ceremony.(4).id)
-Seeds.create_event(hoh.id, jessica.id, get_ceremony.(4).id, "What's the Hold Up? competition.")
-Seeds.create_event(nom.id, josh.id, get_ceremony.(4).id)
-Seeds.create_event(nom.id, ramses.id, get_ceremony.(4).id)
-Seeds.create_event(pov.id, jessica.id, get_ceremony.(4).id, "BB Juicy Blast competition.")
-Seeds.create_event(taken_off.id, nil, get_ceremony.(4).id)
+Seeds.create_event(return_to_house.id, cody.id, get_ceremony_19.(4).id)
+Seeds.create_event(hoh.id, jessica.id, get_ceremony_19.(4).id, "What's the Hold Up? competition.")
+Seeds.create_event(nom.id, josh.id, get_ceremony_19.(4).id)
+Seeds.create_event(nom.id, ramses.id, get_ceremony_19.(4).id)
+Seeds.create_event(pov.id, jessica.id, get_ceremony_19.(4).id, "BB Juicy Blast competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony_19.(4).id)
 
-Seeds.create_vote(get_ceremony.(4).id, paul.id, ramses.id)
-Seeds.create_vote(get_ceremony.(4).id, christmas.id, ramses.id)
-Seeds.create_vote(get_ceremony.(4).id, kevin.id, ramses.id)
-Seeds.create_vote(get_ceremony.(4).id, alex.id, ramses.id)
-Seeds.create_vote(get_ceremony.(4).id, raven.id, ramses.id)
-Seeds.create_vote(get_ceremony.(4).id, jason.id, ramses.id)
-Seeds.create_vote(get_ceremony.(4).id, matt.id, ramses.id)
-Seeds.create_vote(get_ceremony.(4).id, mark.id, josh.id)
-Seeds.create_vote(get_ceremony.(4).id, elena.id, josh.id)
-Seeds.create_vote(get_ceremony.(4).id, cody.id, josh.id)
+Seeds.create_vote(get_ceremony_19.(4).id, paul.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(4).id, christmas.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(4).id, kevin.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(4).id, alex.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(4).id, raven.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(4).id, jason.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(4).id, matt.id, ramses.id)
+Seeds.create_vote(get_ceremony_19.(4).id, mark.id, josh.id)
+Seeds.create_vote(get_ceremony_19.(4).id, elena.id, josh.id)
+Seeds.create_vote(get_ceremony_19.(4).id, cody.id, josh.id)
 
 # Week 6
 IO.puts("Seeding week 6")
-Seeds.create_event(hoh.id, paul.id, get_ceremony.(5).id, "Inked and Evicted competition.")
+Seeds.create_event(hoh.id, paul.id, get_ceremony_19.(5).id, "Inked and Evicted competition.")
 
 Seeds.create_event(
   win_comp.id,
   mark.id,
-  get_ceremony.(5).id,
+  get_ceremony_19.(5).id,
   "Bowlerina temptation competition. Jason lost and became the third nominee."
 )
 
 Seeds.create_event(
   otb.id,
   jason.id,
-  get_ceremony.(5).id,
+  get_ceremony_19.(5).id,
   "Jason became the third nominee by losing the Bowlerina temptation competition."
 )
 
-Seeds.create_event(nom.id, cody.id, get_ceremony.(5).id)
-Seeds.create_event(nom.id, jessica.id, get_ceremony.(5).id)
-Seeds.create_event(pov.id, paul.id, get_ceremony.(5).id)
-Seeds.create_event(taken_off.id, jason.id, get_ceremony.(5).id)
+Seeds.create_event(nom.id, cody.id, get_ceremony_19.(5).id)
+Seeds.create_event(nom.id, jessica.id, get_ceremony_19.(5).id)
+Seeds.create_event(pov.id, paul.id, get_ceremony_19.(5).id)
+Seeds.create_event(taken_off.id, jason.id, get_ceremony_19.(5).id)
 
 # Week 7
 IO.puts("Seeding week 7")
-Seeds.create_event(hoh.id, josh.id, get_ceremony.(6).id, "Gravestone Golf competition.")
+Seeds.create_event(hoh.id, josh.id, get_ceremony_19.(6).id, "Gravestone Golf competition.")
 
 Seeds.create_event(
   win_comp.id,
   cody.id,
-  get_ceremony.(6).id,
+  get_ceremony_19.(6).id,
   "Strangest Things temptation competition. Jessica lost and became the third nominee."
 )
 
 Seeds.create_event(
   otb.id,
   jessica.id,
-  get_ceremony.(6).id,
+  get_ceremony_19.(6).id,
   "Jessica became the third nominee by losing the Strangest Things temptation competition."
 )
 
-Seeds.create_event(nom.id, mark.id, get_ceremony.(6).id)
-Seeds.create_event(nom.id, elena.id, get_ceremony.(6).id)
-Seeds.create_event(pov.id, mark.id, get_ceremony.(6).id, "OTEV the Possessed Piglet competition.")
-Seeds.create_event(taken_off.id, mark.id, get_ceremony.(6).id)
-Seeds.create_event(replacement_nom.id, raven.id, get_ceremony.(6).id)
+Seeds.create_event(nom.id, mark.id, get_ceremony_19.(6).id)
+Seeds.create_event(nom.id, elena.id, get_ceremony_19.(6).id)
 
-Seeds.create_vote(get_ceremony.(6).id, paul.id, jessica.id)
-Seeds.create_vote(get_ceremony.(6).id, christmas.id, jessica.id)
-Seeds.create_vote(get_ceremony.(6).id, kevin.id, jessica.id)
-Seeds.create_vote(get_ceremony.(6).id, alex.id, jessica.id)
-Seeds.create_vote(get_ceremony.(6).id, jason.id, jessica.id)
-Seeds.create_vote(get_ceremony.(6).id, matt.id, jessica.id)
-Seeds.create_vote(get_ceremony.(6).id, mark.id, jessica.id)
-Seeds.create_vote(get_ceremony.(6).id, cody.id, raven.id)
+Seeds.create_event(
+  pov.id,
+  mark.id,
+  get_ceremony_19.(6).id,
+  "OTEV the Possessed Piglet competition."
+)
+
+Seeds.create_event(taken_off.id, mark.id, get_ceremony_19.(6).id)
+Seeds.create_event(replacement_nom.id, raven.id, get_ceremony_19.(6).id)
+
+Seeds.create_vote(get_ceremony_19.(6).id, paul.id, jessica.id)
+Seeds.create_vote(get_ceremony_19.(6).id, christmas.id, jessica.id)
+Seeds.create_vote(get_ceremony_19.(6).id, kevin.id, jessica.id)
+Seeds.create_vote(get_ceremony_19.(6).id, alex.id, jessica.id)
+Seeds.create_vote(get_ceremony_19.(6).id, jason.id, jessica.id)
+Seeds.create_vote(get_ceremony_19.(6).id, matt.id, jessica.id)
+Seeds.create_vote(get_ceremony_19.(6).id, mark.id, jessica.id)
+Seeds.create_vote(get_ceremony_19.(6).id, cody.id, raven.id)
 
 # Week 8
 IO.puts("Seeding week 8")
-Seeds.create_event(hoh.id, alex.id, get_ceremony.(7).id, "Hocus Focus competition.")
+Seeds.create_event(hoh.id, alex.id, get_ceremony_19.(7).id, "Hocus Focus competition.")
 
 Seeds.create_event(
   win_comp.id,
   mark.id,
-  get_ceremony.(7).id,
+  get_ceremony_19.(7).id,
   "Where Were You? temptation competition. Matt lost and became the third nominee."
 )
 
 Seeds.create_event(
   otb.id,
   matt.id,
-  get_ceremony.(7).id,
+  get_ceremony_19.(7).id,
   "Matt became the third nominee by losing the Where Were You? temptation competition."
 )
 
-Seeds.create_event(nom.id, elena.id, get_ceremony.(7).id)
-Seeds.create_event(nom.id, jason.id, get_ceremony.(7).id)
-Seeds.create_event(pov.id, matt.id, get_ceremony.(7).id, "BB Adventure Tour competition.")
-Seeds.create_event(taken_off.id, jason.id, get_ceremony.(7).id)
-Seeds.create_event(replacement_nom.id, cody.id, get_ceremony.(7).id)
+Seeds.create_event(nom.id, elena.id, get_ceremony_19.(7).id)
+Seeds.create_event(nom.id, jason.id, get_ceremony_19.(7).id)
+Seeds.create_event(pov.id, matt.id, get_ceremony_19.(7).id, "BB Adventure Tour competition.")
+Seeds.create_event(taken_off.id, jason.id, get_ceremony_19.(7).id)
+Seeds.create_event(replacement_nom.id, cody.id, get_ceremony_19.(7).id)
 
-Seeds.create_vote(get_ceremony.(7).id, josh.id, cody.id)
-Seeds.create_vote(get_ceremony.(7).id, paul.id, cody.id)
-Seeds.create_vote(get_ceremony.(7).id, christmas.id, cody.id)
-Seeds.create_vote(get_ceremony.(7).id, kevin.id, cody.id)
-Seeds.create_vote(get_ceremony.(7).id, raven.id, cody.id)
-Seeds.create_vote(get_ceremony.(7).id, jason.id, cody.id)
-Seeds.create_vote(get_ceremony.(7).id, mark.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(7).id, josh.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(7).id, paul.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(7).id, christmas.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(7).id, kevin.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(7).id, raven.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(7).id, jason.id, cody.id)
+Seeds.create_vote(get_ceremony_19.(7).id, mark.id, cody.id)
 
-week_8 = Enum.fetch!(weeks, 7)
+week_8 = Enum.fetch!(weeks_19, 7)
 week_8_de_ceremony = Seeds.create_eviction_ceremony(week_8.id, 2)
 
 Seeds.create_event(hoh.id, jason.id, week_8_de_ceremony.id, "Let It Slide competition.")
@@ -871,52 +1026,59 @@ Seeds.create_vote(week_8_de_ceremony.id, mark.id, matt.id)
 
 # Week 9
 IO.puts("Seeding week 9")
-Seeds.create_event(hoh.id, christmas.id, get_ceremony.(8).id, "Tales from Decrypt competition.")
-Seeds.create_event(nom.id, jason.id, get_ceremony.(8).id)
-Seeds.create_event(nom.id, matt.id, get_ceremony.(8).id)
-Seeds.create_event(pov.id, jason.id, get_ceremony.(8).id, "Home Zing Home competition.")
-Seeds.create_event(taken_off.id, jason.id, get_ceremony.(8).id)
-Seeds.create_event(replacement_nom.id, mark.id, get_ceremony.(8).id)
 
-Seeds.create_vote(get_ceremony.(8).id, josh.id, mark.id)
-Seeds.create_vote(get_ceremony.(8).id, paul.id, mark.id)
-Seeds.create_vote(get_ceremony.(8).id, kevin.id, mark.id)
-Seeds.create_vote(get_ceremony.(8).id, alex.id, matt.id)
-Seeds.create_vote(get_ceremony.(8).id, raven.id, mark.id)
-Seeds.create_vote(get_ceremony.(8).id, jason.id, matt.id)
+Seeds.create_event(
+  hoh.id,
+  christmas.id,
+  get_ceremony_19.(8).id,
+  "Tales from Decrypt competition."
+)
+
+Seeds.create_event(nom.id, jason.id, get_ceremony_19.(8).id)
+Seeds.create_event(nom.id, matt.id, get_ceremony_19.(8).id)
+Seeds.create_event(pov.id, jason.id, get_ceremony_19.(8).id, "Home Zing Home competition.")
+Seeds.create_event(taken_off.id, jason.id, get_ceremony_19.(8).id)
+Seeds.create_event(replacement_nom.id, mark.id, get_ceremony_19.(8).id)
+
+Seeds.create_vote(get_ceremony_19.(8).id, josh.id, mark.id)
+Seeds.create_vote(get_ceremony_19.(8).id, paul.id, mark.id)
+Seeds.create_vote(get_ceremony_19.(8).id, kevin.id, mark.id)
+Seeds.create_vote(get_ceremony_19.(8).id, alex.id, matt.id)
+Seeds.create_vote(get_ceremony_19.(8).id, raven.id, mark.id)
+Seeds.create_vote(get_ceremony_19.(8).id, jason.id, matt.id)
 
 # Week 10
 IO.puts("Seeding week 10")
-Seeds.create_event(hoh.id, jason.id, get_ceremony.(9).id, "Everyone's a Wiener competition.")
-Seeds.create_event(nom.id, matt.id, get_ceremony.(9).id)
-Seeds.create_event(nom.id, raven.id, get_ceremony.(9).id)
-Seeds.create_event(pov.id, jason.id, get_ceremony.(9).id, "Hide and Go Veto competition.")
-Seeds.create_event(taken_off.id, nil, get_ceremony.(9).id)
+Seeds.create_event(hoh.id, jason.id, get_ceremony_19.(9).id, "Everyone's a Wiener competition.")
+Seeds.create_event(nom.id, matt.id, get_ceremony_19.(9).id)
+Seeds.create_event(nom.id, raven.id, get_ceremony_19.(9).id)
+Seeds.create_event(pov.id, jason.id, get_ceremony_19.(9).id, "Hide and Go Veto competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony_19.(9).id)
 
-Seeds.create_vote(get_ceremony.(9).id, josh.id, matt.id)
-Seeds.create_vote(get_ceremony.(9).id, paul.id, matt.id)
-Seeds.create_vote(get_ceremony.(9).id, christmas.id, matt.id)
-Seeds.create_vote(get_ceremony.(9).id, kevin.id, matt.id)
-Seeds.create_vote(get_ceremony.(9).id, alex.id, matt.id)
+Seeds.create_vote(get_ceremony_19.(9).id, josh.id, matt.id)
+Seeds.create_vote(get_ceremony_19.(9).id, paul.id, matt.id)
+Seeds.create_vote(get_ceremony_19.(9).id, christmas.id, matt.id)
+Seeds.create_vote(get_ceremony_19.(9).id, kevin.id, matt.id)
+Seeds.create_vote(get_ceremony_19.(9).id, alex.id, matt.id)
 # Penalty vote
-Seeds.create_vote(get_ceremony.(9).id, nil, matt.id)
+Seeds.create_vote(get_ceremony_19.(9).id, nil, matt.id)
 
 # Week 11
 IO.puts("Seeding week 11")
-Seeds.create_event(hoh.id, christmas.id, get_ceremony.(10).id, "Ready, Set, Whoa competition.")
-Seeds.create_event(nom.id, alex.id, get_ceremony.(10).id)
-Seeds.create_event(nom.id, jason.id, get_ceremony.(10).id)
-Seeds.create_event(pov.id, paul.id, get_ceremony.(10).id, "Punch Slap Kick competition.")
-Seeds.create_event(taken_off.id, alex.id, get_ceremony.(10).id)
-Seeds.create_event(replacement_nom.id, kevin.id, get_ceremony.(10).id)
+Seeds.create_event(hoh.id, christmas.id, get_ceremony_19.(10).id, "Ready, Set, Whoa competition.")
+Seeds.create_event(nom.id, alex.id, get_ceremony_19.(10).id)
+Seeds.create_event(nom.id, jason.id, get_ceremony_19.(10).id)
+Seeds.create_event(pov.id, paul.id, get_ceremony_19.(10).id, "Punch Slap Kick competition.")
+Seeds.create_event(taken_off.id, alex.id, get_ceremony_19.(10).id)
+Seeds.create_event(replacement_nom.id, kevin.id, get_ceremony_19.(10).id)
 
-Seeds.create_vote(get_ceremony.(10).id, josh.id, jason.id)
-Seeds.create_vote(get_ceremony.(10).id, paul.id, kevin.id)
-Seeds.create_vote(get_ceremony.(10).id, christmas.id, jason.id)
-Seeds.create_vote(get_ceremony.(10).id, alex.id, kevin.id)
-Seeds.create_vote(get_ceremony.(10).id, raven.id, jason.id)
+Seeds.create_vote(get_ceremony_19.(10).id, josh.id, jason.id)
+Seeds.create_vote(get_ceremony_19.(10).id, paul.id, kevin.id)
+Seeds.create_vote(get_ceremony_19.(10).id, christmas.id, jason.id)
+Seeds.create_vote(get_ceremony_19.(10).id, alex.id, kevin.id)
+Seeds.create_vote(get_ceremony_19.(10).id, raven.id, jason.id)
 
-week_11 = Enum.fetch!(weeks, 10)
+week_11 = Enum.fetch!(weeks_19, 10)
 week_11_de_ceremony = Seeds.create_eviction_ceremony(week_11.id, 2)
 
 Seeds.create_event(hoh.id, alex.id, week_11_de_ceremony.id, "Fake News competition.")
@@ -931,25 +1093,25 @@ Seeds.create_vote(week_11_de_ceremony.id, christmas.id, raven.id)
 
 # Week 12
 IO.puts("Seeding week 12")
-Seeds.create_event(hoh.id, josh.id, get_ceremony.(11).id, "The Revengers competition.")
-Seeds.create_event(nom.id, kevin.id, get_ceremony.(11).id)
-Seeds.create_event(nom.id, alex.id, get_ceremony.(11).id)
-Seeds.create_event(pov.id, paul.id, get_ceremony.(11).id, "BB Comics competition.")
-Seeds.create_event(taken_off.id, nil, get_ceremony.(11).id)
+Seeds.create_event(hoh.id, josh.id, get_ceremony_19.(11).id, "The Revengers competition.")
+Seeds.create_event(nom.id, kevin.id, get_ceremony_19.(11).id)
+Seeds.create_event(nom.id, alex.id, get_ceremony_19.(11).id)
+Seeds.create_event(pov.id, paul.id, get_ceremony_19.(11).id, "BB Comics competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony_19.(11).id)
 
-Seeds.create_vote(get_ceremony.(11).id, josh.id, alex.id)
-Seeds.create_vote(get_ceremony.(11).id, paul.id, kevin.id)
-Seeds.create_vote(get_ceremony.(11).id, christmas.id, alex.id)
+Seeds.create_vote(get_ceremony_19.(11).id, josh.id, alex.id)
+Seeds.create_vote(get_ceremony_19.(11).id, paul.id, kevin.id)
+Seeds.create_vote(get_ceremony_19.(11).id, christmas.id, alex.id)
 
 # Week 13
 IO.puts("Seeding week 13")
-Seeds.create_event(hoh.id, paul.id, get_ceremony.(12).id, "What the Bleep? competition.")
-Seeds.create_event(nom.id, josh.id, get_ceremony.(12).id)
-Seeds.create_event(nom.id, kevin.id, get_ceremony.(12).id)
-Seeds.create_event(pov.id, paul.id, get_ceremony.(12).id, "Back to the Veto competition.")
-Seeds.create_event(taken_off.id, nil, get_ceremony.(12).id)
+Seeds.create_event(hoh.id, paul.id, get_ceremony_19.(12).id, "What the Bleep? competition.")
+Seeds.create_event(nom.id, josh.id, get_ceremony_19.(12).id)
+Seeds.create_event(nom.id, kevin.id, get_ceremony_19.(12).id)
+Seeds.create_event(pov.id, paul.id, get_ceremony_19.(12).id, "Back to the Veto competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony_19.(12).id)
 
-Seeds.create_vote(get_ceremony.(12).id, christmas.id, kevin.id)
+Seeds.create_vote(get_ceremony_19.(12).id, christmas.id, kevin.id)
 
 # Week 14
 IO.puts("Seeding week 14")
@@ -957,38 +1119,51 @@ IO.puts("Seeding week 14")
 Seeds.create_event(
   final_hoh_1.id,
   paul.id,
-  get_ceremony.(13).id,
+  get_ceremony_19.(13).id,
   "Tail of the Unicorn competition."
 )
 
 Seeds.create_event(
   final_hoh_2.id,
   josh.id,
-  get_ceremony.(13).id,
+  get_ceremony_19.(13).id,
   "Knock 'Em Down competition."
 )
 
 Seeds.create_event(
   hoh.id,
   josh.id,
-  get_ceremony.(13).id,
+  get_ceremony_19.(13).id,
   "Scales of Just-Us competition."
 )
 
-Seeds.create_event(win_afp.id, cody.id, get_ceremony.(13).id)
-Seeds.create_vote(get_ceremony.(13).id, josh.id, christmas.id)
+Seeds.create_event(win_afp.id, cody.id, get_ceremony_19.(13).id)
+Seeds.create_vote(get_ceremony_19.(13).id, josh.id, christmas.id)
 
 # Jury
 IO.puts("Seeding jury votes")
-Seeds.create_jury_vote(season.id, christmas.id, paul.id)
-Seeds.create_jury_vote(season.id, kevin.id, paul.id)
-Seeds.create_jury_vote(season.id, alex.id, josh.id)
-Seeds.create_jury_vote(season.id, raven.id, paul.id)
-Seeds.create_jury_vote(season.id, jason.id, josh.id)
-Seeds.create_jury_vote(season.id, matt.id, paul.id)
-Seeds.create_jury_vote(season.id, mark.id, josh.id)
-Seeds.create_jury_vote(season.id, elena.id, josh.id)
-Seeds.create_jury_vote(season.id, cody.id, josh.id)
+Seeds.create_jury_vote(season_19.id, christmas.id, paul.id)
+Seeds.create_jury_vote(season_19.id, kevin.id, paul.id)
+Seeds.create_jury_vote(season_19.id, alex.id, josh.id)
+Seeds.create_jury_vote(season_19.id, raven.id, paul.id)
+Seeds.create_jury_vote(season_19.id, jason.id, josh.id)
+Seeds.create_jury_vote(season_19.id, matt.id, paul.id)
+Seeds.create_jury_vote(season_19.id, mark.id, josh.id)
+Seeds.create_jury_vote(season_19.id, elena.id, josh.id)
+Seeds.create_jury_vote(season_19.id, cody.id, josh.id)
+
+# Season 19
+IO.puts("Seeding season 19")
+
+# Week 1
+IO.puts("Seeding week 1")
+
+Seeds.create_event(
+  win_comp.id,
+  swaggy.id,
+  get_ceremony_20.(0).id,
+  "Trash Folder / Houseguest CAPTCHA / Surfing the BB Web Competition. Swaggy beat Angela and guaranteed safety for himself and seven other houseguests."
+)
 
 # Create users
 IO.puts("Seeding users")
@@ -996,64 +1171,118 @@ andy = Seeds.create_user("Andy", "Steinberg", "holy.meekrob@gmail.com")
 erin = Seeds.create_user("Erin", "Steinberg", "erinsdavidson@gmail.com")
 weston = Seeds.create_user("Weston", "Fox", "bitb1448@gmail.com")
 jess = Seeds.create_user("Jessica", "Fox", "jessfalcao@gmail.com")
+colin = Seeds.create_user("Colin", "Davidson", "empty@none.org")
 
-# Create existing league
+# Create Season 19 league
 IO.puts("Seeding league")
-league = Seeds.create_league(season.id, andy.id, "Stupid Paul")
-Seeds.create_rule(league.id, scorables.survive_the_week.id, 2)
-Seeds.create_rule(league.id, scorables.win_hoh.id, 10)
-Seeds.create_rule(league.id, scorables.win_hoh_de.id, 15)
-Seeds.create_rule(league.id, scorables.win_hoh_final.id, 10)
-Seeds.create_rule(league.id, scorables.nominated.id, -5)
-Seeds.create_rule(league.id, scorables.nominated_de.id, -5)
-Seeds.create_rule(league.id, scorables.nominated_as_replacement.id, -5)
-Seeds.create_rule(league.id, scorables.nominated_as_replacement_de.id, -5)
-Seeds.create_rule(league.id, scorables.otb.id, -5)
-Seeds.create_rule(league.id, scorables.win_pov.id, 5)
-Seeds.create_rule(league.id, scorables.win_pov_de.id, 8)
-Seeds.create_rule(league.id, scorables.win_pov_final.id, 5)
-Seeds.create_rule(league.id, scorables.veto_self.id, 10)
-Seeds.create_rule(league.id, scorables.veto_self_de.id, 10)
-Seeds.create_rule(league.id, scorables.taken_off.id, 10)
-Seeds.create_rule(league.id, scorables.taken_off_de.id, 10)
-Seeds.create_rule(league.id, scorables.dodge_eviction.id, 2)
-Seeds.create_rule(league.id, scorables.dodge_eviction_de.id, 2)
-Seeds.create_rule(league.id, scorables.reenter.id, 20)
-Seeds.create_rule(league.id, scorables.americas_choice.id, 2)
-Seeds.create_rule(league.id, scorables.sole_vote_against_the_house.id, 5)
-Seeds.create_rule(league.id, scorables.win_bb.id, 45)
-Seeds.create_rule(league.id, scorables.place_bb.id, 30)
-Seeds.create_rule(league.id, scorables.show_bb.id, 20)
-Seeds.create_rule(league.id, scorables.make_jury.id, 10)
+league_19 = Seeds.create_league(season_19.id, andy.id, "Stupid Paul")
+Seeds.create_rule(league_19.id, scorables.survive_the_week.id, 2)
+Seeds.create_rule(league_19.id, scorables.win_hoh.id, 10)
+Seeds.create_rule(league_19.id, scorables.win_hoh_de.id, 15)
+Seeds.create_rule(league_19.id, scorables.win_hoh_final.id, 10)
+Seeds.create_rule(league_19.id, scorables.nominated.id, -5)
+Seeds.create_rule(league_19.id, scorables.nominated_de.id, -5)
+Seeds.create_rule(league_19.id, scorables.nominated_as_replacement.id, -5)
+Seeds.create_rule(league_19.id, scorables.nominated_as_replacement_de.id, -5)
+Seeds.create_rule(league_19.id, scorables.otb.id, -5)
+Seeds.create_rule(league_19.id, scorables.win_pov.id, 5)
+Seeds.create_rule(league_19.id, scorables.win_pov_de.id, 8)
+Seeds.create_rule(league_19.id, scorables.win_pov_final.id, 5)
+Seeds.create_rule(league_19.id, scorables.veto_self.id, 10)
+Seeds.create_rule(league_19.id, scorables.veto_self_de.id, 10)
+Seeds.create_rule(league_19.id, scorables.taken_off.id, 10)
+Seeds.create_rule(league_19.id, scorables.taken_off_de.id, 10)
+Seeds.create_rule(league_19.id, scorables.dodge_eviction.id, 2)
+Seeds.create_rule(league_19.id, scorables.dodge_eviction_de.id, 2)
+Seeds.create_rule(league_19.id, scorables.reenter.id, 20)
+Seeds.create_rule(league_19.id, scorables.americas_choice.id, 2)
+Seeds.create_rule(league_19.id, scorables.sole_vote_against_the_house.id, 5)
+Seeds.create_rule(league_19.id, scorables.win_bb.id, 45)
+Seeds.create_rule(league_19.id, scorables.place_bb.id, 30)
+Seeds.create_rule(league_19.id, scorables.show_bb.id, 20)
+Seeds.create_rule(league_19.id, scorables.make_jury.id, 10)
+
+# Create Season 20 league
+IO.puts("Seeding league")
+league_20 = Seeds.create_league(season_19.id, andy.id, "Popping Colin's Cherry")
+Seeds.create_rule(league_20.id, scorables.survive_the_week.id, 2)
+Seeds.create_rule(league_20.id, scorables.win_hoh.id, 10)
+Seeds.create_rule(league_20.id, scorables.win_hoh_de.id, 15)
+Seeds.create_rule(league_20.id, scorables.win_hoh_final.id, 10)
+Seeds.create_rule(league_20.id, scorables.nominated.id, -5)
+Seeds.create_rule(league_20.id, scorables.nominated_de.id, -5)
+Seeds.create_rule(league_20.id, scorables.nominated_as_replacement.id, -5)
+Seeds.create_rule(league_20.id, scorables.nominated_as_replacement_de.id, -5)
+Seeds.create_rule(league_20.id, scorables.otb.id, -5)
+Seeds.create_rule(league_20.id, scorables.win_pov.id, 5)
+Seeds.create_rule(league_20.id, scorables.win_pov_de.id, 8)
+Seeds.create_rule(league_20.id, scorables.win_pov_final.id, 5)
+Seeds.create_rule(league_20.id, scorables.veto_self.id, 10)
+Seeds.create_rule(league_20.id, scorables.veto_self_de.id, 10)
+Seeds.create_rule(league_20.id, scorables.taken_off.id, 10)
+Seeds.create_rule(league_20.id, scorables.taken_off_de.id, 10)
+Seeds.create_rule(league_20.id, scorables.dodge_eviction.id, 2)
+Seeds.create_rule(league_20.id, scorables.dodge_eviction_de.id, 2)
+Seeds.create_rule(league_20.id, scorables.reenter.id, 20)
+Seeds.create_rule(league_20.id, scorables.americas_choice.id, 2)
+Seeds.create_rule(league_20.id, scorables.sole_vote_against_the_house.id, 5)
+Seeds.create_rule(league_20.id, scorables.win_bb.id, 45)
+Seeds.create_rule(league_20.id, scorables.place_bb.id, 30)
+Seeds.create_rule(league_20.id, scorables.show_bb.id, 20)
+Seeds.create_rule(league_20.id, scorables.make_jury.id, 10)
 
 # Create teams
-IO.puts("Seeding teams")
-andy_team = Seeds.create_team(league.id, andy.id, "Andy's team")
-erin_team = Seeds.create_team(league.id, erin.id, "Erin's team")
-weston_team = Seeds.create_team(league.id, weston.id, "Weston's team")
-jessica_team = Seeds.create_team(league.id, jess.id, "Jessica's team")
+IO.puts("Seeding season 19 league teams")
+andy_team_19 = Seeds.create_team(league_19.id, andy.id, "Andy's team")
+erin_team_19 = Seeds.create_team(league_19.id, erin.id, "Erin's team")
+weston_team = Seeds.create_team(league_19.id, weston.id, "Weston's team")
+jessica_team = Seeds.create_team(league_19.id, jess.id, "Jessica's team")
 
 # Record draft
-IO.puts("Seeding league draft")
+IO.puts("Seeding season 19 league draft")
 Seeds.draft(jessica_team.id, matt.id, 1)
-Seeds.draft(andy_team.id, mark.id, 2)
-Seeds.draft(erin_team.id, christmas.id, 3)
+Seeds.draft(andy_team_19.id, mark.id, 2)
+Seeds.draft(erin_team_19.id, christmas.id, 3)
 Seeds.draft(weston.id, cody.id, 4)
 Seeds.draft(weston.id, jessica.id, 5)
-Seeds.draft(erin_team.id, cameron.id, 6)
-Seeds.draft(andy_team.id, josh.id, 7)
+Seeds.draft(erin_team_19.id, cameron.id, 6)
+Seeds.draft(andy_team_19.id, josh.id, 7)
 Seeds.draft(jessica_team.id, jason.id, 8)
 Seeds.draft(jessica_team.id, ramses.id, 9)
-Seeds.draft(andy_team.id, dom.id, 10)
-Seeds.draft(erin_team.id, alex.id, 11)
+Seeds.draft(andy_team_19.id, dom.id, 10)
+Seeds.draft(erin_team_19.id, alex.id, 11)
 Seeds.draft(weston_team.id, megan.id, 12)
 Seeds.draft(weston_team.id, elena.id, 13)
-Seeds.draft(erin_team.id, raven.id, 14)
-Seeds.draft(andy_team.id, kevin.id, 15)
+Seeds.draft(erin_team_19.id, raven.id, 14)
+Seeds.draft(andy_team_19.id, kevin.id, 15)
 Seeds.draft(jessica_team.id, jillian.id, 16)
 
 # How to handle Paul?
 # For now, just add a draft pick
-Seeds.draft(erin_team.id, paul.id, 17)
+Seeds.draft(erin_team_19.id, paul.id, 17)
+
+# Create teams
+IO.puts("Seeding season 20 league teams")
+andy_team_20 = Seeds.create_team(league_20.id, andy.id, "Andy's team")
+erin_team_20 = Seeds.create_team(league_20.id, erin.id, "Erin's team")
+colin_team = Seeds.create_team(league_20.id, colin.id, "Colin's team")
+
+# Record draft
+IO.puts("Seeding season 20 league draft")
+Seeds.draft(colin_team.id, angela.id, 1)
+Seeds.draft(erin_team_20.id, winston.id, 2)
+Seeds.draft(andy_team_20.id, brett.id, 3)
+Seeds.draft(andy_team_20.id, swaggy.id, 4)
+Seeds.draft(erin_team_20.id, sam.id, 5)
+Seeds.draft(colin_team.id, rachel.id, 6)
+Seeds.draft(colin_team.id, jc.id, 7)
+Seeds.draft(erin_team_20.id, scottie.id, 8)
+Seeds.draft(andy_team_20.id, faysal.id, 9)
+Seeds.draft(andy_team_20.id, haleigh.id, 10)
+Seeds.draft(erin_team_20.id, tyler.id, 11)
+Seeds.draft(colin_team.id, kaycee.id, 12)
+Seeds.draft(colin_team.id, steve.id, 13)
+Seeds.draft(erin_team_20.id, bayleigh.id, 14)
+Seeds.draft(andy_team_20.id, kaitlyn.id, 15)
 
 IO.puts("Done!")
