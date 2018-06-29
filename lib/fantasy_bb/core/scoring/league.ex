@@ -17,7 +17,7 @@ defmodule FantasyBb.Core.Scoring.League do
 
     houseguests =
       Map.new(
-        season.houseguests,
+        FantasyBb.Data.Season.get_houseguests(season),
         fn houseguest -> {houseguest.id, 0} end
       )
 

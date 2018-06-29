@@ -31,6 +31,8 @@ defmodule FantasyBb.Core.Season do
   end
 
   def status(season) do
+    IO.puts("Season ID: " <> to_string(season.id))
+
     case {started?(season), completed?(season)} do
       {false, _completed} ->
         :upcoming
@@ -38,7 +40,7 @@ defmodule FantasyBb.Core.Season do
       {_started, false} ->
         :current
 
-      {_starned, _completed} ->
+      {_started, _completed} ->
         :complete
     end
   end

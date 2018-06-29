@@ -711,8 +711,14 @@ season_20_houseguests = [
 
 eviction_ceremonies_19 = Enum.map(weeks_19, &Seeds.create_eviction_ceremony(&1.id, 1))
 eviction_ceremonies_20 = Enum.map(weeks_20, &Seeds.create_eviction_ceremony(&1.id, 1))
-get_ceremony_19 = &Enum.fetch!(eviction_ceremonies_19, &1)
-get_ceremony_20 = &Enum.fetch!(eviction_ceremonies_20, &1)
+
+get_ceremony_19 = fn week ->
+  Enum.fetch!(eviction_ceremonies_19, week)
+end
+
+get_ceremony_20 = fn week ->
+  Enum.fetch!(eviction_ceremonies_20, week)
+end
 
 # Season 19
 IO.puts("Seeding season 19")
@@ -1165,6 +1171,13 @@ Seeds.create_event(
   "Trash Folder / Houseguest CAPTCHA / Surfing the BB Web Competition. Swaggy beat Angela and guaranteed safety for himself and seven other houseguests."
 )
 
+Seeds.create_event(
+  hoh.id,
+  tyler.id,
+  get_ceremony_20.(0).id,
+  "Microchip Mayhem competition."
+)
+
 # Create users
 IO.puts("Seeding users")
 andy = Seeds.create_user("Andy", "Steinberg", "holy.meekrob@gmail.com")
@@ -1204,7 +1217,7 @@ Seeds.create_rule(league_19.id, scorables.make_jury.id, 10)
 
 # Create Season 20 league
 IO.puts("Seeding league")
-league_20 = Seeds.create_league(season_19.id, andy.id, "Popping Colin's Cherry")
+league_20 = Seeds.create_league(season_20.id, andy.id, "Popping Colin's Cherry")
 Seeds.create_rule(league_20.id, scorables.survive_the_week.id, 2)
 Seeds.create_rule(league_20.id, scorables.win_hoh.id, 10)
 Seeds.create_rule(league_20.id, scorables.win_hoh_de.id, 15)

@@ -196,13 +196,13 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   end
 
   # Win Big Brother
-  def should_process(35, %League{events: [%FinalCeremony{} | _remaining]}) do
-    true
+  def should_process(35, %League{events: [%FinalCeremony{} = ceremony | _remaining]}) do
+    Enum.any?(ceremony.votes)
   end
 
   # Finish in second place
-  def should_process(36, %League{events: [%FinalCeremony{} | _remaining]}) do
-    true
+  def should_process(36, %League{events: [%FinalCeremony{} = ceremony | _remaining]}) do
+    Enum.any?(ceremony.votes)
   end
 
   # Finish in third place
