@@ -1178,6 +1178,9 @@ Seeds.create_event(
   "Microchip Mayhem competition."
 )
 
+Seeds.create_event(nom.id, steve.id, get_ceremony_20.(0).id)
+Seeds.create_event(nom.id, sam.id, get_ceremony_20.(0).id)
+
 # Create users
 IO.puts("Seeding users")
 andy = Seeds.create_user("Andy", "Steinberg", "holy.meekrob@gmail.com")
