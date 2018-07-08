@@ -1158,8 +1158,8 @@ Seeds.create_jury_vote(season_19.id, mark.id, josh.id)
 Seeds.create_jury_vote(season_19.id, elena.id, josh.id)
 Seeds.create_jury_vote(season_19.id, cody.id, josh.id)
 
-# Season 19
-IO.puts("Seeding season 19")
+# Season 20
+IO.puts("Seeding season 20")
 
 # Week 1
 IO.puts("Seeding week 1")
@@ -1180,6 +1180,30 @@ Seeds.create_event(
 
 Seeds.create_event(nom.id, steve.id, get_ceremony_20.(0).id)
 Seeds.create_event(nom.id, sam.id, get_ceremony_20.(0).id)
+
+Seeds.create_event(
+  win_comp.id,
+  sam.id,
+  get_ceremony_20.(0).id,
+  "Sam won Most Trending Houseguest and opted for the Bonus Life power."
+)
+
+Seeds.create_event(pov.id, faysal.id, get_ceremony_20.(0).id, "VimeBro Studios competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony_20.(0).id)
+
+Seeds.create_vote(get_ceremony_20.(0).id, scottie.id, sam.id)
+Seeds.create_vote(get_ceremony_20.(0).id, jc.id, steve.id)
+Seeds.create_vote(get_ceremony_20.(0).id, swaggy.id, sam.id)
+Seeds.create_vote(get_ceremony_20.(0).id, bayleigh.id, sam.id)
+Seeds.create_vote(get_ceremony_20.(0).id, rachel.id, steve.id)
+Seeds.create_vote(get_ceremony_20.(0).id, kaycee.id, steve.id)
+Seeds.create_vote(get_ceremony_20.(0).id, faysal.id, sam.id)
+Seeds.create_vote(get_ceremony_20.(0).id, haleigh.id, sam.id)
+Seeds.create_vote(get_ceremony_20.(0).id, angela.id, steve.id)
+Seeds.create_vote(get_ceremony_20.(0).id, brett.id, steve.id)
+Seeds.create_vote(get_ceremony_20.(0).id, winston.id, steve.id)
+Seeds.create_vote(get_ceremony_20.(0).id, kaitlyn.id, steve.id)
+Seeds.create_vote(get_ceremony_20.(0).id, rockstar.id, sam.id)
 
 # Create users
 IO.puts("Seeding users")
