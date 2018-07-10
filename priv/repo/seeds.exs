@@ -668,7 +668,7 @@ season_20_houseguests = [
   Seeds.build_season(~D[2017-06-28], "Big Brother 19", season_19_houseguests, 14)
 
 {season_20, houseguests_20, weeks_20} =
-  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 1)
+  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 2)
 
 [
   alex,
@@ -1204,6 +1204,19 @@ Seeds.create_vote(get_ceremony_20.(0).id, brett.id, steve.id)
 Seeds.create_vote(get_ceremony_20.(0).id, winston.id, steve.id)
 Seeds.create_vote(get_ceremony_20.(0).id, kaitlyn.id, steve.id)
 Seeds.create_vote(get_ceremony_20.(0).id, rockstar.id, sam.id)
+
+# Week 2
+IO.puts("Seeding week 2")
+
+Seeds.create_event(
+  hoh.id,
+  kaitlyn.id,
+  get_ceremony_20.(1).id,
+  "Land a Job competition."
+)
+
+Seeds.create_event(nom.id, scottie.id, get_ceremony_20.(1).id)
+Seeds.create_event(nom.id, winston.id, get_ceremony_20.(1).id)
 
 # Create users
 IO.puts("Seeding users")
