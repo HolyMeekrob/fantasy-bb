@@ -236,8 +236,8 @@ defmodule FantasyBb.Core.Scoring.Scorable do
   end
 
   # Made jury
-  def should_process(43, %League{events: [%FinalCeremony{} | _remaining]}) do
-    true
+  def should_process(43, %League{events: [%FinalCeremony{} = ceremony | _remaining]}) do
+    Enum.any?(ceremony.votes)
   end
 
   # Vote for winner
