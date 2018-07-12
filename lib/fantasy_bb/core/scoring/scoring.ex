@@ -12,7 +12,6 @@ defmodule FantasyBb.Core.Scoring do
     initial_state.events
     |> Enum.reduce(initial_state, &process/2)
     |> Map.fetch!(:teams)
-    |> Enum.map(&Map.take(&1, [:id, :points]))
   end
 
   defp process(event, league) do
