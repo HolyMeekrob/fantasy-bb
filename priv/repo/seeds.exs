@@ -359,7 +359,7 @@ scorables = %{
     ),
   win_comp:
     Seeds.create_scorable(
-      "Win miscellaneous competition",
+      "Win miscellaneous competition.",
       "Win a competition that does not fall under any other category."
     ),
   win_bb:
@@ -668,7 +668,7 @@ season_20_houseguests = [
   Seeds.build_season(~D[2017-06-28], "Big Brother 19", season_19_houseguests, 14)
 
 {season_20, houseguests_20, weeks_20} =
-  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 2)
+  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 3)
 
 [
   alex,
@@ -1217,6 +1217,32 @@ Seeds.create_event(
 
 Seeds.create_event(nom.id, scottie.id, get_ceremony_20.(1).id)
 Seeds.create_event(nom.id, winston.id, get_ceremony_20.(1).id)
+Seeds.create_event(pov.id, tyler.id, get_ceremony_20.(1).id, "Houseguestsonly.com competition.")
+Seeds.create_event(taken_off.id, scottie.id, get_ceremony_20.(1).id)
+Seeds.create_event(replacement_nom.id, swaggy.id, get_ceremony_20.(1).id)
+
+Seeds.create_vote(get_ceremony_20.(1).id, bayleigh.id, winston.id)
+Seeds.create_vote(get_ceremony_20.(1).id, brett.id, swaggy.id)
+Seeds.create_vote(get_ceremony_20.(1).id, kaycee.id, swaggy.id)
+Seeds.create_vote(get_ceremony_20.(1).id, tyler.id, swaggy.id)
+Seeds.create_vote(get_ceremony_20.(1).id, rockstar.id, winston.id)
+Seeds.create_vote(get_ceremony_20.(1).id, haleigh.id, winston.id)
+Seeds.create_vote(get_ceremony_20.(1).id, faysal.id, winston.id)
+Seeds.create_vote(get_ceremony_20.(1).id, scottie.id, swaggy.id)
+Seeds.create_vote(get_ceremony_20.(1).id, jc.id, swaggy.id)
+Seeds.create_vote(get_ceremony_20.(1).id, angela.id, swaggy.id)
+Seeds.create_vote(get_ceremony_20.(1).id, rachel.id, swaggy.id)
+Seeds.create_vote(get_ceremony_20.(1).id, sam.id, swaggy.id)
+
+# Week 2
+IO.puts("Seeding week 3")
+
+Seeds.create_event(
+  hoh.id,
+  scottie.id,
+  get_ceremony_20.(2).id,
+  "Product launch competition"
+)
 
 # Create users
 IO.puts("Seeding users")
