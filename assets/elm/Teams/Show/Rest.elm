@@ -43,4 +43,6 @@ teamDecoder =
         |> required "ownerName" string
         |> required "points" int
         |> required "players" (list playerDecoder)
+        |> required "leagueId" int
+        |> required "leagueName" string
         |> required "canEdit" bool

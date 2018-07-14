@@ -18,6 +18,8 @@ initialModel idStr =
         , ownerName = ""
         , points = 0
         , players = []
+        , leagueId = 0
+        , leagueName = ""
         , canEdit = False
         }
     }

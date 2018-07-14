@@ -27,6 +27,8 @@ defmodule FantasyBbWeb.TeamView do
       ownerName: team.owner.first_name,
       points: team.points,
       players: Enum.map(team.houseguests, get_houseguest),
+      leagueId: team.league.id,
+      leagueName: team.league.name,
       canEdit: true
     }
   end

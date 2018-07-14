@@ -19,6 +19,8 @@ type alias Team =
     , ownerName : String
     , points : Int
     , players : List Player
+    , leagueId : Int
+    , leagueName : String
     , canEdit : Bool
     }
 
