@@ -1215,6 +1215,13 @@ Seeds.create_event(
   "Land a Job competition."
 )
 
+Seeds.create_event(
+  win_comp.id,
+  tyler.id,
+  get_ceremony_20.(1).id,
+  "Tyler won Most Trending Houseguest and opted for the The Cloud power."
+)
+
 Seeds.create_event(nom.id, scottie.id, get_ceremony_20.(1).id)
 Seeds.create_event(nom.id, winston.id, get_ceremony_20.(1).id)
 Seeds.create_event(pov.id, tyler.id, get_ceremony_20.(1).id, "Houseguestsonly.com competition.")
@@ -1243,6 +1250,16 @@ Seeds.create_event(
   get_ceremony_20.(2).id,
   "Product launch competition"
 )
+
+Seeds.create_event(
+  win_comp.id,
+  bayleigh.id,
+  get_ceremony_20.(2).id,
+  "Bayleigh won Most Trending Houseguest and opted for the Identity Theft power."
+)
+
+Seeds.create_event(nom.id, brett.id, get_ceremony_20.(2).id)
+Seeds.create_event(nom.id, winston.id, get_ceremony_20.(2).id)
 
 # Create users
 IO.puts("Seeding users")
