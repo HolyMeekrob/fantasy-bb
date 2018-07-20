@@ -1260,6 +1260,20 @@ Seeds.create_event(
 
 Seeds.create_event(nom.id, brett.id, get_ceremony_20.(2).id)
 Seeds.create_event(nom.id, winston.id, get_ceremony_20.(2).id)
+Seeds.create_event(pov.id, scottie.id, get_ceremony_20.(2).id, "Mamma Mia! Madness competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony_20.(2).id)
+
+Seeds.create_vote(get_ceremony_20.(2).id, kaitlyn.id, brett.id)
+Seeds.create_vote(get_ceremony_20.(2).id, rachel.id, winston.id)
+Seeds.create_vote(get_ceremony_20.(2).id, kaycee.id, winston.id)
+Seeds.create_vote(get_ceremony_20.(2).id, rockstar.id, brett.id)
+Seeds.create_vote(get_ceremony_20.(2).id, faysal.id, brett.id)
+Seeds.create_vote(get_ceremony_20.(2).id, bayleigh.id, brett.id)
+Seeds.create_vote(get_ceremony_20.(2).id, angela.id, winston.id)
+Seeds.create_vote(get_ceremony_20.(2).id, haleigh.id, brett.id)
+Seeds.create_vote(get_ceremony_20.(2).id, jc.id, winston.id)
+Seeds.create_vote(get_ceremony_20.(2).id, tyler.id, winston.id)
+Seeds.create_vote(get_ceremony_20.(2).id, sam.id, winston.id)
 
 # Create users
 IO.puts("Seeding users")
