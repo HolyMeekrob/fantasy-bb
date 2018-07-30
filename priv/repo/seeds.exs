@@ -668,7 +668,7 @@ season_20_houseguests = [
   Seeds.build_season(~D[2017-06-28], "Big Brother 19", season_19_houseguests, 14)
 
 {season_20, houseguests_20, weeks_20} =
-  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 3)
+  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 5)
 
 [
   alex,
@@ -1241,7 +1241,7 @@ Seeds.create_vote(get_ceremony_20.(1).id, angela.id, swaggy.id)
 Seeds.create_vote(get_ceremony_20.(1).id, rachel.id, swaggy.id)
 Seeds.create_vote(get_ceremony_20.(1).id, sam.id, swaggy.id)
 
-# Week 2
+# Week 3
 IO.puts("Seeding week 3")
 
 Seeds.create_event(
@@ -1274,6 +1274,46 @@ Seeds.create_vote(get_ceremony_20.(2).id, haleigh.id, brett.id)
 Seeds.create_vote(get_ceremony_20.(2).id, jc.id, winston.id)
 Seeds.create_vote(get_ceremony_20.(2).id, tyler.id, winston.id)
 Seeds.create_vote(get_ceremony_20.(2).id, sam.id, winston.id)
+
+# Week 4
+IO.puts("Seeding week 4")
+
+Seeds.create_event(
+  hoh.id,
+  sam.id,
+  get_ceremony_20.(3).id,
+  "Out on a limb competition"
+)
+
+Seeds.create_event(nom.id, haleigh.id, get_ceremony_20.(3).id)
+Seeds.create_event(nom.id, kaitlyn.id, get_ceremony_20.(3).id)
+Seeds.create_event(pov.id, faysal.id, get_ceremony_20.(3).id, "Chop Bonk Spank competition.")
+Seeds.create_event(taken_off.id, haleigh.id, get_ceremony_20.(3).id)
+Seeds.create_event(replacement_nom.id, rockstar.id, get_ceremony_20.(3).id)
+
+Seeds.create_vote(get_ceremony_20.(3).id, jc.id, rockstar.id)
+Seeds.create_vote(get_ceremony_20.(3).id, bayleigh.id, kaitlyn.id)
+Seeds.create_vote(get_ceremony_20.(3).id, haleigh.id, kaitlyn.id)
+Seeds.create_vote(get_ceremony_20.(3).id, faysal.id, kaitlyn.id)
+Seeds.create_vote(get_ceremony_20.(3).id, brett.id, kaitlyn.id)
+Seeds.create_vote(get_ceremony_20.(3).id, tyler.id, kaitlyn.id)
+Seeds.create_vote(get_ceremony_20.(3).id, angela.id, kaitlyn.id)
+Seeds.create_vote(get_ceremony_20.(3).id, kaycee.id, kaitlyn.id)
+Seeds.create_vote(get_ceremony_20.(3).id, rachel.id, kaitlyn.id)
+Seeds.create_vote(get_ceremony_20.(3).id, scottie.id, kaitlyn.id)
+
+# Week 5
+IO.puts("Seeding week 5")
+
+Seeds.create_event(
+  hoh.id,
+  bayleigh.id,
+  get_ceremony_20.(4).id,
+  "Email competition"
+)
+
+Seeds.create_event(nom.id, brett.id, get_ceremony_20.(4).id)
+Seeds.create_event(nom.id, rachel.id, get_ceremony_20.(4).id)
 
 # Create users
 IO.puts("Seeding users")
