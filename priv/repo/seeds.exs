@@ -308,7 +308,7 @@ scorables = %{
   taken_off_de:
     Seeds.create_scorable(
       "Taken off the block (double eviction)",
-      "Houseguest has Power of Veto used on them during a double veiction event.",
+      "Houseguest has Power of Veto used on them during a double eviction event.",
       10
     ),
   nominated_as_replacement:
@@ -668,7 +668,7 @@ season_20_houseguests = [
   Seeds.build_season(~D[2017-06-28], "Big Brother 19", season_19_houseguests, 14)
 
 {season_20, houseguests_20, weeks_20} =
-  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 5)
+  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 6)
 
 [
   alex,
@@ -1182,7 +1182,7 @@ Seeds.create_event(nom.id, steve.id, get_ceremony_20.(0).id)
 Seeds.create_event(nom.id, sam.id, get_ceremony_20.(0).id)
 
 Seeds.create_event(
-  win_comp.id,
+  americas_choice.id,
   sam.id,
   get_ceremony_20.(0).id,
   "Sam won Most Trending Houseguest and opted for the Bonus Life power."
@@ -1216,7 +1216,7 @@ Seeds.create_event(
 )
 
 Seeds.create_event(
-  win_comp.id,
+  americas_choice.id,
   tyler.id,
   get_ceremony_20.(1).id,
   "Tyler won Most Trending Houseguest and opted for the The Cloud power."
@@ -1248,11 +1248,11 @@ Seeds.create_event(
   hoh.id,
   scottie.id,
   get_ceremony_20.(2).id,
-  "Product launch competition"
+  "Product launch competition."
 )
 
 Seeds.create_event(
-  win_comp.id,
+  americas_choice.id,
   bayleigh.id,
   get_ceremony_20.(2).id,
   "Bayleigh won Most Trending Houseguest and opted for the Identity Theft power."
@@ -1282,7 +1282,7 @@ Seeds.create_event(
   hoh.id,
   sam.id,
   get_ceremony_20.(3).id,
-  "Out on a limb competition"
+  "Out on a limb competition."
 )
 
 Seeds.create_event(nom.id, haleigh.id, get_ceremony_20.(3).id)
@@ -1309,11 +1309,47 @@ Seeds.create_event(
   hoh.id,
   bayleigh.id,
   get_ceremony_20.(4).id,
-  "Email competition"
+  "Perfect Timing competition"
 )
 
 Seeds.create_event(nom.id, brett.id, get_ceremony_20.(4).id)
 Seeds.create_event(nom.id, rachel.id, get_ceremony_20.(4).id)
+Seeds.create_event(pov.id, tyler.id, get_ceremony_20.(4).id, "Goober Driver competition.")
+Seeds.create_event(taken_off.id, nil, get_ceremony_20.(4).id)
+
+Seeds.create_vote(get_ceremony_20.(4).id, rockstar.id, brett.id)
+Seeds.create_vote(get_ceremony_20.(4).id, angela.id, rachel.id)
+Seeds.create_vote(get_ceremony_20.(4).id, kaycee.id, rachel.id)
+Seeds.create_vote(get_ceremony_20.(4).id, scottie.id, brett.id)
+Seeds.create_vote(get_ceremony_20.(4).id, tyler.id, rachel.id)
+Seeds.create_vote(get_ceremony_20.(4).id, sam.id, rachel.id)
+Seeds.create_vote(get_ceremony_20.(4).id, faysal.id, brett.id)
+Seeds.create_vote(get_ceremony_20.(4).id, jc.id, rachel.id)
+Seeds.create_vote(get_ceremony_20.(4).id, haleigh.id, brett.id)
+
+# Week 6
+IO.puts("Seeding week 6")
+
+Seeds.create_event(
+  hoh.id,
+  angela.id,
+  get_ceremony_20.(5).id,
+  "Gif That Keeps On Giving competition."
+)
+
+Seeds.create_event(nom.id, scottie.id, get_ceremony_20.(5).id)
+Seeds.create_event(nom.id, rockstar.id, get_ceremony_20.(5).id)
+
+Seeds.create_event(
+  win_comp.id,
+  haleigh.id,
+  get_ceremony_20.(5).id,
+  "Haleigh won the Hacker power."
+)
+
+# TODO: Need a new kind of taken off (non-veto taken off)
+Seeds.create_event(taken_off.id, scottie.id, get_ceremony_20.(5).id)
+Seeds.create_event(otb.id, tyler.id, get_ceremony_20.(5).id)
 
 # Create users
 IO.puts("Seeding users")

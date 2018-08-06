@@ -5263,6 +5263,60 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
       end
     end
 
+    test "is a standard eviction but voting has not occurred" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                order <- StreamData.constant(1),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        ceremony = %EvictionCeremony{
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now(),
+          votes: []
+        }
+
+        prev_a = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            otb: MapSet.new([2, 4, 6]),
+            hohs: MapSet.new([7]),
+            evictees: MapSet.new([10, 11])
+          },
+          events: [ceremony | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3, 7])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        curr = put_in(prev_a.season.otb, MapSet.new())
+        curr = put_in(curr.season.hohs, MapSet.new())
+        curr = put_in(curr.season.evictees, MapSet.new([10, 11, 2]))
+        curr = put_in(curr.season.voters, MapSet.new([1, 3, 4, 5, 6, 7]))
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
     test "is a standard eviction and all evictees on one team" do
       check all point_value <- StreamData.integer(),
                 week_number <- StreamData.positive_integer(),
@@ -5418,6 +5472,60 @@ defmodule FantasyBb.Core.Scoring.RuleTest do
             %EvictionVote{voter_id: 3, candidate_id: 2},
             %EvictionVote{voter_id: 5, candidate_id: 4}
           ]
+        }
+
+        prev_a = %League{
+          id: league_id,
+          season: %Season{
+            id: season_id,
+            otb: MapSet.new([2, 4, 6]),
+            hohs: MapSet.new([7]),
+            evictees: MapSet.new([10, 11])
+          },
+          events: [ceremony | remaining_events],
+          teams: [
+            %Team{
+              id: 1,
+              points: 10,
+              houseguests: MapSet.new([1, 2, 3, 7])
+            },
+            %Team{
+              id: 2,
+              points: 20,
+              houseguests: MapSet.new([4, 5, 6])
+            }
+          ]
+        }
+
+        curr = put_in(prev_a.season.otb, MapSet.new())
+        curr = put_in(curr.season.hohs, MapSet.new())
+        curr = put_in(curr.season.evictees, MapSet.new([10, 11, 2]))
+        curr = put_in(curr.season.voters, MapSet.new([1, 3, 4, 5, 6, 7]))
+
+        {prev_b, result} = Rule.process(rule, {prev_a, curr})
+
+        assert(prev_a === prev_b, "prior league state should not change")
+        assert(curr === result, "updated league state should not change")
+      end
+    end
+
+    test "is a double eviction but voting has not occurred" do
+      check all point_value <- StreamData.integer(),
+                week_number <- StreamData.positive_integer(),
+                order <- StreamData.map(StreamData.positive_integer(), &(&1 + 1)),
+                league_id <- StreamData.positive_integer(),
+                season_id <- StreamData.positive_integer(),
+                remaining_events <- remaining_events_generator() do
+        rule = %Rule{
+          scorable_id: @scorable_id,
+          point_value: point_value
+        }
+
+        ceremony = %EvictionCeremony{
+          week_number: week_number,
+          order: order,
+          timestamp: NaiveDateTime.utc_now(),
+          votes: []
         }
 
         prev_a = %League{

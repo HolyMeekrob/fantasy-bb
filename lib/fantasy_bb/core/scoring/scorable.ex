@@ -148,12 +148,12 @@ defmodule FantasyBb.Core.Scoring.Scorable do
 
   # Dodge eviction - standard eviction
   def should_process(26, %League{events: [%EvictionCeremony{} = ceremony | _remaining]}) do
-    is_standard_eviction(ceremony)
+    is_standard_eviction(ceremony) and Enum.any?(ceremony.votes)
   end
 
   # Dodge eviction - double eviction
   def should_process(27, %League{events: [%EvictionCeremony{} = ceremony | _remaining]}) do
-    is_double_eviction(ceremony)
+    is_double_eviction(ceremony) and Enum.any?(ceremony.votes)
   end
 
   # Vote for evicted houseguest
@@ -541,7 +541,7 @@ defmodule FantasyBb.Core.Scoring.Scorable do
     award_points_to_event_assignee(points, prev, curr)
   end
 
-  # Win America's favorite player
+  # Self evict
   def process(39, points, prev, curr) do
     award_points_to_event_assignee(points, prev, curr)
   end
