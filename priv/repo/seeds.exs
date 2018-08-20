@@ -668,7 +668,7 @@ season_20_houseguests = [
   Seeds.build_season(~D[2017-06-28], "Big Brother 19", season_19_houseguests, 14)
 
 {season_20, houseguests_20, weeks_20} =
-  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 6)
+  Seeds.build_season(~D[2018-06-27], "Big Brother 20", season_20_houseguests, 8)
 
 [
   alex,
@@ -1344,12 +1344,67 @@ Seeds.create_event(
   win_comp.id,
   haleigh.id,
   get_ceremony_20.(5).id,
-  "Haleigh won the Hacker power."
+  "Haleigh won the Crack the Code competition and received the hacker power."
 )
 
 # TODO: Need a new kind of taken off (non-veto taken off)
 Seeds.create_event(taken_off.id, scottie.id, get_ceremony_20.(5).id)
 Seeds.create_event(otb.id, tyler.id, get_ceremony_20.(5).id)
+Seeds.create_event(pov.id, angela.id, get_ceremony_20.(5).id, "Boom Power Trip competition.")
+Seeds.create_event(taken_off.id, tyler.id, get_ceremony_20.(5).id)
+Seeds.create_event(replacement_nom.id, bayleigh.id, get_ceremony_20.(5).id)
+
+Seeds.create_vote(get_ceremony_20.(5).id, kaycee.id, bayleigh.id)
+Seeds.create_vote(get_ceremony_20.(5).id, brett.id, bayleigh.id)
+Seeds.create_vote(get_ceremony_20.(5).id, faysal.id, bayleigh.id)
+Seeds.create_vote(get_ceremony_20.(5).id, scottie.id, bayleigh.id)
+Seeds.create_vote(get_ceremony_20.(5).id, haleigh.id, bayleigh.id)
+Seeds.create_vote(get_ceremony_20.(5).id, sam.id, rockstar.id)
+Seeds.create_vote(get_ceremony_20.(5).id, jc.id, bayleigh.id)
+
+# Week 7
+IO.puts("Seeding week 7")
+
+Seeds.create_event(
+  hoh.id,
+  haleigh.id,
+  get_ceremony_20.(6).id,
+  "#HashtagTooLong competition."
+)
+
+Seeds.create_event(nom.id, angela.id, get_ceremony_20.(6).id)
+Seeds.create_event(nom.id, kaycee.id, get_ceremony_20.(6).id)
+
+Seeds.create_event(
+  win_comp.id,
+  kaycee.id,
+  get_ceremony_20.(6).id,
+  "Kaycee won the hacker power."
+)
+
+# TODO: Need a new kind of taken off (non-veto taken off)
+Seeds.create_event(taken_off.id, kaycee.id, get_ceremony_20.(6).id)
+Seeds.create_event(otb.id, rockstar.id, get_ceremony_20.(6).id)
+Seeds.create_event(pov.id, tyler.id, get_ceremony_20.(6).id, "Otev competition.")
+Seeds.create_event(taken_off.id, angela.id, get_ceremony_20.(6).id)
+Seeds.create_event(replacement_nom.id, kaycee.id, get_ceremony_20.(6).id)
+
+Seeds.create_vote(get_ceremony_20.(6).id, angela.id, rockstar.id)
+Seeds.create_vote(get_ceremony_20.(6).id, jc.id, rockstar.id)
+Seeds.create_vote(get_ceremony_20.(6).id, sam.id, rockstar.id)
+Seeds.create_vote(get_ceremony_20.(6).id, scottie.id, kaycee.id)
+Seeds.create_vote(get_ceremony_20.(6).id, brett.id, rockstar.id)
+Seeds.create_vote(get_ceremony_20.(6).id, tyler.id, rockstar.id)
+
+# Week 8
+IO.puts("Seeding week 8")
+
+Seeds.create_event(
+  hoh.id,
+  faysal.id,
+  get_ceremony_20.(7).id,
+  ""
+)
 
 # Create users
 IO.puts("Seeding users")
