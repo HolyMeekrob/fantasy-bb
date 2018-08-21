@@ -1385,7 +1385,7 @@ Seeds.create_event(
 # TODO: Need a new kind of taken off (non-veto taken off)
 Seeds.create_event(taken_off.id, kaycee.id, get_ceremony_20.(6).id)
 Seeds.create_event(otb.id, rockstar.id, get_ceremony_20.(6).id)
-Seeds.create_event(pov.id, tyler.id, get_ceremony_20.(6).id, "Otev competition.")
+Seeds.create_event(pov.id, tyler.id, get_ceremony_20.(6).id, "Otev the Sneezy Skunk competition.")
 Seeds.create_event(taken_off.id, angela.id, get_ceremony_20.(6).id)
 Seeds.create_event(replacement_nom.id, kaycee.id, get_ceremony_20.(6).id)
 
@@ -1403,8 +1403,11 @@ Seeds.create_event(
   hoh.id,
   faysal.id,
   get_ceremony_20.(7).id,
-  ""
+  "Glow & Flow competition."
 )
+
+Seeds.create_event(nom.id, brett.id, get_ceremony_20.(7).id)
+Seeds.create_event(nom.id, scottie.id, get_ceremony_20.(7).id)
 
 # Create users
 IO.puts("Seeding users")
