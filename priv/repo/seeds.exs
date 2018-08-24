@@ -1408,6 +1408,16 @@ Seeds.create_event(
 
 Seeds.create_event(nom.id, brett.id, get_ceremony_20.(7).id)
 Seeds.create_event(nom.id, scottie.id, get_ceremony_20.(7).id)
+Seeds.create_event(pov.id, brett.id, get_ceremony_20.(7).id, "Hide & Go Veto competition.")
+Seeds.create_event(taken_off.id, brett.id, get_ceremony_20.(7).id)
+Seeds.create_event(replacement_nom.id, kaycee.id, get_ceremony_20.(7).id)
+
+Seeds.create_vote(get_ceremony_20.(7).id, angela.id, scottie.id)
+Seeds.create_vote(get_ceremony_20.(7).id, jc.id, scottie.id)
+Seeds.create_vote(get_ceremony_20.(7).id, tyler.id, scottie.id)
+Seeds.create_vote(get_ceremony_20.(7).id, haleigh.id, scottie.id)
+Seeds.create_vote(get_ceremony_20.(7).id, sam.id, scottie.id)
+Seeds.create_vote(get_ceremony_20.(7).id, brett.id, scottie.id)
 
 # Create users
 IO.puts("Seeding users")
